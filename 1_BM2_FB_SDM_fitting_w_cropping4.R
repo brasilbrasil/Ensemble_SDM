@@ -7,8 +7,8 @@ rm(list = ls()) #remove all past worksheet variables
 #local_config_dir='C:/Users/lfortini/'
 local_config_dir='Y:/FB_analysis/FB_SDM/biomod2/' #'C:/Users/lfortini/'
 spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
-#spp_nm=c("Kauai_Amakihi")#, "Oahu_Amakihi", "Apapane")# "Akekeke", "Akikiki", "Anianiau", "Kauai_Amakihi", "Kauai_Elepaio", "Puaiohi", "Oahu_Amakihi", "Oahu_Elepaio", "Apapane", "Iiwi",)   #"Akekee", "Akikiki", "Anianiau", "Apapane", "Iiwi", "Kauai_Amakihi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi"
-server=1
+spp_nm=c("Kauai_Amakihi")#, "Oahu_Amakihi", "Apapane")# "Akekeke", "Akikiki", "Anianiau", "Kauai_Amakihi", "Kauai_Elepaio", "Puaiohi", "Oahu_Amakihi", "Oahu_Elepaio", "Apapane", "Iiwi",)   #"Akekee", "Akikiki", "Anianiau", "Apapane", "Iiwi", "Kauai_Amakihi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi"
+server=0
 remove_PA_abs=TRUE
 overwrite=0
 
@@ -38,6 +38,8 @@ library(dismo)
 library(mda)
 library(stringr)
 
+
+#this loop copies the necessary data to run the models into the working directory
 dirs=list.dirs(necessary_run_data, full.names = FALSE, recursive = TRUE)
 for (dir in dirs){
   layers<-list.files(dir, pattern=NULL, full.names=FALSE, include.dirs = FALSE)
@@ -57,6 +59,7 @@ for (dir in dirs){
     }
   }
 }
+
 spp_info=read.csv(paste(csv_dir,'FB_spp_data.csv', sep = ""))
 
 
@@ -73,9 +76,18 @@ for (env_var_file  in env_var_files){
 n_abs_removed=c()
 for (sp_nm in spp_nm){
   sp_nm=as.character(sp_nm)
+      
+  sp_nm_temp=str_replace_all(sp_nm,"_", ".")
+  sp_dir=paste0(sp_nm_temp,"/")
+  dir.create(sp_dir)
+  #copy the maxent jar file into the species subdirectory
+  file.copy("maxent.jar", paste0(sp_dir,"maxent.jar"), overwrite = TRUE, recursive = TRUE,
+            copy.mode = TRUE)
+  
+  
   cat('\n',sp_nm,'modeling...')
   FileName00<-paste(sp_nm, "_VariImp.csv")
-  if (file.exists(FileName00)==F | overwrite==1){    
+  if (file.exists(FileName00)==F | overwrite==1){ #check to see if the analysis for this species was already done    
     # Start the clock!
     ptm0 <- proc.time()
     workspace_name=paste(sp_nm,"_FB_run.RData", sep = "") #set name of file to save all workspace data after model run
@@ -225,6 +237,14 @@ for (sp_nm in spp_nm){
     # options(na.action=na.omit)  ## Is this redundant. I thought NAs were removed.
     
     ## Modelling ##
+
+    if (server==1){
+      working_dir=paste0('Y:/FB_analysis/FB_SDM/biomod2/response_curves_500/',sp_dir)
+    }else{
+      working_dir=paste0('C:/Users/lfortini/Data/biomod2/test/',sp_dir)
+    }
+    setwd(working_dir)
+    
     myBiomodModelOut <- BIOMOD_Modeling(myBiomodData, 
                                         models = models_to_run, models.options = myBiomodOption,
                                         NbRunEval=500,
@@ -234,6 +254,13 @@ for (sp_nm in spp_nm){
                                         models.eval.meth = 'ROC', #c('TSS','ROC', 'KAPPA'),
                                         SaveObj = TRUE,
                                         rescal.all.models = TRUE)
+
+    if (server==1){
+      working_dir='Y:/FB_analysis/FB_SDM/biomod2/response_curves_500/'
+    }else{
+      working_dir='C:/Users/lfortini/Data/biomod2/test/'
+    }
+    setwd(working_dir)
     
     ## Output the biomod models
     myBiomodModelOut
