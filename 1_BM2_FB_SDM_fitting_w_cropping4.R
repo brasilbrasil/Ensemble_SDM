@@ -5,18 +5,21 @@ rm(list = ls()) #remove all past worksheet variables
 
 ###USER CONFIGURATION
 #local_config_dir='C:/Users/lfortini/'
-local_config_dir='Y:/FB_analysis/FB_SDM/biomod2/' #'C:/Users/lfortini/'
-spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
-spp_nm=c("Kauai_Amakihi")#, "Oahu_Amakihi", "Apapane")# "Akekeke", "Akikiki", "Anianiau", "Kauai_Amakihi", "Kauai_Elepaio", "Puaiohi", "Oahu_Amakihi", "Oahu_Elepaio", "Apapane", "Iiwi",)   #"Akekee", "Akikiki", "Anianiau", "Apapane", "Iiwi", "Kauai_Amakihi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi"
-server=0
+source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
+local_config_dir=paste0(DR_FB_SDM_results_S,'test_runs/') #'C:/Users/lfortini/'
+#spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
+spp_nm=c("Akekeke", "Akikiki", "Anianiau", "Kauai_Amakihi")#, "Oahu_Amakihi", "Apapane")# "Akekeke", "Akikiki", "Anianiau", "Kauai_Amakihi", "Kauai_Elepaio", "Puaiohi", "Oahu_Amakihi", "Oahu_Elepaio", "Apapane", "Iiwi",)   #"Akekee", "Akikiki", "Anianiau", "Apapane", "Iiwi", "Kauai_Amakihi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi"
+server=1
 remove_PA_abs=TRUE
 overwrite=0
 
-models_to_run=c('GBM','RF','MAXENT')
+models_to_run=c('GBM','MAXENT')
+NbRunEval=500
+
 if (server==1){
-  working_dir='Y:/FB_analysis/FB_SDM/biomod2/response_curves_500/'
-  clim_data_dir0="Y:/SDM_env_data/bioclim_variables/full extent bioclim data/all_grd/all_baseline/100m/" 
-  necessary_run_data='Y:/FB_analysis/FB_SDM/biomod2/necessary_run_data/' #where all needed files are stored (maxent.jar, species csvs, crop rasters, etc.)
+  working_dir=paste0(DR_FB_SDM_results_S,'test_runs/')
+  clim_data_dir0=paste0(DR_FB_clim_data,"all_grd/all_baseline/100m/") 
+  necessary_run_data=paste0(DR_FB_SDM_results_S,'necessary_run_data/') #where all needed files are stored (maxent.jar, species csvs, crop rasters, etc.)
 }else{
   working_dir='C:/Users/lfortini/Data/biomod2/test/'
   necessary_run_data='C:/Users/lfortini/Data/biomod2/necessary_run_data/' #where all needed files are stored (maxent.jar, species csvs, crop rasters, etc.    
@@ -30,6 +33,7 @@ csv_dir=paste(working_dir,"single_sp_CSVs/", sep="")
 
 ###START UNDERHOOD
 setwd(working_dir)
+base_working_dir=working_dir
 library(biomod2)
 library(raster)
 library(rJava)
@@ -37,6 +41,18 @@ library(randomForest)
 library(dismo)
 library(mda)
 library(stringr)
+
+#this code below will subset species into the right number of instances started with the bat file                        
+Sys.sleep(6) #time for script process to show up on tasklist
+n_instances=length(system('tasklist /FI "IMAGENAME eq Rscript.exe" ', intern = TRUE))-3
+cpucores=as.integer(Sys.getenv('NUMBER_OF_PROCESSORS'))
+if (n_instances>0 & cpucores>1){
+  #n_instances=1
+  jnkn=length(spp_nm)
+  jnk=seq(1,jnkn,round(jnkn/cpucores,0))
+  jnk=c(jnk,jnkn)
+  spp_nm=spp_nm[jnk[n_instances]:jnk[n_instances+1]]
+}
 
 
 #this loop copies the necessary data to run the models into the working directory
@@ -238,16 +254,13 @@ for (sp_nm in spp_nm){
     
     ## Modelling ##
 
-    if (server==1){
-      working_dir=paste0('Y:/FB_analysis/FB_SDM/biomod2/response_curves_500/',sp_dir)
-    }else{
-      working_dir=paste0('C:/Users/lfortini/Data/biomod2/test/',sp_dir)
-    }
+
+    working_dir=paste0(base_working_dir,sp_dir)
     setwd(working_dir)
     
     myBiomodModelOut <- BIOMOD_Modeling(myBiomodData, 
                                         models = models_to_run, models.options = myBiomodOption,
-                                        NbRunEval=500,
+                                        NbRunEval=NbRunEval,
                                         DataSplit=80,
                                         Yweights=NULL, 
                                         VarImport=10,
@@ -255,11 +268,7 @@ for (sp_nm in spp_nm){
                                         SaveObj = TRUE,
                                         rescal.all.models = TRUE)
 
-    if (server==1){
-      working_dir='Y:/FB_analysis/FB_SDM/biomod2/response_curves_500/'
-    }else{
-      working_dir='C:/Users/lfortini/Data/biomod2/test/'
-    }
+    working_dir=base_working_dir
     setwd(working_dir)
     
     ## Output the biomod models
