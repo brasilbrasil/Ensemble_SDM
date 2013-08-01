@@ -8,7 +8,7 @@ plot_graphs=1
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run.csv', sep = ""),header=F, stringsAsFactors=F))
 spp_nm=c("Akikiki")# "Akekeke", "Akikiki", "Anianiau", "Kauai_Amakihi", "Kauai_Elepaio", "Puaiohi", "Oahu_Amakihi", "Oahu_Elepaio", "Apapane", "Iiwi",)   #"Akekee", "Akikiki", "Anianiau", "Apapane", "Iiwi", "Kauai_Amakihi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi"
 if(server==1){
-  working_dir='Y:/FB_analysis/FB_SDM/biomod2/test_runs_5_6_12/'
+  working_dir=paste0(DR_FB_SDM_results_S,'test_runs_500m/')
   }else{
     working_dir='C:/Users/lfortini/Data/biomod2/test/'
 }

@@ -6,19 +6,19 @@ rm(list = ls()) #remove all past worksheet variables
 ###USER CONFIGURATION
 #local_config_dir='C:/Users/lfortini/'
 source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
-local_config_dir=paste0(DR_FB_SDM_results_S,'test_runs/') #'C:/Users/lfortini/'
+local_config_dir=paste0(DR_FB_SDM_results_S,'test_runs_500m/') #'C:/Users/lfortini/'
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
-spp_nm=c("Akekee", "Akikiki", "Anianiau", "Kauai_Amakihi")#, "Oahu_Amakihi", "Apapane")# "Akekeke", "Akikiki", "Anianiau", "Kauai_Amakihi", "Kauai_Elepaio", "Puaiohi", "Oahu_Amakihi", "Oahu_Elepaio", "Apapane", "Iiwi",)   #"Akekee", "Akikiki", "Anianiau", "Apapane", "Iiwi", "Kauai_Amakihi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi"
+spp_nm=c("Akekee", "Anianiau", "Kauai_Amakihi", "Oahu_Amakihi","Hawaii_Akepa", "Hawaii_Elepaio", "Palila")
 server=1
 remove_PA_abs=TRUE
 overwrite=0
 
 models_to_run=c('GBM','MAXENT')
-NbRunEval=500
+NbRunEval=10
 
 if (server==1){
-  working_dir=paste0(DR_FB_SDM_results_S,'test_runs/')
-  clim_data_dir0=paste0(DR_FB_clim_data,"all_grd/all_baseline/100m/") 
+  working_dir=paste0(DR_FB_SDM_results_S,'test_runs_500m/')
+  clim_data_dir0=paste0(DR_FB_clim_data,"all_grd/all_baseline/500m/") 
   necessary_run_data=paste0(DR_FB_SDM_results_S,'necessary_run_data/') #where all needed files are stored (maxent.jar, species csvs, crop rasters, etc.)
 }else{
   working_dir='C:/Users/lfortini/Data/biomod2/test/'
@@ -48,11 +48,16 @@ cpucores=as.integer(Sys.getenv('NUMBER_OF_PROCESSORS'))
 if (n_instances>0 & cpucores>1){
   #n_instances=1
   jnkn=length(spp_nm)
-  jnk=seq(1,jnkn,round(jnkn/cpucores,0))
-  jnk=c(jnk,jnkn)
-  spp_nm=spp_nm[jnk[n_instances]:jnk[n_instances+1]]
+  x=c(1:jnkn)
+  chunk <- function(x,n) split(x, factor(sort(rank(x)%%n)))
+  groups=chunk(x,cpucores)
+  jnk=groups[n_instances][[1]]
+  spp_nm=spp_nm[jnk]
+  #jnk=seq(1,jnkn,round(jnkn/cpucores,0))
+  #jnk=c(jnk,jnkn)
+  #spp_nm=spp_nm[jnk[n_instances]:(jnk[n_instances+1]-1)]
 }
-
+#split(c(1:10),3)
 
 #this loop copies the necessary data to run the models into the working directory
 dirs=list.dirs(necessary_run_data, full.names = FALSE, recursive = TRUE)
@@ -74,6 +79,7 @@ for (dir in dirs){
     }
   }
 }
+cat('\n','Copying of necessary files is complete')
 
 spp_info=read.csv(paste(csv_dir,'FB_spp_data.csv', sep = ""))
 
@@ -95,9 +101,9 @@ for (sp_nm in spp_nm){
   sp_nm_temp=str_replace_all(sp_nm,"_", ".")
   sp_dir=paste0(sp_nm_temp,"/")
   dir.create(sp_dir)
-  #copy the maxent jar file into the species subdirectory
-  file.copy("maxent.jar", paste0(sp_dir,"maxent.jar"), overwrite = TRUE, recursive = TRUE,
-            copy.mode = TRUE)
+  ##copy the maxent jar file into the species subdirectory
+  #file.copy("maxent.jar", paste0(sp_dir,"maxent.jar"), overwrite = TRUE, recursive = TRUE,
+  #          copy.mode = TRUE)
   
   
   cat('\n',sp_nm,'modeling...')
@@ -182,6 +188,8 @@ for (sp_nm in spp_nm){
     
     ### NEW: Select, Count and Remove presence duplicate points in cells 
     dups3<- duplicated(XY_pres_extrnoNA[, 'cells']) # Identifies duplicates in cell column 
+    n_dups=length(dups3[dups3==TRUE])
+    cat('\n','out of ', length(dups3), "points, ",n_dups, "were removed because they were within the same raster cell for", sp_nm)
     #sum(dups3) 
     XY_pres_extrnoNA<-XY_pres_extrnoNA[!dups3, ] 
     #XY_pres_extrnoNA<-XY_pres_extrnoNA[,-4] # This drops the cell column from the data frame
@@ -254,8 +262,8 @@ for (sp_nm in spp_nm){
     ## Modelling ##
 
 
-    working_dir=paste0(base_working_dir,sp_dir)
-    setwd(working_dir)
+    #working_dir=paste0(base_working_dir,sp_dir)
+    #setwd(working_dir)
     
     myBiomodModelOut <- BIOMOD_Modeling(myBiomodData, 
                                         models = models_to_run, models.options = myBiomodOption,
@@ -267,8 +275,8 @@ for (sp_nm in spp_nm){
                                         SaveObj = TRUE,
                                         rescal.all.models = TRUE)
 
-    working_dir=base_working_dir
-    setwd(working_dir)
+    #working_dir=base_working_dir
+    #setwd(working_dir)
     
     ## Output the biomod models
     myBiomodModelOut
