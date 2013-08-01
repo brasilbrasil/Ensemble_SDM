@@ -8,7 +8,7 @@ rm(list = ls()) #remove all past worksheet variables
 source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
 local_config_dir=paste0(DR_FB_SDM_results_S,'test_runs/') #'C:/Users/lfortini/'
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
-spp_nm=c("Akekeke", "Akikiki", "Anianiau", "Kauai_Amakihi")#, "Oahu_Amakihi", "Apapane")# "Akekeke", "Akikiki", "Anianiau", "Kauai_Amakihi", "Kauai_Elepaio", "Puaiohi", "Oahu_Amakihi", "Oahu_Elepaio", "Apapane", "Iiwi",)   #"Akekee", "Akikiki", "Anianiau", "Apapane", "Iiwi", "Kauai_Amakihi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi"
+spp_nm=c("Akekee", "Akikiki", "Anianiau", "Kauai_Amakihi")#, "Oahu_Amakihi", "Apapane")# "Akekeke", "Akikiki", "Anianiau", "Kauai_Amakihi", "Kauai_Elepaio", "Puaiohi", "Oahu_Amakihi", "Oahu_Elepaio", "Apapane", "Iiwi",)   #"Akekee", "Akikiki", "Anianiau", "Apapane", "Iiwi", "Kauai_Amakihi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi"
 server=1
 remove_PA_abs=TRUE
 overwrite=0
@@ -36,7 +36,6 @@ setwd(working_dir)
 base_working_dir=working_dir
 library(biomod2)
 library(raster)
-library(rJava)
 library(randomForest)
 library(dismo)
 library(mda)
