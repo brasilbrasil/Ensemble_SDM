@@ -22,6 +22,7 @@ memory = T #keep.in.memory=memory
 baseline_or_future=1 #1 for baseline, 2 for baseline_wettest, 3 for baseline_driest, 4 for future, 5 for future_wettest, 6 for future_driest
 overwrite=1 #if 1, will overwrite past results
 eval_stats=c("ROC","TSS","KAPPA") 
+
 maxentWDtmp = paste("maxentWDtmp_", baseline_or_future, sep = "")
 memory.limit(size=24000000)
 temp<-paste('J:/pioapps/Science_Division/Adam_GIS/temp/RWorkDir_Hawaii1_', baseline_or_future, '/', sep='')
@@ -336,9 +337,7 @@ for (sp_nm in spp_nm){
                       (subset(predictors, 3))*4,
                       (subset(predictors, 4)))
       names(predictors)<- var_name
-      }
-    
-    
+      }    
     cat('/n',sp_nm,'projection raster stack created...')
     gc()
     workspace_name_out0=paste(sp_nm,"_FB_all_model_proj_", proj_nm, ".RData", sep = "")

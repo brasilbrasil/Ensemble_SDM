@@ -8,17 +8,19 @@ rm(list = ls()) #remove all past worksheet variables
 source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
 local_config_dir=paste0(DR_FB_SDM_results_S,'test_runs_500m/') #'C:/Users/lfortini/'
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
-spp_nm=c("Akekee", "Anianiau", "Kauai_Amakihi", "Oahu_Amakihi","Hawaii_Akepa", "Hawaii_Elepaio", "Palila")
+#spp_nm=c("Anianiau", "Kauai_Amakihi", "Hawaii_Elepaio", "Palila")
+spp_nm=c("Akekee")#, "Anianiau", "Kauai_Amakihi", "Oahu_Amakihi","Hawaii_Akepa", "Hawaii_Elepaio", "Palila")
 server=1
 remove_PA_abs=TRUE
 overwrite=0
 
 models_to_run=c('GBM','MAXENT')
+eval_stats=c("ROC")
 NbRunEval=10
 
 if (server==1){
-  working_dir=paste0(DR_FB_SDM_results_S,'test_runs_500m/')
-  clim_data_dir0=paste0(DR_FB_clim_data,"all_grd/all_baseline/500m/") 
+  working_dir=paste0(DR_FB_SDM_results_S,'test_runs_500m_rounded/')
+  clim_data_dir0=paste0(DR_FB_clim_data,"all_grd/all_baseline/500m_test/") 
   necessary_run_data=paste0(DR_FB_SDM_results_S,'necessary_run_data/') #where all needed files are stored (maxent.jar, species csvs, crop rasters, etc.)
 }else{
   working_dir='C:/Users/lfortini/Data/biomod2/test/'
@@ -41,6 +43,7 @@ library(dismo)
 library(mda)
 library(stringr)
 
+###not in FWS code (multi instance automation)
 #this code below will subset species into the right number of instances started with the bat file                        
 Sys.sleep(6) #time for script process to show up on tasklist
 n_instances=length(system('tasklist /FI "IMAGENAME eq Rscript.exe" ', intern = TRUE))-3
@@ -57,8 +60,8 @@ if (n_instances>0 & cpucores>1){
   #jnk=c(jnk,jnkn)
   #spp_nm=spp_nm[jnk[n_instances]:(jnk[n_instances+1]-1)]
 }
-#split(c(1:10),3)
 
+###not in FWS code (copy necessary files)
 #this loop copies the necessary data to run the models into the working directory
 dirs=list.dirs(necessary_run_data, full.names = FALSE, recursive = TRUE)
 for (dir in dirs){
@@ -99,7 +102,7 @@ for (sp_nm in spp_nm){
   sp_nm=as.character(sp_nm)
       
   sp_nm_temp=str_replace_all(sp_nm,"_", ".")
-  sp_dir=paste0(sp_nm_temp,"/")
+  sp_dir=paste0(sp_nm_temp,"/") ###not in FWS code (dir creation)
   dir.create(sp_dir)
   ##copy the maxent jar file into the species subdirectory
   #file.copy("maxent.jar", paste0(sp_dir,"maxent.jar"), overwrite = TRUE, recursive = TRUE,
@@ -107,7 +110,7 @@ for (sp_nm in spp_nm){
   
   
   cat('\n',sp_nm,'modeling...')
-  FileName00<-paste(sp_nm, "_VariImp.csv")
+  FileName00<-paste(sp_nm, "_VariImp.csv") ###not in FWS code (orverwrite capacity)
   if (file.exists(FileName00)==F | overwrite==1){ #check to see if the analysis for this species was already done    
     # Start the clock!
     ptm0 <- proc.time()
@@ -195,7 +198,7 @@ for (sp_nm in spp_nm){
     #XY_pres_extrnoNA<-XY_pres_extrnoNA[,-4] # This drops the cell column from the data frame
     
     ####combining the presence and pseudoabsence background points
-    if (remove_PA_abs){
+    if (remove_PA_abs){ ###not in FWS code (remove PAs that overlap with Ps)
       jnk= XYabackg_extrnoNA[, 'cells'] %in% XY_pres_extrnoNA[, 'cells']  ####DEBUG DEBUG DEBUG
       XYabackg_extrnoNA=XYabackg_extrnoNA[jnk=='FALSE',]
       jnk=length(which(jnk==TRUE))
@@ -208,6 +211,7 @@ for (sp_nm in spp_nm){
     head(mySpeciesOcc)
     tail(mySpeciesOcc)
     
+    ###not in FWS code (points map)
     jpeg_name=paste(sp_nm,"_loc_data_used.jpg", sep = "")
     jpeg(jpeg_name,
          width = 10, height = 10, units = "in",pointsize = 12, quality = 90, bg = "white", res = 300)
@@ -220,7 +224,7 @@ for (sp_nm in spp_nm){
     #plot(a,  title=title_temp)
     dev.off()
     
-    
+
     ###defining the variables used by biomod2
     myRespName = sp_nm # Insert Species Name Here
     myRespXY = mySpeciesOcc[,1:2]
@@ -236,6 +240,11 @@ for (sp_nm in spp_nm){
       resp.name = myRespName,
       PA.nb.rep = 0)
     
+    jpeg_name=paste(sp_nm,"_loc_data_used2.jpg", sep = "")
+    jpeg(jpeg_name,
+         width = 10, height = 10, units = "in",pointsize = 12, quality = 90, bg = "white", res = 300)
+    plot(myBiomodData)
+    dev.off()
     
     memory.limit(size=4095)
     myBiomodOption <- BIOMOD_ModelingOptions(
@@ -245,8 +254,8 @@ for (sp_nm in spp_nm){
                    penalty = 2,
                    thresh = 0.001,
                    prune = TRUE),
-      RF = list(do.classif = TRUE, ntree = 100, mtry = 'default'), 
-      MAXENT = list(maximumiterations = 100, visible = TRUE, linear = TRUE, quadratic = TRUE,
+      RF = list(do.classif = TRUE, ntree = 100, mtry = 'default', max.nodes=10, corr.bias = T), 
+      MAXENT = list(maximumiterations = 100, visible = F, linear = TRUE, quadratic = TRUE,
                     product = TRUE, threshold = TRUE, hinge = TRUE, lq2lqptthreshold = 80, l2lqthreshold = 10,
                     hingethreshold = 15, beta_threshold = -1, beta_categorical = -1, beta_lqp = -1, 
                     beta_hinge = -1,defaultprevalence = 0.5)
@@ -271,7 +280,8 @@ for (sp_nm in spp_nm){
                                         DataSplit=80,
                                         Yweights=NULL, 
                                         VarImport=10,
-                                        models.eval.meth = 'ROC', #c('TSS','ROC', 'KAPPA'),
+                                        do.full.models=T,
+                                        models.eval.meth = eval_stats, #c('TSS','ROC', 'KAPPA'),
                                         SaveObj = TRUE,
                                         rescal.all.models = TRUE)
 
@@ -285,22 +295,26 @@ for (sp_nm in spp_nm){
     myBiomodModelEval <- getModelsEvaluations(myBiomodModelOut)    
     dimnames(myBiomodModelEval)
     
-    #     # Outputting the validation metrics for all tests
-    #     myBiomodModelEval["TSS","Testing.data",,,]
-    #     Spp_TSS<- data.frame(myBiomodModelEval["TSS","Testing.data",,,])
-    #     FileName<-paste(sp_nm, "_TSS.csv")
-    #     write.table(Spp_TSS, file = FileName, sep=",", col.names=NA)
+    # Outputting the validation metrics for all tests
+    if ("TSS" %in% eval_stats){
+      myBiomodModelEval["TSS","Testing.data",,,]
+      Spp_TSS<- data.frame(myBiomodModelEval["TSS","Testing.data",,,])
+      FileName<-paste(sp_nm, "_TSS.csv")
+      write.table(Spp_TSS, file = FileName, sep=",", col.names=NA)
+    }
     
-    myBiomodModelEval["ROC","Testing.data",,,]
-    Spp_ROC<- data.frame(myBiomodModelEval["ROC","Testing.data",,,])
-    FileName<-paste(sp_nm, "_ROC.csv")
-    write.table(Spp_ROC, file = FileName, sep=",", col.names=NA)
-    
-    #     myBiomodModelEval["KAPPA","Testing.data",,,]
-    #     Spp_KAP<- data.frame(myBiomodModelEval["KAPPA","Testing.data",,,])
-    #     FileName<-paste(sp_nm, "_KAP.csv")
-    #     write.table(Spp_KAP, file = FileName, sep=",", col.names=NA)
-    
+    if ("ROC" %in% eval_stats){
+      myBiomodModelEval["ROC","Testing.data",,,]
+      Spp_ROC<- data.frame(myBiomodModelEval["ROC","Testing.data",,,])
+      FileName<-paste(sp_nm, "_ROC.csv")
+      write.table(Spp_ROC, file = FileName, sep=",", col.names=NA)
+    }
+    if ("KAPAA" %in% eval_stats){
+      myBiomodModelEval["KAPPA","Testing.data",,,]
+      Spp_KAP<- data.frame(myBiomodModelEval["KAPPA","Testing.data",,,])
+      FileName<-paste(sp_nm, "_KAP.csv")
+      write.table(Spp_KAP, file = FileName, sep=",", col.names=NA)
+    }
     ## getting the variable importance ##
     getModelsVarImport(myBiomodModelOut)
     Spp_VariImp<- data.frame(getModelsVarImport(myBiomodModelOut))

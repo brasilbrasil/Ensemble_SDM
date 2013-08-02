@@ -1,10 +1,11 @@
 rm(list = ls()) #remove all past worksheet variables
 
 ###USER CONFIGURATION
-#local_config_dir='Y:/FB_analysis/FB_SDM/biomod2/run_1_7_12_15/' #'C:/Users/lfortini/'
-#local_config_dir='C:/Users/lfortini/' #if specifiying sp to run by file, this is directory of where csv file is located
-#spp_nm=(read.csv(paste(local_config_dir,'spp_to_run.csv', sep = ""),header=F, stringsAsFactors=F))
-spp_nm=c("Omao","Palila","Puaiohi", "Amakihi", "Anianiau")# "Akekeke", "Akikiki", "Anianiau", "Kauai_Amakihi", "Kauai_Elepaio", "Puaiohi", "Oahu_Amakihi", "Oahu_Elepaio", "Apapane", "Iiwi",)   #"Akekee", "Akikiki", "Anianiau", "Apapane", "Iiwi", "Kauai_Amakihi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi"
+source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
+local_config_dir=paste0(DR_FB_SDM_results_S,'test_runs_500m/') #'C:/Users/lfortini/'
+#spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
+#spp_nm=c("Anianiau", "Kauai_Amakihi", "Hawaii_Elepaio", "Palila")
+spp_nm=c("Akekee", "Anianiau", "Kauai_Amakihi", "Oahu_Amakihi","Hawaii_Akepa", "Hawaii_Elepaio", "Palila")
 
 
 

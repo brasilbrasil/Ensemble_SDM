@@ -1,20 +1,23 @@
 rm(list = ls()) #remove all past worksheet variables
 
 ###USER CONFIGURATION
-server=0
+server=1
 plot_graphs=1
-#local_config_dir='C:/Users/lfortini/'
-#local_config_dir='Y:/FB_analysis/FB_SDM/biomod2/run_1_7_12_15/' #'C:/Users/lfortini/'
-#spp_nm=(read.csv(paste(local_config_dir,'spp_to_run.csv', sep = ""),header=F, stringsAsFactors=F))
-spp_nm=c("Akikiki")# "Akekeke", "Akikiki", "Anianiau", "Kauai_Amakihi", "Kauai_Elepaio", "Puaiohi", "Oahu_Amakihi", "Oahu_Elepaio", "Apapane", "Iiwi",)   #"Akekee", "Akikiki", "Anianiau", "Apapane", "Iiwi", "Kauai_Amakihi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi"
+source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
+local_config_dir=paste0(DR_FB_SDM_results_S,'test_runs_500m/') #'C:/Users/lfortini/'
+#spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
+spp_nm=c("Akekee")#, "Anianiau", "Kauai_Amakihi", "Oahu_Amakihi","Hawaii_Akepa", "Hawaii_Elepaio", "Palila")
+models_to_run=c('GBM','MAXENT')
+eval_stats=c("ROC")
+
 if(server==1){
-  working_dir=paste0(DR_FB_SDM_results_S,'test_runs_500m/')
-  }else{
-    working_dir='C:/Users/lfortini/Data/biomod2/test/'
+  working_dir=paste0(DR_FB_SDM_results_S,'test_runs_500m_rounded/')
+}else{
+  working_dir='C:/Users/lfortini/Data/biomod2/test/'
 }
 
 csv_dir=paste(working_dir,"single_sp_CSVs/", sep="")
-overwrite=1
+overwrite=0
 
 ####START UNDERHOOD
 setwd(working_dir)
@@ -47,7 +50,7 @@ for (sp_nm in spp_nm){
     ### response curves
     ###################################################
     
-    myGLMs <- BIOMOD_LoadModels(myBiomodModelOut, models='RF')
+    myGLMs <- BIOMOD_LoadModels(myBiomodModelOut, models="GBM")
     
     # 4.2 plot 2D response plots
     myRespPlot2D <- response.plot2(models  = myGLMs,
@@ -62,15 +65,15 @@ for (sp_nm in spp_nm){
     
     # 4.2 plot 3D response plots
     ## here only for a lone model (i.e "MyocastorCoypus_PA1_RUN1_GLM")
-    myRespPlot3D <- response.plot2(models  = myGLMs[1],
-                                   Data = getModelsInputData(myBiomodModelOut,'expl.var'), 
-                                   show.variables= getModelsInputData(myBiomodModelOut,'expl.var.names'),
-                                   do.bivariate = TRUE,
-                                   fixed.var.metric = 'mean',
-                                   save.file="no", 
-                                   name="response_curve", 
-                                   ImageSize=480, 
-                                   plot=TRUE)
+#     myRespPlot3D <- response.plot2(models  = myGLMs[1],
+#                                    Data = getModelsInputData(myBiomodModelOut,'expl.var'), 
+#                                    show.variables= getModelsInputData(myBiomodModelOut,'expl.var.names'),
+#                                    do.bivariate = TRUE,
+#                                    fixed.var.metric = 'mean',
+#                                    save.file="no", 
+#                                    name="response_curve", 
+#                                    ImageSize=480, 
+#                                    plot=TRUE)
     
     ### all the values used to produce this plot are stored into the returned object
     ### you can redo plots by yourself and customised them
@@ -89,8 +92,8 @@ for (sp_nm in spp_nm){
     pred=myRespPlot2D[,2,1,1]
     plot(var,pred, type="l")
     
-    dim(myRespPlot3D)
-    dimnames(myRespPlot3D)
+    #dim(myRespPlot3D)
+    #dimnames(myRespPlot3D)
     
     
     ###################################################
@@ -111,8 +114,8 @@ for (sp_nm in spp_nm){
     myBiomodEM <- BIOMOD_EnsembleModeling(
       modeling.output = myBiomodModelOut,
       chosen.models = 'all', #these are not model types (e.g., GBM), but model runs (e.g., PA1_RF)
-      eval.metric = c('ROC'), #c('TSS', 'ROC', 'KAPPA'); 'all', #c('TSS', 'ROC'),
-      eval.metric.quality.threshold = c(0.5),
+      eval.metric = eval_stats, #c('TSS', 'ROC', 'KAPPA'); 'all', #c('TSS', 'ROC'),
+      eval.metric.quality.threshold = rep(0.15,length(eval_stats)),
       prob.mean = T,
       prob.cv = T,
       prob.ci = T,
