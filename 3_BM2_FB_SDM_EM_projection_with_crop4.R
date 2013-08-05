@@ -1,19 +1,10 @@
 rm(list = ls()) #remove all past worksheet variables
 
 ###USER CONFIGURATION
-plot_graphs=1
 source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
-local_config_dir=paste0(DR_FB_SDM_results_S,'test_runs_500m/') #'C:/Users/lfortini/'
-#spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
-#spp_nm=c("Anianiau", "Kauai_Amakihi", "Hawaii_Elepaio", "Palila")
-spp_nm=c("Akekee", "Anianiau", "Kauai_Amakihi", "Oahu_Amakihi","Hawaii_Akepa", "Hawaii_Elepaio", "Palila")
+source(paste0(DR_code_S,"Ensemble_SDM/0_SDM_run_config.r")) #this is where all configurations are at           
 baseline_or_future=1 #0 for baseline, 1 for future
-overwrite=1 #if 1, will overwrite past results
-eval_stats="ROC" #c("ROC", "TSS"), if single, do not place in array 
-server=1
-models_to_run=c('GBM','MAXENT')
 memory = T #keep.in.memory=memory
-env_var_files=c("bio1.grd", "bio7.grd", "bio12.grd", "bio15.grd") 
 
 maxentWDtmp = paste("maxentWDtmp_", baseline_or_future, sep = "")
 memory.limit(size=24000000)
@@ -21,7 +12,6 @@ temp<-paste('Y:/temp/', baseline_or_future, '/', sep='')
 dir.create(temp)
 
 if (server==1){
-  working_dir=paste0(DR_FB_SDM_results_S,'test_runs_500m_rounded/')
   clim_data_2000=paste0(DR_FB_clim_data,"all_grd/all_baseline/500m_test/")
   clim_data_2100=paste0(DR_FB_clim_data,"all_grd/all_future/500m/")
   clim_data_2000wettest="D:/GIS_Data/REnviroLayers/mixed_data_2000_250mwettest/"
@@ -29,12 +19,10 @@ if (server==1){
   clim_data_2100wettest="D:/GIS_Data/REnviroLayers/mixed_data_2100_250mwettest/"
   clim_data_2100driest= "D:/GIS_Data/REnviroLayers/mixed_data_2100_250mdriest/"  
 }else{
-  working_dir='C:/Users/lfortini/Forest bird SDM/biomod2/'
   clim_data_2000="Y:/SDM_env_data/bioclim_variables/full extent bioclim data/all_grd/all_baseline/250m/"
   clim_data_2100="Y:/SDM_env_data/bioclim_variables/full extent bioclim data/all_grd/all_future/250m/"
 }
 ####START UNDERHOOD
-crop_raster_dir=paste(working_dir, 'map_crop/',sep="")
 
 if (baseline_or_future==1){
   clim_surface_to_use=clim_data_2000 

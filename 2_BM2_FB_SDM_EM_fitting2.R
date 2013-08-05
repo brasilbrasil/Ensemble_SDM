@@ -1,23 +1,8 @@
 rm(list = ls()) #remove all past worksheet variables
 
 ###USER CONFIGURATION
-server=1
-plot_graphs=1
 source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
-local_config_dir=paste0(DR_FB_SDM_results_S,'test_runs_500m/') #'C:/Users/lfortini/'
-#spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
-spp_nm=c("Akekee", "Anianiau", "Kauai_Amakihi", "Oahu_Amakihi","Hawaii_Akepa", "Hawaii_Elepaio", "Palila")
-models_to_run=c('GBM','MAXENT')
-eval_stats=c("ROC")
-
-if(server==1){
-  working_dir=paste0(DR_FB_SDM_results_S,'test_runs_500m_rounded/')
-}else{
-  working_dir='C:/Users/lfortini/Data/biomod2/test/'
-}
-
-csv_dir=paste(working_dir,"single_sp_CSVs/", sep="")
-overwrite=0
+source(paste0(DR_code_S,"Ensemble_SDM/0_SDM_run_config.r")) #this is where all configurations are at           
 
 ####START UNDERHOOD
 setwd(working_dir)

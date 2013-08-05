@@ -4,38 +4,15 @@ rm(list = ls()) #remove all past worksheet variables
 #use the projection code to project the distribution model on different environmental surfaces (do not forget to change the working directory)
 
 ###USER CONFIGURATION
-#local_config_dir='C:/Users/lfortini/'
 source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
-local_config_dir=paste0(DR_FB_SDM_results_S,'test_runs_500m/') #'C:/Users/lfortini/'
-#spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
-#spp_nm=c("Anianiau", "Kauai_Amakihi", "Hawaii_Elepaio", "Palila")
-spp_nm=c("Akekee", "Anianiau", "Kauai_Amakihi", "Oahu_Amakihi","Hawaii_Akepa", "Hawaii_Elepaio", "Palila")
-server=1
+source(paste0(DR_code_S,"Ensemble_SDM/0_SDM_run_config.r")) #this is where all configurations are at
 remove_PA_abs=TRUE
-overwrite=0
-
-models_to_run=c('GBM','MAXENT')
-eval_stats=c("ROC")
 NbRunEval=10
-
-if (server==1){
-  working_dir=paste0(DR_FB_SDM_results_S,'test_runs_500m_rounded/')
-  clim_data_dir0=paste0(DR_FB_clim_data,"all_grd/all_baseline/500m_test/") 
-  necessary_run_data=paste0(DR_FB_SDM_results_S,'necessary_run_data/') #where all needed files are stored (maxent.jar, species csvs, crop rasters, etc.)
-}else{
-  working_dir='C:/Users/lfortini/Data/biomod2/test/'
-  necessary_run_data='C:/Users/lfortini/Data/biomod2/necessary_run_data/' #where all needed files are stored (maxent.jar, species csvs, crop rasters, etc.    
-  clim_data_dir0="C:/Users/lfortini/Data/SDM_env_data/all_grd/all_baseline/100m/"
-}
-
-env_var_files=c("bio1.grd", "bio7.grd", "bio12.grd", "bio15.grd") 
-crop_raster_dir=paste(working_dir, 'map_crop/',sep="")
-csv_dir=paste(working_dir,"single_sp_CSVs/", sep="")
-
 
 ###START UNDERHOOD
 setwd(working_dir)
 base_working_dir=working_dir
+
 library(biomod2)
 library(raster)
 library(randomForest)
@@ -94,9 +71,6 @@ for (env_var_file  in env_var_files){
 }
 
 #sp_nm=spp_nm[1]
-#spp_nm=spp_nm[11:length(spp_nm)]
-#spp_nm=spp_nm[1:10]
-#spp_nm=rev(spp_nm)
 n_abs_removed=c()
 for (sp_nm in spp_nm){
   sp_nm=as.character(sp_nm)
@@ -134,7 +108,7 @@ for (sp_nm in spp_nm){
     ##raster_based_env_grid:
     sp_index=which(spp_info[,"Species"]==sp_nm)
     raster_res= spp_info[sp_index,"rasterdir"]
-    clim_data_dir=clim_data_dir0 
+    clim_data_dir=fitting_clim_data_dir 
     jnk0=length(env_var_files)
     crop_raster=raster(paste(crop_raster_dir,raster_res,".grd",sep=""))
     predictors = raster( paste(clim_data_dir, env_var_files[1], sep=""))
@@ -323,7 +297,7 @@ for (sp_nm in spp_nm){
     
     save.image("temp_workspace1.RData")   #to save workspace
     rm(list=c("sp_nm","local_config_dir", "spp_nm", "models_to_run", "working_dir", 
-              "clim_data_dir0", "env_var_files", "csv_dir", "spp_info", "var_name",
+              "fitting_clim_data_dir", "env_var_files", "csv_dir", "spp_info", "var_name",
               "eval_stats0", "spp_nm0", "clim_surface_to_use", "proj_nm0", "overwrite", 
               "plot_graphs", "local_config_dir","spp_nm", "clim_data_2000", 
               "clim_data_2100", "working_dir", "csv_dir", "eval_stats",  "crop_raster", "necessary_run_data"))      
