@@ -6,7 +6,7 @@ plot_graphs=1
 source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
 local_config_dir=paste0(DR_FB_SDM_results_S,'test_runs_500m/') #'C:/Users/lfortini/'
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
-spp_nm=c("Akekee")#, "Anianiau", "Kauai_Amakihi", "Oahu_Amakihi","Hawaii_Akepa", "Hawaii_Elepaio", "Palila")
+spp_nm=c("Akekee", "Anianiau", "Kauai_Amakihi", "Oahu_Amakihi","Hawaii_Akepa", "Hawaii_Elepaio", "Palila")
 models_to_run=c('GBM','MAXENT')
 eval_stats=c("ROC")
 

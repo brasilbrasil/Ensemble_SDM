@@ -6,10 +6,10 @@ source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
 local_config_dir=paste0(DR_FB_SDM_results_S,'test_runs_500m/') #'C:/Users/lfortini/'
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
 #spp_nm=c("Anianiau", "Kauai_Amakihi", "Hawaii_Elepaio", "Palila")
-spp_nm=c("Akekee")#, "Anianiau", "Kauai_Amakihi", "Oahu_Amakihi","Hawaii_Akepa", "Hawaii_Elepaio", "Palila")
+spp_nm=c("Akekee", "Anianiau", "Kauai_Amakihi", "Oahu_Amakihi","Hawaii_Akepa", "Hawaii_Elepaio", "Palila")
 baseline_or_future=1 #0 for baseline, 1 for future
 overwrite=1 #if 1, will overwrite past results
-eval_stats=c("ROC") 
+eval_stats="ROC" #c("ROC", "TSS"), if single, do not place in array 
 server=1
 models_to_run=c('GBM','MAXENT')
 memory = T #keep.in.memory=memory
@@ -281,52 +281,6 @@ for (sp_nm in spp_nm){
     
     cat('\n',sp_nm,'projection graphs done...')
     
-    ####create analog climate map
-    
-    if (baseline_or_future==1){
-      all_clim_data=c("clim_data_2000", "clim_data_2100")
-      clim_stacks=c("biovars2000", "biovars2100")
-      crop_raster=raster(paste(crop_raster_dir,raster_res,".grd",sep=""))
-      for (dfd in 1:length(all_clim_data)){
-        clim_data=all_clim_data[dfd]
-        clim_data_dir=get(clim_data)
-        predictors_temp = raster( paste(clim_data_dir, env_var_files[1], sep=""))
-        predictors_temp=crop(predictors_temp,  crop_raster)
-        for (jj in 2:jnk0){
-          temp=raster(paste(clim_data_dir, env_var_files[jj], sep=""))
-          temp=crop(temp,  crop_raster)
-          predictors_temp = addLayer(predictors_temp, temp)
-        }
-        names(predictors_temp)<- var_name
-        assign(clim_stacks[dfd], predictors_temp)
-      }
-      
-      jnk=raster(paste(clim_data_dir, "bio12.grd", sep=""))
-      jnk=crop(jnk,  crop_raster)
-      Response_var  =  reclassify(jnk,  c(0.1,Inf,1))
-      
-      pred <- sre(Response_var, biovars2000, biovars2100, Quant = 0.001)
-      analog_climates2100=subset(pred, 1)
-      
-      rm("crop_raster" ,"temp")         
-      
-      raster_name=paste(sp_nm0,"_analog_climates2100", sep="")
-      tif_name=paste(raster_name,".tif", sep="")
-      jpeg_name=paste(raster_name,".jpg", sep="")
-      writeRaster(analog_climates2100, tif_name, format="GTiff", overwrite=TRUE)
-      
-      plot_vars=c("analog_climates2100")
-      
-      for (plot_var in plot_vars){
-        jpeg_name=paste(plot_var, ".jpg", sep = "")
-        jpeg(jpeg_name,
-             width = 10, height = 10, units = "in",
-             pointsize = 12, quality = 90, bg = "white", res = 300)
-        plot(get(plot_var))
-        dev.off()
-      }
-    } 
-    cat('\n',sp_nm,'analog climate raster created...')
     ###################################################
     ### code chunk number 18: EnsembleForecasting_future
     ###################################################
@@ -367,14 +321,16 @@ for (sp_nm in spp_nm){
     }
     
     ems_a<-stack(get(paste("TotalConsensus_EMScaledandBinnedby_", eval_stats[1], sep="")))
+    if (length(eval_stats)>1){ 
     for (i in 2:length(eval_stats)){
       ems_a<-addLayer(ems_a, get(paste("TotalConsensus_EMScaledandBinnedby_", eval_stats[i], sep="")))
-    }
+    }}
     
     ems_b<-stack(get(paste("TotalConsensus_EMBinnedby_", eval_stats[1], sep="")))
-    for (i in 2:length(eval_stats)){
+    if (length(eval_stats)>1){ 
+      for (i in 2:length(eval_stats)){
       ems_b<-addLayer(ems_b, get(paste("TotalConsensus_EMBinnedby_", eval_stats[i], sep="")))
-    }
+    }}
     
     setwd(plots)
     
@@ -387,18 +343,22 @@ for (sp_nm in spp_nm){
     gc = c('antiquewhite1', 'transparent')
     col5 <- colorRampPalette(c('blue', 'sandybrown', 'darkgreen'))
     jnk <- subset(ems_b, 1)
-    try(plot(ems_a, 1,  col = col5(255), useRaster=FALSE, axes = TRUE, addfun=F, interpolate = TRUE, legend = F, add = F, bg = "transparent"),silent=T)
+    try(plot(ems_a[[1]],  col = col5(255), useRaster=FALSE, axes = TRUE, addfun=F, interpolate = TRUE, legend = F, add = F, bg = "transparent"),silent=T)
     plot(jnk, col = gc, useRaster=FALSE, axes = F, addfun=F, interpolate = TRUE, legend = F, add = T)
     
-    par(mar=c(2, 0, 1.5, 0))
+    if (length(eval_stats)>1){ 
+      par(mar=c(2, 0, 1.5, 0))
     jnk <- subset(ems_b, 2)
-    try(plot(ems_a, 2, col = col5(255), useRaster=FALSE, axes = TRUE,interpolate = TRUE, legend = F, yaxt = 'n', add = F, bg = "transparent"),silent=T)  # addfun=F, 
+    try(plot(ems_a[[2]], col = col5(255), useRaster=FALSE, axes = TRUE,interpolate = TRUE, legend = F, yaxt = 'n', add = F, bg = "transparent"),silent=T)  # addfun=F, 
     plot(jnk, col = gc, useRaster=FALSE, axes = F, addfun=F, interpolate = TRUE, yaxt = 'n', legend = F, add = T)
+    }
     
-    par(mar=c(2, 0, 1.5, 3.5))
+    if (length(eval_stats)>2){ 
+      par(mar=c(2, 0, 1.5, 3.5))
     jnk <- subset(ems_b, 3)
-    try(plot(ems_a, 3, col = col5(255), useRaster=FALSE, axes = T, interpolate = F, legend = T, yaxt = 'n', add = F, bg = "transparent"),silent=T)
+    try(plot(ems_a[[3]], col = col5(255), useRaster=FALSE, axes = T, interpolate = F, legend = T, yaxt = 'n', add = F, bg = "transparent"),silent=T)
     plot(jnk, col = gc, useRaster=FALSE, axes = F, interpolate = F, legend = F, add = T)
+    }
     
     legend("bottomright",legend = c("Absent"), fill = gc[1], cex = 0.8)
     dev.off()
@@ -407,7 +367,7 @@ for (sp_nm in spp_nm){
       for (eval_stat in eval_stats){
         try(load(paste(sp_nm,"/proj_", proj_nm, "/",sp_nm,"_AllData_Full_AllAlgos_EM.",eval_stat, sep = "")), TRUE)    
         try(load(paste(sp_nm,"/proj_", proj_nm, "/",sp_nm,"_AllData_AllRun_EM.",eval_stat, sep = "")), TRUE)
-        #try(load(paste(sp_nm,"/proj_", proj_nm, "/proj_", , proj_nm, "_", sp_nm,"_TotalConsensus_EMby",eval_stat, ".grd", sep = "")), TRUE)
+        #try(load(paste(sp_nm,"/proj_", proj_nm, "/proj_", proj_nm, "_", sp_nm,"_TotalConsensus_EMby",eval_stat, ".grd", sep = "")), TRUE)
         jpeg_name=paste(sp_nm0,"_", eval_stat,"_ensemble_", proj_nm, "runs.jpg", sep = "")
         jpeg(jpeg_name,
              width = 10, height = 8, units = "in",
@@ -428,6 +388,7 @@ for (sp_nm in spp_nm){
           #par(mfrow=c(1,2))
           try(plot(get(paste(sp_nm,"_AllData_Full_AllAlgos_EM.",eval_stat0,".bin.",eval_stat, sep = ""))), TRUE)
           try(plot(get(paste(sp_nm,"_AllData_AllRun_EM.",eval_stat0,".bin.",eval_stat, sep = ""))), TRUE)
+          try(plot(raster(paste0(sp_nm,"/proj_", proj_nm, "/proj_", proj_nm, "_", sp_nm,"_TotalConsensus_EMby",eval_stat,"_", eval_stat, "bin.grd"))), TRUE)
           dev.off()
         }
       }
