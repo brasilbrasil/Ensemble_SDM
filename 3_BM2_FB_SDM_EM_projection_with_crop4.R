@@ -205,7 +205,7 @@ for (sp_nm in spp_nm){
         for (i in 1:length(models_to_run)){
           #setwd(working_dir)
           
-          a <- stack(paste(working_dir, sp_nm0,"/proj_", proj_nm, "/proj_", proj_nm, '_', sp_nm0, "_", eval_stats[ii], "bin.grd", sep = ""))
+          a <- stack(paste(working_dir, sp_nm,"/proj_", proj_nm, "/proj_", proj_nm, '_', sp_nm, "_", eval_stats[ii], "bin.grd", sep = ""))
           
           a<-subset(a, (length(names(a)) - (length(models_to_run)))-1+i)#:length(names(a)))
           nm<-names(a)
@@ -215,7 +215,7 @@ for (sp_nm in spp_nm){
           a <-reclassify(a, rcl)
           names(a)<-nm
           
-          b <- stack(paste(working_dir, sp_nm0,"/proj_", proj_nm, "/proj_", proj_nm,"_", sp_nm0, ".grd", sep = ""))
+          b <- stack(paste(working_dir, sp_nm,"/proj_", proj_nm, "/proj_", proj_nm,"_", sp_nm, ".grd", sep = ""))
           b<-subset(b, (length(names(b)) - (length(models_to_run)))-1+i)
           
           
@@ -301,12 +301,12 @@ for (sp_nm in spp_nm){
     if (plot_graphs==1){
       for (i in 1:length(eval_stats)){
         #setwd(working_dir,)
-        jnk=stack(paste(working_dir, sp_nm0, "/proj_", proj_nm, "/proj_", proj_nm, "_", sp_nm0, "_TotalConsensus_EMby", 
+        jnk=stack(paste(working_dir, sp_nm, "/proj_", proj_nm, "/proj_", proj_nm, "_", sp_nm, "_TotalConsensus_EMby", 
                         eval_stats[i], ".grd", sep = ""))
         a<-subset(jnk, length(names(jnk)))
         nm<-names(a)
         
-        jnk=stack(paste(working_dir,sp_nm0, "/proj_", proj_nm, "/proj_", proj_nm, "_", sp_nm0, "_TotalConsensus_EMby", 
+        jnk=stack(paste(working_dir,sp_nm, "/proj_", proj_nm, "/proj_", proj_nm, "_", sp_nm, "_TotalConsensus_EMby", 
                         eval_stats[i], "_", eval_stats[i], "bin.grd" , sep = ""))
         b<-subset(jnk, length(names(jnk)))
         
