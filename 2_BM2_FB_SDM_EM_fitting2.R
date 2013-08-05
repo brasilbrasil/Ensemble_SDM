@@ -1,5 +1,5 @@
 ###USER CONFIGURATION
-
+#see 0_sdm_config file.r
 
 ####START UNDERHOOD
 setwd(working_dir)
@@ -25,57 +25,6 @@ for (sp_nm in spp_nm){
     ### code chunk number 8: modeling_summary
     ###################################################
     myBiomodModelOut
-    
-    
-    
-    ###################################################
-    ### response curves
-    ###################################################
-    
-    myGLMs <- BIOMOD_LoadModels(myBiomodModelOut, models="GBM")
-    
-    # 4.2 plot 2D response plots
-    myRespPlot2D <- response.plot2(models  = myGLMs,
-                                   Data = getModelsInputData(myBiomodModelOut,'expl.var'), 
-                                   show.variables= getModelsInputData(myBiomodModelOut,'expl.var.names'),
-                                   do.bivariate = FALSE,
-                                   fixed.var.metric = 'mean',
-                                   save.file="no", 
-                                   name="response_curve", 
-                                   ImageSize=480, 
-                                   plot=TRUE)
-    
-    # 4.2 plot 3D response plots
-    ## here only for a lone model (i.e "MyocastorCoypus_PA1_RUN1_GLM")
-#     myRespPlot3D <- response.plot2(models  = myGLMs[1],
-#                                    Data = getModelsInputData(myBiomodModelOut,'expl.var'), 
-#                                    show.variables= getModelsInputData(myBiomodModelOut,'expl.var.names'),
-#                                    do.bivariate = TRUE,
-#                                    fixed.var.metric = 'mean',
-#                                    save.file="no", 
-#                                    name="response_curve", 
-#                                    ImageSize=480, 
-#                                    plot=TRUE)
-    
-    ### all the values used to produce this plot are stored into the returned object
-    ### you can redo plots by yourself and customised them
-    dim(myRespPlot2D)
-    dimnames(myRespPlot2D)
-    
-    dev.off()
-    for (asd in 1:dim(myRespPlot2D)[3]){
-      ymax_lim=max(myRespPlot2D[,2,asd,])
-      xmax_lim=max(myRespPlot2D[,1,asd,])
-      xmin_lim=max(myRespPlot2D[,2,asd,])
-      
-    }
-    
-    var=myRespPlot2D[,1,1,1]
-    pred=myRespPlot2D[,2,1,1]
-    plot(var,pred, type="l")
-    
-    #dim(myRespPlot3D)
-    #dimnames(myRespPlot3D)
     
     
     ###################################################

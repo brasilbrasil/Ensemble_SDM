@@ -1,5 +1,5 @@
 ###USER CONFIGURATION
-
+#see 0_sdm_config file.r
 
 ###START UNDERHOOD
 setwd(working_dir)
@@ -25,9 +25,6 @@ if (n_instances>0 & cpucores>1){
   groups=chunk(x,cpucores)
   jnk=groups[n_instances][[1]]
   spp_nm=spp_nm[jnk]
-  #jnk=seq(1,jnkn,round(jnkn/cpucores,0))
-  #jnk=c(jnk,jnkn)
-  #spp_nm=spp_nm[jnk[n_instances]:(jnk[n_instances+1]-1)]
 }
 
 ###not in FWS code (copy necessary files)
@@ -41,7 +38,6 @@ for (dir in dirs){
       out_dir_nm=str_replace(dir, necessary_run_data, working_dir)
       dir.create(out_dir_nm, showWarnings = FALSE, recursive = TRUE, mode = "0777")
       out_lyr_nm=str_replace(layer_full_nm, necessary_run_data, working_dir)
-      #out_lyr_nm=str_replace(out_lyr_nm, bl_lr, output_filenm)
       if (file.exists(out_lyr_nm)==F){
         cat('\n','found ', layer, 'in ', dir)
         file.copy(layer_full_nm, out_lyr_nm, overwrite = TRUE, recursive = TRUE,
@@ -229,17 +225,6 @@ for (sp_nm in spp_nm){
     
     rm("predictors", "xybackg", "XYabackg_extr", "dups2", "jnk", "jnk1", "jnk2") 
     
-    # attempting to change the java and R default parameters to 12 gb of ram and to
-    # omit rows with NA
-    # options(java.parameters = "-Xmx12g" )  # Modify this based on ram available
-    # options(na.action=na.omit)  ## Is this redundant. I thought NAs were removed.
-    
-    ## Modelling ##
-
-
-    #working_dir=paste0(base_working_dir,sp_dir)
-    #setwd(working_dir)
-    
     myBiomodModelOut <- BIOMOD_Modeling(myBiomodData, 
                                         models = models_to_run, models.options = myBiomodOption,
                                         NbRunEval=NbRunEval,
@@ -250,9 +235,6 @@ for (sp_nm in spp_nm){
                                         models.eval.meth = eval_stats, #c('TSS','ROC', 'KAPPA'),
                                         SaveObj = TRUE,
                                         rescal.all.models = TRUE)
-
-    #working_dir=base_working_dir
-    #setwd(working_dir)
     
     ## Output the biomod models
     myBiomodModelOut

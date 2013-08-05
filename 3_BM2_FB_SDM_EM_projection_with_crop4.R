@@ -1,8 +1,5 @@
 ###USER CONFIGURATION
-
-
-
-
+#see 0_sdm_config file.r
 
 ####START UNDERHOOD
 if (baseline_or_future==1){
@@ -34,18 +31,16 @@ library(colorRamps)
 library(rasterVis)
 rasterOptions(tmpdir=temp, timer = T, progress = "text", todisk  = T)
 
-#sp_nm="Akepa" #debug
 var_name=c()
 for (env_var_file  in env_var_files){
   a=strsplit(env_var_file,"\\.")
   var_name=c(var_name, a[[1]][1])
 }
-memory.limit(size=240000)
-#sp_nm=spp_nm[1]
 spp_info=read.csv(paste(csv_dir,'FB_spp_data.csv', sep = ""))
 
 source(paste0(DR_code_S,"Ensemble_SDM/3b_modifications_of_projection_code.r")) #all of fixes to biomod2 code created by AV
 
+#sp_nm=spp_nm[1]
 for (sp_nm in spp_nm){
   sp_nm=as.character(sp_nm)  
   cat('\n',sp_nm,'modeling...')
