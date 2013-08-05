@@ -1,8 +1,5 @@
-rm(list = ls()) #remove all past worksheet variables
-
 ###USER CONFIGURATION
-source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
-source(paste0(DR_code_S,"Ensemble_SDM/0_SDM_run_config.r")) #this is where all configurations are at           
+
 
 ####START UNDERHOOD
 setwd(working_dir)

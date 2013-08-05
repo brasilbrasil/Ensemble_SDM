@@ -1,29 +1,10 @@
-rm(list = ls()) #remove all past worksheet variables
-
 ###USER CONFIGURATION
-source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
-source(paste0(DR_code_S,"Ensemble_SDM/0_SDM_run_config.r")) #this is where all configurations are at           
-baseline_or_future=1 #0 for baseline, 1 for future
-memory = T #keep.in.memory=memory
 
-maxentWDtmp = paste("maxentWDtmp_", baseline_or_future, sep = "")
-memory.limit(size=24000000)
-temp<-paste('Y:/temp/', baseline_or_future, '/', sep='')
-dir.create(temp)
 
-if (server==1){
-  clim_data_2000=paste0(DR_FB_clim_data,"all_grd/all_baseline/500m_test/")
-  clim_data_2100=paste0(DR_FB_clim_data,"all_grd/all_future/500m/")
-  clim_data_2000wettest="D:/GIS_Data/REnviroLayers/mixed_data_2000_250mwettest/"
-  clim_data_2000driest= "D:/GIS_Data/REnviroLayers/mixed_data_2000_250mdriest/"
-  clim_data_2100wettest="D:/GIS_Data/REnviroLayers/mixed_data_2100_250mwettest/"
-  clim_data_2100driest= "D:/GIS_Data/REnviroLayers/mixed_data_2100_250mdriest/"  
-}else{
-  clim_data_2000="Y:/SDM_env_data/bioclim_variables/full extent bioclim data/all_grd/all_baseline/250m/"
-  clim_data_2100="Y:/SDM_env_data/bioclim_variables/full extent bioclim data/all_grd/all_future/250m/"
-}
+
+
+
 ####START UNDERHOOD
-
 if (baseline_or_future==1){
   clim_surface_to_use=clim_data_2000 
   proj_nm0='baseline'}

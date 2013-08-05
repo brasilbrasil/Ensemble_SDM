@@ -1,13 +1,5 @@
-rm(list = ls()) #remove all past worksheet variables
-#for each species modeled, have csv of presence data in working directory for the species named speciesname_Ps.csv formated with 3 cols: x,y,pa where pa = 1
-#after running the code for whichever many species, copy results (species output folder and workspace file) to a new directory, along with the maxent.jar file
-#use the projection code to project the distribution model on different environmental surfaces (do not forget to change the working directory)
-
 ###USER CONFIGURATION
-source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
-source(paste0(DR_code_S,"Ensemble_SDM/0_SDM_run_config.r")) #this is where all configurations are at
-remove_PA_abs=TRUE
-NbRunEval=10
+
 
 ###START UNDERHOOD
 setwd(working_dir)
