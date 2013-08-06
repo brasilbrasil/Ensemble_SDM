@@ -16,9 +16,6 @@ EM_fit=T
 EM_ensemble=F
 EM_project=F
 memory.limit(size=24000000)
-
-#source(paste0(DR_code_S,"Ensemble_SDM/0_SDM_run_config.r")) #this is where all configurations are at
-
 if (server==1){
   working_dir=paste0(DR_FB_SDM_results_S,'test2_runs_500m_rounded/')
   fitting_clim_data_dir=paste0(DR_FB_clim_data,"all_grd/all_baseline/500m_test/") 
@@ -43,7 +40,7 @@ NbRunEval=10
 ####ensemble config
 
 ####projection config
-baseline_or_future=1 #0 for baseline, 1 for future
+baseline_or_future=1 #1 for baseline, 4 for future
 memory = T #keep.in.memory=memory
 temp<-paste('Y:/temp/', baseline_or_future, '/', sep='') #dir for temp run data (to avoid memory errors)
 

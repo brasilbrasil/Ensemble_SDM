@@ -60,8 +60,6 @@ for (sp_nm in spp_nm){
   
   sp_nm=str_replace_all(sp_nm,"_", ".")
   workspace_name_out=paste(sp_nm,"_FB_EM_proj_", proj_nm, ".RData", sep = "")
-  #jnk=paste(sp_nm,"/proj_", proj_nm, "/",sp_nm,"_AllData_Full_AllAlgos_EM.TSS", sep = "")
-  #jnk2=paste(sp_nm,"/proj_", proj_nm, "/",sp_nm,"_AllData_AllRun_EM.TSS", sep = "")
   
   if (file.exists(workspace_name_out)==F | overwrite==1){
     #raster_based_env_grid:
