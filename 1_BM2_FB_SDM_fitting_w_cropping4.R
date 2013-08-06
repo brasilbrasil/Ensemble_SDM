@@ -65,7 +65,7 @@ for (sp_nm in spp_nm){
       
   sp_nm_temp=str_replace_all(sp_nm,"_", ".")
   sp_dir=paste0(sp_nm_temp,"/") ###not in FWS code (dir creation)
-  dir.create(sp_dir)
+  dir.create(sp_dir, showWarnings = FALSE)
   ##copy the maxent jar file into the species subdirectory
   #file.copy("maxent.jar", paste0(sp_dir,"maxent.jar"), overwrite = TRUE, recursive = TRUE,
   #          copy.mode = TRUE)

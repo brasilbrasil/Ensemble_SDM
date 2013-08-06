@@ -50,7 +50,7 @@ for (sp_nm in spp_nm){
   
   plots=paste(working_dir,"/AllEMplots_pmw/",  sep="")
   if (file.exists(plots)==F | overwrite==1){
-    dir.create(plots)}
+    dir.create(plots, showWarnings = FALSE)}
   
   #model run specific variables that must not be saved to workspace
   spp_nm=spp_nm0
