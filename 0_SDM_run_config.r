@@ -4,11 +4,11 @@ source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
 ###################################
 ####GENERAL MODEL CONFIGURATION####
 ###################################
-local_config_dir=paste0(DR_FB_SDM_results_S,'test_runs_500m/') #'C:/Users/lfortini/'
+local_config_dir=DR_FB_SDM_results_S #'C:/Users/lfortini/'
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
-spp_nm=c("Oahu_Amakihi")#,"Akekee", "Anianiau", "Kauai_Amakihi", "Oahu_Amakihi","Hawaii_Akepa", "Hawaii_Elepaio", "Palila")
+spp_nm=c("Oahu_Amakihi","Akekee", "Anianiau", "Kauai_Amakihi", "Oahu_Amakihi","Hawaii_Akepa", "Hawaii_Elepaio", "Palila")
 server=1
-overwrite=1
+overwrite=0
 models_to_run=c('GBM','MAXENT')
 eval_stats=c("ROC")
 plot_graphs=1
@@ -17,7 +17,7 @@ EM_ensemble=F
 EM_project=F
 memory.limit(size=24000000)
 if (server==1){
-  working_dir=paste0(DR_FB_SDM_results_S,'test2_runs_500m_rounded/')
+  working_dir=paste0(DR_FB_SDM_results_S,'test_runs_500m_rounded/')
   fitting_clim_data_dir=paste0(DR_FB_clim_data,"all_grd/all_baseline/500m_test/") 
   necessary_run_data=paste0(DR_FB_SDM_results_S,'necessary_run_data/') #where all needed files are stored (maxent.jar, species csvs, crop rasters, etc.)
 }else{
@@ -60,7 +60,8 @@ if (server==1){
 ####RUNNING SCRIPTS!!!####
 ##########################
 maxentWDtmp = paste("maxentWDtmp_", baseline_or_future, sep = "")
-dir.create(temp)
+dir.create(temp, showWarnings=F)
+dir.create(working_dir, showWarnings=F)
 
 if (EM_fit){
   source(paste0(DR_code_S,"Ensemble_SDM/1_BM2_FB_SDM_fitting_w_cropping4.r")) #this is where all configurations are at
