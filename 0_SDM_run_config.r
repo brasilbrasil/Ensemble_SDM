@@ -7,6 +7,7 @@ source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
 local_config_dir=DR_FB_SDM_results_S #'C:/Users/lfortini/'
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
 spp_nm=c("Oahu_Amakihi","Akekee", "Anianiau", "Kauai_Amakihi", "Oahu_Amakihi","Hawaii_Akepa", "Hawaii_Elepaio", "Palila")
+project_name='test_runs_500m_rounded'
 server=1
 overwrite=0
 models_to_run=c('GBM','MAXENT')
@@ -16,8 +17,9 @@ EM_fit=T
 EM_ensemble=F
 EM_project=F
 memory.limit(size=24000000)
+
 if (server==1){
-  working_dir=paste0(DR_FB_SDM_results_S,'test_runs_500m_rounded/')
+  working_dir=paste0(DR_FB_SDM_results_S,project_name,'/')
   fitting_clim_data_dir=paste0(DR_FB_clim_data,"all_grd/all_baseline/500m_test/") 
   necessary_run_data=paste0(DR_FB_SDM_results_S,'necessary_run_data/') #where all needed files are stored (maxent.jar, species csvs, crop rasters, etc.)
 }else{
@@ -42,7 +44,7 @@ NbRunEval=10
 ####projection config
 baseline_or_future=1 #1 for baseline, 4 for future
 memory = T #keep.in.memory=memory
-dir_for_temp_files<-paste('Y:/temp/', baseline_or_future, '/', sep='') #dir for temp run data (to avoid memory errors)
+dir_for_temp_files<-paste('Y:/temp/', project_name,'/', baseline_or_future, '/', sep='') #dir for temp run data (to avoid memory errors)
 
 if (server==1){
   clim_data_2000=paste0(DR_FB_clim_data,"all_grd/all_baseline/500m_test/")
@@ -60,7 +62,8 @@ if (server==1){
 ####RUNNING SCRIPTS!!!####
 ##########################
 maxentWDtmp = paste("maxentWDtmp_", baseline_or_future, sep = "")
-dir.create(dir_for_temp_files, showWarnings=F)
+dir.create(dir_for_temp_files, showWarnings=F, recursive=T)
+#dir.create(paste('Y:/temp/', project_name,'/', sep=''), showWarnings=F)
 dir.create(working_dir, showWarnings=F)
 
 if (EM_fit){
