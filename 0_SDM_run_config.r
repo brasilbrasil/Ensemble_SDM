@@ -42,7 +42,7 @@ NbRunEval=10
 ####projection config
 baseline_or_future=1 #1 for baseline, 4 for future
 memory = T #keep.in.memory=memory
-temp<-paste('Y:/temp/', baseline_or_future, '/', sep='') #dir for temp run data (to avoid memory errors)
+dir_for_temp_files<-paste('Y:/temp/', baseline_or_future, '/', sep='') #dir for temp run data (to avoid memory errors)
 
 if (server==1){
   clim_data_2000=paste0(DR_FB_clim_data,"all_grd/all_baseline/500m_test/")
@@ -60,7 +60,7 @@ if (server==1){
 ####RUNNING SCRIPTS!!!####
 ##########################
 maxentWDtmp = paste("maxentWDtmp_", baseline_or_future, sep = "")
-dir.create(temp, showWarnings=F)
+dir.create(dir_for_temp_files, showWarnings=F)
 dir.create(working_dir, showWarnings=F)
 
 if (EM_fit){

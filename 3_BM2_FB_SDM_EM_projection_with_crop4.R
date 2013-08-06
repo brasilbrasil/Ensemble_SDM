@@ -29,7 +29,7 @@ library(biomod2)
 library(stringr)
 library(colorRamps)
 library(rasterVis)
-rasterOptions(tmpdir=temp, timer = T, progress = "text", todisk  = T)
+rasterOptions(tmpdir=dir_for_temp_files, timer = T, progress = "text", todisk  = T)
 
 var_name=c()
 for (env_var_file  in env_var_files){
