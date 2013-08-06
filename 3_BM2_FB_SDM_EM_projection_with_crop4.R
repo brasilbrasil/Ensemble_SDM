@@ -43,7 +43,7 @@ source(paste0(DR_code_S,"Ensemble_SDM/3b_modifications_of_projection_code.r")) #
 #sp_nm=spp_nm[1]
 for (sp_nm in spp_nm){
   sp_nm=as.character(sp_nm)  
-  cat('\n',sp_nm,'modeling...')
+  cat('\n',sp_nm,'model projection...')
   sp_nm0=sp_nm
   workspace_name=paste(sp_nm0,"_FB_EM_fit.RData", sep = "") #set name of file to load workspace data from model run
   load(workspace_name)

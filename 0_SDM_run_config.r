@@ -14,8 +14,8 @@ models_to_run=c('GBM','MAXENT')
 eval_stats=c("ROC")
 plot_graphs=1
 EM_fit=T
-EM_ensemble=F
-EM_project=F
+EM_ensemble=T
+EM_project=T
 memory.limit(size=24000000)
 
 if (server==1){

@@ -12,7 +12,7 @@ memory.limit(size=4095)
 sp_nm=spp_nm[1]
 for (sp_nm in spp_nm){
   sp_nm=as.character(sp_nm)  
-  cat('\n',sp_nm,'modeling...')
+  cat('\n',sp_nm,'ensemble creation...')
   sp_nm0=sp_nm
   workspace_name=paste(sp_nm0,"_FB_run.RData", sep = "") #set name of file to load workspace data from model run
   workspace_name_out=paste(sp_nm0,"_FB_EM_fit.RData", sep = "") #set name of file to load workspace data from model run

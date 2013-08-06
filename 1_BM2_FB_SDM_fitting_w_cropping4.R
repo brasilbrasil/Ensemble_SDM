@@ -71,7 +71,7 @@ for (sp_nm in spp_nm){
   #          copy.mode = TRUE)
   
   
-  cat('\n',sp_nm,'modeling...')
+  cat('\n',sp_nm,'model fitting...')
   FileName00<-paste(sp_nm, "_VariImp.csv") ###not in FWS code (orverwrite capacity)
   if (file.exists(FileName00)==F | overwrite==1){ #check to see if the analysis for this species was already done    
     # Start the clock!
