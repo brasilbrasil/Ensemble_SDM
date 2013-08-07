@@ -13,19 +13,21 @@ plot_graphs=1
 # spp_nm=(read.csv(paste(local_config_dir,'spp_to_run.csv', sep = ""),header=F, stringsAsFactors=F))
 # spp_nm=c("Kauai_Amakihi")#, "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi")#, "Akikiki", "Anianiau", "Apapane", "Iiwi", "Kauai_Amakihi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi")   #"Akekee", "Akikiki", "Anianiau", "Apapane", "Iiwi", "Kauai_Amakihi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi"
 
-spp_nm=c("Akiapolauu", "Hawaii_Akepa", "Hawaii_Creeper")
+spp_nm=c("Maui_Alauahio","Maui_Parrotbill", "Akohekohe") 
+
 models_to_run=c('GBM','MAXENT')#,'RF')
 eval_stats=c("ROC", "TSS", "KAPPA")
-working_dir='J:/pioapps/Science_Division/Adam_GIS/ForestBirds/RWorkDir_Hawaii1/'
-
+working_dir='J:/pioapps/Science_Division/Adam_GIS/ForestBirds/RWorkDir_Maui/'
 memory = T #keep.in.memory=memory
 baseline_or_future=1 #1 for baseline, 2 for baseline_wettest, 3 for baseline_driest, 4 for future, 5 for future_wettest, 6 for future_driest
 overwrite=1 #if 1, will overwrite past results
 eval_stats=c("ROC","TSS","KAPPA") 
-
 maxentWDtmp = paste("maxentWDtmp_", baseline_or_future, sep = "")
 memory.limit(size=24000000)
-temp<-paste('J:/pioapps/Science_Division/Adam_GIS/temp/RWorkDir_Hawaii1_', baseline_or_future, '/', sep='')
+temp<-paste('J:/pioapps/Science_Division/Adam_GIS/temp/RWorkDir_Maui_', baseline_or_future, '/', sep='')
+file.copy(paste(working_dir, 'maxent.jar', sep = ""), paste(working_dir, 'maxent', baseline_or_future, '.jar', sep = ""), copy.mode = TRUE)
+
+
 dir.create(temp)
 rasterOptions(tmpdir=temp, timer = T, progress = "text", todisk  = T)
 
@@ -209,7 +211,9 @@ setMethod('predict', signature(object = 'MAXENT_biomod2_model'),
   if (is.null(on_0_1000)) on_0_1000 <- FALSE  
   .Prepare.Maxent.Proj.WorkDir(Data = newdata, proj.name = file.path(object@resp_name,temp_workdir))  
   cat("\n\t\tRunning Maxent...")
-  system(command=paste("java -cp ", file.path(object@model_options$path_to_maxent.jar, "maxent.jar"),
+  
+  maxent <-paste("maxent", baseline_or_future, ".jar", sep='')
+  system(command=paste("java -cp ", file.path(object@model_options$path_to_maxent.jar, maxent),
                        " density.Project \"", 
                        file.path(object@model_output_dir, sub("_MAXENT",".lambdas",object@model_name, fixed=T)),"\" ", 
                        file.path(object@resp_name, temp_workdir, maxentWDtmp,"Proj"), " ", 
@@ -262,7 +266,7 @@ setMethod('predict', signature(object = 'MAXENT_biomod2_model'),
   xy <- NULL
   .Prepare.Maxent.Proj.WorkDir(Data = as.data.frame(newdata), xy = xy , proj.name = file.path(object@resp_name,temp_workdir)) 
   cat("\n\t\tRunning Maxent...")
-  system(command=paste("java -cp ", file.path(object@model_options$path_to_maxent.jar, "maxent.jar"),
+  system(command=paste("java -cp ", file.path(object@model_options$path_to_maxent.jar, maxent),
                        " density.Project \"", 
                        file.path(object@model_output_dir, sub("_MAXENT",".lambdas",object@model_name, fixed=T)),"\" ", 
                        file.path(object@resp_name, temp_workdir, maxentWDtmp,"Proj_swd.csv"), " ", 
@@ -337,7 +341,9 @@ for (sp_nm in spp_nm){
                       (subset(predictors, 3))*4,
                       (subset(predictors, 4)))
       names(predictors)<- var_name
-      }    
+      }
+    
+    
     cat('/n',sp_nm,'projection raster stack created...')
     gc()
     workspace_name_out0=paste(sp_nm,"_FB_all_model_proj_", proj_nm, ".RData", sep = "")

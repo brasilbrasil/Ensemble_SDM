@@ -106,17 +106,6 @@ for (sp_nm in spp_nm){
     mySpeciesOcc=read.csv(paste(csv_dir,sp_nm,'_pres_abs.csv', sep = "")) #FB_data_points4_PAandA
     
     #presence (and absence) data handling)
-#     jnk=dim(mySpeciesOcc)[1]
-#     dups2<- duplicated(mySpeciesOcc[, c('X','Y')])
-#     sum(dups2)
-#     mySpeciesOcc<-mySpeciesOcc[!dups2, ]
-#     jnk1=dim(mySpeciesOcc)[1]
-#     if (!include_Abs){
-#       mySpeciesOcc=mySpeciesOcc[mySpeciesOcc[,"pa"]==1,] #get rid of absences
-#       jnk2=dim(mySpeciesOcc)[1]
-#       cat('\n','removed ', jnk1-jnk2, "absence records for", sp_nm)
-#     }
-#     cat('\n','removed ', jnk-jnk1, "duplicates for", sp_nm)
     mySpeciesOcc=cbind(mySpeciesOcc[,2:3],pa=mySpeciesOcc[,1])
     head(mySpeciesOcc)
     
@@ -137,7 +126,8 @@ for (sp_nm in spp_nm){
       
       #calculate desired number of PA points based on PandA density within CE
       neg_CE_cells=sum(as.matrix(neg_sp_CE), na.rm=T)
-      n_PA_points=round(neg_CE_cells/CE_point_density)
+      jnk=dim(mySpeciesOcc[mySpeciesOcc$pa==0])[1]
+      n_PA_points=round(neg_CE_cells/CE_point_density)+jnk
       PA_candidate_points=rasterToPoints(neg_sp_CE, fun=function(x){x==1})
       
       plot(mySREresp)
@@ -160,24 +150,6 @@ for (sp_nm in spp_nm){
     PA_candidate_points_noNA=cbind(PA_candidate_points_noNA,pa=rep('NA', dim(PA_candidate_points_noNA)[1],1))
     names(PA_candidate_points_noNA)=c('X', 'Y', 'pa') 
     head(PA_candidate_points_noNA)
-    
-    ####Generate 10000 random background pts with good env data
-    #       xybackg<-randomPoints(predictors, n=20000) # Creates 10,000 background/absence points
-    #       colnames(xybackg)=c('X', 'Y')
-    #       XYabackg <- c(rep(0, nrow(xybackg)))
-    #       XYabackg <- data.frame(cbind(xybackg, pa=XYabackg))
-    #       head(XYabackg)
-    #       
-    #       PA_candidate_points<-extract(predictors, XYabackg[,1:2], cellnumbers=T)
-    #       PA_candidate_points<-cbind(XYabackg, PA_candidate_points)
-    #jnk=nrow(PA_candidate_points_noNA)
-    #     if (jnk>10000){
-    #       PA_candidate_points_noNA=PA_candidate_points_noNA[1:10000,]
-    #     }else{
-    #       cat('\n','could only generate', jnk, "random background points for", sp_nm)
-    #     } #pick only 10k good points, will give error if not enough good points area available
-    #     head(PA_candidate_points_noNA)
-    #     tail(PA_candidate_points_noNA)
     
     #merge data with pseudoabsence
     mySpeciesOcc<-data.frame(rbind(mySpeciesOcc, PA_candidate_points_noNA))
@@ -203,20 +175,6 @@ for (sp_nm in spp_nm){
     mySpeciesOcc<-XY_pres_extrnoNA[!dups3, ] 
     #n_PandA=dim(XY_pres_extrnoNA)[1]
     
-
-#     if (!include_Abs){
-#       mySpeciesOcc<-XY_pres_extrnoNA      
-#     }else{
-#       ####combining the presence and pseudoabsence background points
-#       if (remove_PAs_that_overlap_Ps){ ###not in FWS code (remove PAs that overlap with Ps)
-#         jnk= PA_candidate_points_noNA[, 'cells'] %in% XY_pres_extrnoNA[, 'cells']  ####DEBUG DEBUG DEBUG
-#         PA_candidate_points_noNA=PA_candidate_points_noNA[jnk=='FALSE',]
-#         jnk=length(which(jnk==TRUE))
-#         cat('\n','removed', jnk, "random background points that overlaped with presence for", sp_nm)
-#         n_abs_removed=cbind(n_abs_removed,jnk)
-#       }
-#       mySpeciesOcc<-data.frame(rbind(XY_pres_extrnoNA, PA_candidate_points_noNA))
-#     }
     mySpeciesOcc<-mySpeciesOcc[,-4] # This drops the cell column from the data frame
     
     head(mySpeciesOcc)
@@ -255,7 +213,6 @@ for (sp_nm in spp_nm){
       PA.nb.absences = n_PA_points,
       PA.strategy = PA.strategy,
       PA.dist.min = PA.dist.min)
-
     #This plotting methods takes way too long!!! 
 #     jpeg_name=paste(sp_nm,"_loc_data_used2.jpg", sep = "")
 #     jpeg(jpeg_name,
