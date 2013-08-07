@@ -58,11 +58,11 @@ for (env_var_file  in env_var_files){
   var_name=c(var_name, a[[1]][1])
 }
 
-sp_nm=spp_nm[1]
+#sp_nm=spp_nm[1]
 n_abs_removed=c()
 for (sp_nm in spp_nm){
   sp_nm=as.character(sp_nm)
-  
+      
   sp_nm_temp=str_replace_all(sp_nm,"_", ".")
   sp_dir=paste0(sp_nm_temp,"/") ###not in FWS code (dir creation)
   dir.create(sp_dir, showWarnings = FALSE)
@@ -78,6 +78,19 @@ for (sp_nm in spp_nm){
     workspace_name=paste(sp_nm,"_FB_modelfitting.RData", sep = "") #set name of file to save all workspace data after model run
     
     #######Loading datasets#######
+    mySpeciesOcc=read.csv(paste(csv_dir,sp_nm,'_pres_abs.csv', sep = "")) #FB_data_points4_PAandA
+    
+    # Select, Count and Remove presence Duplicates
+    jnk=dim(mySpeciesOcc)[1]
+    dups2<- duplicated(mySpeciesOcc[, c('X','Y')])
+    sum(dups2)
+    mySpeciesOcc<-mySpeciesOcc[!dups2, ]
+    jnk1=dim(mySpeciesOcc)[1]
+    mySpeciesOcc=mySpeciesOcc[mySpeciesOcc[,"pa"]==1,] #get rid of absences
+    jnk2=dim(mySpeciesOcc)[1]
+    head(mySpeciesOcc)
+    cat('\n','removed ', jnk-jnk1, "duplicates for", sp_nm)
+    cat('\n','removed ', jnk1-jnk2, "absence records for", sp_nm)
     
     ##raster_based_env_grid:
     sp_index=which(spp_info[,"Species"]==sp_nm)
@@ -96,127 +109,64 @@ for (sp_nm in spp_nm){
     rm("crop_raster" ,"temp") 
     predictors
     
+    # Ploting predictors may take a substantial amount of time, depending on the file type (i.e. ascii or grd) and resolution)
+    # Irritatingly, if the resolution is too high they may not plot...  this also may be a function of the plotting package used
+    # i.e. whether 'useRaster' is true or false.  On windows 2008 it doesn't work under 'TRUE'.
+    
     jpeg_name=paste(sp_nm,"_env_vars_used.jpg", sep = "")
     jpeg(jpeg_name,
          width = 10, height = 10, units = "in",pointsize = 12, quality = 90, bg = "white", res = 300)
     plot(predictors, col=rev(terrain.colors(255)), maxpixels=100000, useRaster=FALSE, axes = TRUE, addfun=NULL, Interpolate = TRUE)
     dev.off()
     
-    ####species point data
-    mySpeciesOcc=read.csv(paste(csv_dir,sp_nm,'_pres_abs.csv', sep = "")) #FB_data_points4_PAandA
-    
-    #presence (and absence) data handling)
-#     jnk=dim(mySpeciesOcc)[1]
-#     dups2<- duplicated(mySpeciesOcc[, c('X','Y')])
-#     sum(dups2)
-#     mySpeciesOcc<-mySpeciesOcc[!dups2, ]
-#     jnk1=dim(mySpeciesOcc)[1]
-#     if (!include_Abs){
-#       mySpeciesOcc=mySpeciesOcc[mySpeciesOcc[,"pa"]==1,] #get rid of absences
-#       jnk2=dim(mySpeciesOcc)[1]
-#       cat('\n','removed ', jnk1-jnk2, "absence records for", sp_nm)
-#     }
-#     cat('\n','removed ', jnk-jnk1, "duplicates for", sp_nm)
-    mySpeciesOcc=cbind(mySpeciesOcc[,2:3],pa=mySpeciesOcc[,1])
-    head(mySpeciesOcc)
-    
-    
-    ##pseudo-absence handling
-    if (PAs_outside_CE){
-      P_and_A=mySpeciesOcc[,1:2]
-      mySREresp <- reclassify(subset(predictors,1,drop=TRUE), c(-Inf,Inf,0))
-      mySREresp[cellFromXY(mySREresp,P_and_A)] <- 1
-      sp_CE=sre(Response=mySREresp,Explanatory=predictors,NewData=predictors,Quant=0.025)
-      #calculate density of points within sre
-      n_PandA=sum(as.matrix(mySREresp), na.rm=T)
-      CE_cells=sum(as.matrix(sp_CE), na.rm=T)
-      CE_point_density=round(CE_cells/n_PandA)
-      
-      #create raster outside CE
-      neg_sp_CE=sp_CE==0
-      
-      #calculate desired number of PA points based on PandA density within CE
-      neg_CE_cells=sum(as.matrix(neg_sp_CE), na.rm=T)
-      n_PA_points=round(neg_CE_cells/CE_point_density)
-      PA_candidate_points=rasterToPoints(neg_sp_CE, fun=function(x){x==1})
-      
-      plot(mySREresp)
-      plot(sp_CE)
-      plot(neg_sp_CE)
-            
-    }else{
-      Ps=mySpeciesOcc[,1:2]
-      mySREresp <- reclassify(subset(predictors,1,drop=TRUE), c(-Inf,Inf,0))
-      mySREresp[cellFromXY(mySREresp,Ps)] <- 1
-      mySREresp=mySREresp==0
-      plot(mySREresp)
-      PA_candidate_points=rasterToPoints(mySREresp, fun=function(x){x==1})
-      n_PA_points=PA.nb.absences
-    }  
-    PA_candidate_points=as.data.frame(PA_candidate_points[,1:2])
-    head(PA_candidate_points)
-    dim(PA_candidate_points)
-    PA_candidate_points_noNA=PA_candidate_points[complete.cases(PA_candidate_points),] #removes rows with NAs
-    PA_candidate_points_noNA=cbind(PA_candidate_points_noNA,pa=rep('NA', dim(PA_candidate_points_noNA)[1],1))
-    names(PA_candidate_points_noNA)=c('X', 'Y', 'pa') 
-    head(PA_candidate_points_noNA)
-    
     ####Generate 10000 random background pts with good env data
-    #       xybackg<-randomPoints(predictors, n=20000) # Creates 10,000 background/absence points
-    #       colnames(xybackg)=c('X', 'Y')
-    #       XYabackg <- c(rep(0, nrow(xybackg)))
-    #       XYabackg <- data.frame(cbind(xybackg, pa=XYabackg))
-    #       head(XYabackg)
-    #       
-    #       PA_candidate_points<-extract(predictors, XYabackg[,1:2], cellnumbers=T)
-    #       PA_candidate_points<-cbind(XYabackg, PA_candidate_points)
-    #jnk=nrow(PA_candidate_points_noNA)
-    #     if (jnk>10000){
-    #       PA_candidate_points_noNA=PA_candidate_points_noNA[1:10000,]
-    #     }else{
-    #       cat('\n','could only generate', jnk, "random background points for", sp_nm)
-    #     } #pick only 10k good points, will give error if not enough good points area available
-    #     head(PA_candidate_points_noNA)
-    #     tail(PA_candidate_points_noNA)
+    xybackg<-randomPoints(predictors, n=20000) # Creates 10,000 background/absence points
+    colnames(xybackg)=c('X', 'Y')
+    XYabackg <- c(rep(0, nrow(xybackg)))
+    XYabackg <- data.frame(cbind(xybackg, pa=XYabackg))
+    head(XYabackg)
     
-    #merge data with pseudoabsence
-    mySpeciesOcc<-data.frame(rbind(mySpeciesOcc, PA_candidate_points_noNA))
+    XYabackg_extr<-extract(predictors, XYabackg[,1:2], cellnumbers=T)
+    XYabackg_extr<-cbind(XYabackg, XYabackg_extr)
+    head(XYabackg_extr)
+    dim(XYabackg_extr)
+    XYabackg_extrnoNA=XYabackg_extr[complete.cases(XYabackg_extr),] #removes rows with NAs
     
-    #### EXTRACTION OF ENV DATA FOR POINT DATA
-    XY_pres_extr<-extract(predictors, mySpeciesOcc[,1:2], cellnumbers=T) ###NEW:This creates a new column call "cell" with the cell numbers from the rasterstack ) 
-    XY_pres_extr=data.frame(cbind(mySpeciesOcc,XY_pres_extr)) ###NEW CHANGE
+    jnk=nrow(XYabackg_extrnoNA)
+    if (jnk>10000){
+      XYabackg_extrnoNA=XYabackg_extrnoNA[1:10000,]
+    }else{
+      cat('\n','could only generate', jnk, "random background points for", sp_nm)
+    } #pick only 10k good points, will give error if not enough good points area available
+    head(XYabackg_extrnoNA)
+    tail(XYabackg_extrnoNA)
+    
+    #### EXTRACTION OF ENV DATA FOR PRESENCE DATA
+    XY_pres_extr<-extract(predictors, mySpeciesOcc[,2:3], cellnumbers=T) ###NEW:This creates a new column call "cell" with the cell numbers from the rasterstack ) 
+    XY_pres_extr=data.frame(cbind(mySpeciesOcc[,2:3], pa= c(rep(1, nrow(mySpeciesOcc))),XY_pres_extr)) ###NEW CHANGE
     #XY_pres_extr<-cbind(mySpeciesOcc, XY_pres_extr)
     head(XY_pres_extr)
-    XY_pres_extrnoNA=XY_pres_extr[complete.cases(XY_pres_extr[4:dim(XY_pres_extr)[2]]),] #removes rows with NAs
+    XY_pres_extrnoNA=XY_pres_extr[complete.cases(XY_pres_extr),] #removes rows with NAs
     head(XY_pres_extrnoNA) 
-    #tail(XY_pres_extrnoNA) 
+    tail(XY_pres_extrnoNA) 
     
     ### NEW: Select, Count and Remove presence duplicate points in cells 
-    jnk=c(1,0, NA)
-    jnk=order(match(XY_pres_extrnoNA$pa, jnk))
-    #jnk=order(XY_pres_extrnoNA$pa, decreasing=T)
-    XY_pres_extrnoNA=XY_pres_extrnoNA[jnk,] #sorting so if duplicates, PA removed before abs, abs removed before Pres
-    
-    dups3<- duplicated(XY_pres_extrnoNA[, c('cells')]) # Identifies duplicates in cell column 
+    dups3<- duplicated(XY_pres_extrnoNA[, 'cells']) # Identifies duplicates in cell column 
     n_dups=length(dups3[dups3==TRUE])
     cat('\n','out of ', length(dups3), "points, ",n_dups, "were removed because they were within the same raster cell for", sp_nm)
-    mySpeciesOcc<-XY_pres_extrnoNA[!dups3, ] 
-    #n_PandA=dim(XY_pres_extrnoNA)[1]
+    #sum(dups3) 
+    XY_pres_extrnoNA<-XY_pres_extrnoNA[!dups3, ] 
+    #XY_pres_extrnoNA<-XY_pres_extrnoNA[,-4] # This drops the cell column from the data frame
     
-
-#     if (!include_Abs){
-#       mySpeciesOcc<-XY_pres_extrnoNA      
-#     }else{
-#       ####combining the presence and pseudoabsence background points
-#       if (remove_PAs_that_overlap_Ps){ ###not in FWS code (remove PAs that overlap with Ps)
-#         jnk= PA_candidate_points_noNA[, 'cells'] %in% XY_pres_extrnoNA[, 'cells']  ####DEBUG DEBUG DEBUG
-#         PA_candidate_points_noNA=PA_candidate_points_noNA[jnk=='FALSE',]
-#         jnk=length(which(jnk==TRUE))
-#         cat('\n','removed', jnk, "random background points that overlaped with presence for", sp_nm)
-#         n_abs_removed=cbind(n_abs_removed,jnk)
-#       }
-#       mySpeciesOcc<-data.frame(rbind(XY_pres_extrnoNA, PA_candidate_points_noNA))
-#     }
+    ####combining the presence and pseudoabsence background points
+    if (remove_PA_abs){ ###not in FWS code (remove PAs that overlap with Ps)
+      jnk= XYabackg_extrnoNA[, 'cells'] %in% XY_pres_extrnoNA[, 'cells']  ####DEBUG DEBUG DEBUG
+      XYabackg_extrnoNA=XYabackg_extrnoNA[jnk=='FALSE',]
+      jnk=length(which(jnk==TRUE))
+      cat('\n','removed', jnk, "random background points that overlaped with presence for", sp_nm)
+      n_abs_removed=cbind(n_abs_removed,jnk)
+    }
+    mySpeciesOcc<-data.frame(rbind(XY_pres_extrnoNA, XYabackg_extrnoNA))
     mySpeciesOcc<-mySpeciesOcc[,-4] # This drops the cell column from the data frame
     
     head(mySpeciesOcc)
@@ -229,39 +179,33 @@ for (sp_nm in spp_nm){
     plot(seq((min(mySpeciesOcc[,1])-0.1),(max(mySpeciesOcc[,1])+0.1),by=((max(mySpeciesOcc[,1])+0.1)-(min(mySpeciesOcc[,1])-0.1))/5), 
          seq((min(mySpeciesOcc[,2])-0.1),(max(mySpeciesOcc[,2])+0.1),by=((max(mySpeciesOcc[,2])+0.1)-(min(mySpeciesOcc[,2])-0.1))/5), 
          type = "n", xlab="Lon", ylab="Lat")# setting up coord. system
-    points(x=mySpeciesOcc[mySpeciesOcc[,3]=='NA',1], y=mySpeciesOcc[mySpeciesOcc[,3]=='NA',2], type = "p", col = "grey", pch=20,cex = 0.7)
     points(x=mySpeciesOcc[mySpeciesOcc[,3]==0,1], y=mySpeciesOcc[mySpeciesOcc[,3]==0,2], type = "p", col = "red", pch=20,cex = 0.7)
     points(x=mySpeciesOcc[mySpeciesOcc[,3]==1,1], y=mySpeciesOcc[mySpeciesOcc[,3]==1,2], type = "p", col = "blue", pch=20,cex = 0.7)
-
+    #a=rasterFromXYZ(mySpeciesOcc[,1:3])
+    #plot(a,  title=title_temp)
     dev.off()
     
-    
+
     ###defining the variables used by biomod2
     myRespName = sp_nm # Insert Species Name Here
     myRespXY = mySpeciesOcc[,1:2]
     myResp<-data.frame(Sp_Bio=mySpeciesOcc[,3])
-    myResp[myResp=='NA']=NA
-    #unique(myResp)
-    #head(myResp)
+    head(myResp)
     
-    
-    jnk=dim(mySpeciesOcc)[2]
+    jnk0=length(env_var_files)
+    jnk=4+jnk0-1
     myBiomodData <- BIOMOD_FormatingData(
       resp.var = myResp,
       expl.var = mySpeciesOcc[,4:jnk], # Modify based on number of variables 
       resp.xy = myRespXY,
       resp.name = myRespName,
-      PA.nb.rep=PA.nb.rep,
-      PA.nb.absences = n_PA_points,
-      PA.strategy = PA.strategy,
-      PA.dist.min = PA.dist.min)
-
-    #This plotting methods takes way too long!!! 
-#     jpeg_name=paste(sp_nm,"_loc_data_used2.jpg", sep = "")
-#     jpeg(jpeg_name,
-#          width = 10, height = 10, units = "in",pointsize = 12, quality = 90, bg = "white", res = 300)
-#     plot(myBiomodData)
-#     dev.off()
+      PA.nb.rep = 0)
+    
+    jpeg_name=paste(sp_nm,"_loc_data_used2.jpg", sep = "")
+    jpeg(jpeg_name,
+         width = 10, height = 10, units = "in",pointsize = 12, quality = 90, bg = "white", res = 300)
+    plot(myBiomodData)
+    dev.off()
     
     memory.limit(size=4095)
     myBiomodOption <- BIOMOD_ModelingOptions(
@@ -278,7 +222,7 @@ for (sp_nm in spp_nm){
                     beta_hinge = -1,defaultprevalence = 0.5)
     )
     
-    rm("predictors", "xybackg", "PA_candidate_points", "dups2", "jnk", "jnk1", "jnk2") 
+    rm("predictors", "xybackg", "XYabackg_extr", "dups2", "jnk", "jnk1", "jnk2") 
     
     myBiomodModelOut <- BIOMOD_Modeling(myBiomodData, 
                                         models = models_to_run, models.options = myBiomodOption,

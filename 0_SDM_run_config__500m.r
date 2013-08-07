@@ -4,23 +4,23 @@ source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
 ###################################
 ####GENERAL MODEL CONFIGURATION####
 ###################################
-local_config_dir=DR_FB_SDM_results_S
+local_config_dir=DR_FB_SDM_results_S #'C:/Users/lfortini/'
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
-spp_nm=c("Akekee")#, "Anianiau", "Kauai_Amakihi", "Oahu_Amakihi","Hawaii_Akepa", "Hawaii_Elepaio", "Palila")
-project_name='test_runs_AandPAtest'
+spp_nm=c("Oahu_Amakihi","Akekee", "Anianiau", "Kauai_Amakihi", "Oahu_Amakihi","Hawaii_Akepa", "Hawaii_Elepaio", "Palila")
+project_name='test_runs_500m'
 server=1
 overwrite=0
 models_to_run=c('GBM','MAXENT')
 eval_stats=c("ROC")
 plot_graphs=1
 EM_fit=T
-EM_ensemble=F
-EM_project=F
+EM_ensemble=T
+EM_project=T
 memory.limit(size=24000000)
 
 if (server==1){
   working_dir=paste0(DR_FB_SDM_results_S,project_name,'/')
-  fitting_clim_data_dir=paste0(DR_FB_clim_data,"all_grd/all_baseline/100m/") 
+  fitting_clim_data_dir=paste0(DR_FB_clim_data,"all_grd/all_baseline/500m/") 
   necessary_run_data=paste0(DR_FB_SDM_results_S,'necessary_run_data/') #where all needed files are stored (maxent.jar, species csvs, crop rasters, etc.)
 }else{
   working_dir='C:/Users/lfortini/Data/biomod2/test/'
@@ -35,24 +35,19 @@ csv_dir=paste(working_dir,"single_sp_CSVs/", sep="")
 #################################
 ####CONFIG FOR SPECIFIC STEPS####
 #################################
-####fit config (script#1)
-NbRunEval=3
-include_Abs=T #in test phase
-PAs_outside_CE=T #if T, will only consider PAs outside climate envelope of all points collected
-PA.nb.rep=3
-PA.nb.absences = 1000 #if PAs_outside_CE=T, this will be overridden! (n of PAs will be determined by P/A point density within CE 
-PA.strategy = "random"
-equiv_100m=0.0009430131
-PA.dist.min = 5*equiv_100m #500 min distance from actual data points 
-####ensemble config (script#2)
+####fit config
+remove_PA_abs=TRUE
+NbRunEval=5
 
-####projection config (script#3)
+####ensemble config
+
+####projection config
 baseline_or_future=1 #1 for baseline, 4 for future
 memory = T #keep.in.memory=memory
 dir_for_temp_files<-paste('Y:/temp/', project_name,'/', baseline_or_future, '/', sep='') #dir for temp run data (to avoid memory errors)
 
 if (server==1){
-  clim_data_2000=paste0(DR_FB_clim_data,"all_grd/all_baseline/250m/")
+  clim_data_2000=paste0(DR_FB_clim_data,"all_grd/all_baseline/500m/")
   clim_data_2100=paste0(DR_FB_clim_data,"all_grd/all_future/500m/")
   clim_data_2000wettest="D:/GIS_Data/REnviroLayers/mixed_data_2000_250mwettest/"
   clim_data_2000driest= "D:/GIS_Data/REnviroLayers/mixed_data_2000_250mdriest/"
