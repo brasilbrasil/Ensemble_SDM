@@ -29,7 +29,11 @@ library(biomod2)
 library(stringr)
 library(colorRamps)
 library(rasterVis)
-rasterOptions(tmpdir=dir_for_temp_files, timer = T, progress = "text", todisk  = T)
+
+if (apply_biomod2_fixes){
+  rasterOptions(tmpdir=dir_for_temp_files, timer = T, progress = "text", todisk  = T)
+  source(paste0(DR_code_S,"Ensemble_SDM/3b_modifications_of_projection_code.r")) #all of fixes to biomod2 code created by AV
+}
 
 var_name=c()
 for (env_var_file  in env_var_files){
@@ -37,8 +41,6 @@ for (env_var_file  in env_var_files){
   var_name=c(var_name, a[[1]][1])
 }
 spp_info=read.csv(paste(csv_dir,'FB_spp_data.csv', sep = ""))
-
-source(paste0(DR_code_S,"Ensemble_SDM/3b_modifications_of_projection_code.r")) #all of fixes to biomod2 code created by AV
 
 #sp_nm=spp_nm[1]
 for (sp_nm in spp_nm){

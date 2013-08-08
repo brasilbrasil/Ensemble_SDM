@@ -6,8 +6,8 @@ source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
 ###################################
 local_config_dir=DR_FB_SDM_results_S #'C:/Users/lfortini/'
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
-spp_nm=c("Akekee", "Kauai_Amakihi", "Hawaii_Akepa", "Palila")
-project_name='test_runs_100m_hibar'
+spp_nm=c("Akekee")#, "Kauai_Amakihi", "Hawaii_Akepa", "Palila")
+project_name='test_runs_100m_hibar_nofixes'
 server=1
 overwrite=0
 models_to_run=c('GBM','MAXENT')
@@ -17,6 +17,8 @@ EM_fit=T
 EM_ensemble=T
 EM_project=T
 memory.limit(size=24000000)
+apply_biomod2_fixes=F #if running large models use this option
+
 
 if (server==1){
   working_dir=paste0(DR_FB_SDM_results_S,project_name,'/')
@@ -61,9 +63,10 @@ if (server==1){
 ##########################
 ####RUNNING SCRIPTS!!!####
 ##########################
-maxentWDtmp = paste("maxentWDtmp_", baseline_or_future, sep = "")
-dir.create(dir_for_temp_files, showWarnings=F, recursive=T)
-#dir.create(paste('Y:/temp/', project_name,'/', sep=''), showWarnings=F)
+if (apply_biomod2_fixes){
+  maxentWDtmp = paste("maxentWDtmp_", baseline_or_future, sep = "")
+  dir.create(dir_for_temp_files, showWarnings=F, recursive=T)
+}#dir.create(paste('Y:/temp/', project_name,'/', sep=''), showWarnings=F)
 dir.create(working_dir, showWarnings=F)
 
 if (EM_fit){

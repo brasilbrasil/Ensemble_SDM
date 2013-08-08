@@ -7,8 +7,8 @@ options(error=stop) #this keeps the code from running after errors
 ###################################
 local_config_dir=DR_FB_SDM_results_S
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
-spp_nm=c("Akekee", "Kauai_Amakihi", "Oahu_Amakihi","Hawaii_Akepa", "Palila")
-project_name='test_runs_AandPAtest'
+spp_nm=c("Akekee")#, "Kauai_Amakihi", "Oahu_Amakihi","Hawaii_Akepa", "Palila")
+project_name='test_runs_AandPAtest_nofixes'
 server=1
 overwrite=0
 models_to_run=c('GBM','MAXENT')
@@ -18,6 +18,7 @@ EM_fit=T
 EM_ensemble=T
 EM_project=T
 memory.limit(size=24000000)
+apply_biomod2_fixes=F #if running large models use this option
 
 if (server==1){
   working_dir=paste0(DR_FB_SDM_results_S,project_name,'/')
@@ -37,10 +38,10 @@ csv_dir=paste(working_dir,"single_sp_CSVs/", sep="")
 ####CONFIG FOR SPECIFIC STEPS####
 #################################
 ####fit config (script#1)
-NbRunEval=4
+NbRunEval=3
 include_Abs=T #in test phase
 PAs_outside_CE=T #if T, will only consider PAs outside climate envelope of all points collected
-PA.nb.rep=4
+PA.nb.rep=3
 PA.nb.absences = 1000 #if PAs_outside_CE=T, this will be overridden! (n of PAs will be determined by P/A point density within CE 
 PA.strategy = "random"
 equiv_100m=0.0009430131
@@ -67,9 +68,10 @@ if (server==1){
 ##########################
 ####RUNNING SCRIPTS!!!####
 ##########################
+if (apply_biomod2_fixes){
 maxentWDtmp = paste("maxentWDtmp_", baseline_or_future, sep = "")
 dir.create(dir_for_temp_files, showWarnings=F, recursive=T)
-#dir.create(paste('Y:/temp/', project_name,'/', sep=''), showWarnings=F)
+}#dir.create(paste('Y:/temp/', project_name,'/', sep=''), showWarnings=F)
 dir.create(working_dir, showWarnings=F)
 
 ###not in FWS code (multi instance automation)

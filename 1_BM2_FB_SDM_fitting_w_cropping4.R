@@ -206,11 +206,13 @@ for (sp_nm in spp_nm){
       PA.strategy = PA.strategy,
       PA.dist.min = PA.dist.min)
     #This plotting methods takes way too long!!!  (but it is useful since it plots PAs selected)
+    if (plot_graphs==1 & PA.nb.rep<9){  
     jpeg_name=paste(sp_nm,"_loc_data_used2.jpg", sep = "")
     jpeg(jpeg_name,
          width = 10, height = 10, units = "in",pointsize = 12, quality = 90, bg = "white", res = 300)
     plot(myBiomodData)
     dev.off()
+    }
     
     memory.limit(size=4095)
     myBiomodOption <- BIOMOD_ModelingOptions(
