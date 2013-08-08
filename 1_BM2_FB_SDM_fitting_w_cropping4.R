@@ -12,20 +12,6 @@ library(dismo)
 library(mda)
 library(stringr)
 
-###not in FWS code (multi instance automation)
-#this code below will subset species into the right number of instances started with the bat file                        
-Sys.sleep(6) #time for script process to show up on tasklist
-n_instances=length(system('tasklist /FI "IMAGENAME eq Rscript.exe" ', intern = TRUE))-3
-cpucores=as.integer(Sys.getenv('NUMBER_OF_PROCESSORS'))
-if (n_instances>0 & cpucores>1){
-  #n_instances=1
-  jnkn=length(spp_nm)
-  x=c(1:jnkn)
-  chunk <- function(x,n) split(x, factor(sort(rank(x)%%n)))
-  groups=chunk(x,cpucores)
-  jnk=groups[n_instances][[1]]
-  spp_nm=spp_nm[jnk]
-}
 
 ###not in FWS code (copy necessary files)
 #this loop copies the necessary data to run the models into the working directory
@@ -80,6 +66,8 @@ for (sp_nm in spp_nm){
     #######Loading datasets#######
     
     ##raster_based_env_grid:
+    cat('\n','loading rasters...')
+    
     sp_index=which(spp_info[,"Species"]==sp_nm)
     raster_res= spp_info[sp_index,"rasterdir"]
     clim_data_dir=fitting_clim_data_dir 
@@ -103,6 +91,7 @@ for (sp_nm in spp_nm){
     dev.off()
     
     ####species point data
+    cat('\n','loading species data...')
     mySpeciesOcc=read.csv(paste(csv_dir,sp_nm,'_pres_abs.csv', sep = "")) #FB_data_points4_PAandA
     
     #presence (and absence) data handling)
@@ -111,6 +100,7 @@ for (sp_nm in spp_nm){
     
     
     ##pseudo-absence handling
+    cat('\n','defining candidate PA points...')
     if (PAs_outside_CE){
       P_and_A=mySpeciesOcc[,1:2]
       mySREresp <- reclassify(subset(predictors,1,drop=TRUE), c(-Inf,Inf,0))
@@ -126,7 +116,7 @@ for (sp_nm in spp_nm){
       
       #calculate desired number of PA points based on PandA density within CE
       neg_CE_cells=sum(as.matrix(neg_sp_CE), na.rm=T)
-      jnk=dim(mySpeciesOcc[mySpeciesOcc$pa==0])[1]
+      jnk=dim(mySpeciesOcc[mySpeciesOcc$pa==0,])[1]
       n_PA_points=round(neg_CE_cells/CE_point_density)+jnk
       PA_candidate_points=rasterToPoints(neg_sp_CE, fun=function(x){x==1})
       
@@ -155,6 +145,7 @@ for (sp_nm in spp_nm){
     mySpeciesOcc<-data.frame(rbind(mySpeciesOcc, PA_candidate_points_noNA))
     
     #### EXTRACTION OF ENV DATA FOR POINT DATA
+    cat('\n','extracting env vars to points...')
     XY_pres_extr<-extract(predictors, mySpeciesOcc[,1:2], cellnumbers=T) ###NEW:This creates a new column call "cell" with the cell numbers from the rasterstack ) 
     XY_pres_extr=data.frame(cbind(mySpeciesOcc,XY_pres_extr)) ###NEW CHANGE
     #XY_pres_extr<-cbind(mySpeciesOcc, XY_pres_extr)
@@ -195,6 +186,7 @@ for (sp_nm in spp_nm){
     
     
     ###defining the variables used by biomod2
+    cat('\n','biomod model config...')
     myRespName = sp_nm # Insert Species Name Here
     myRespXY = mySpeciesOcc[,1:2]
     myResp<-data.frame(Sp_Bio=mySpeciesOcc[,3])
@@ -213,12 +205,12 @@ for (sp_nm in spp_nm){
       PA.nb.absences = n_PA_points,
       PA.strategy = PA.strategy,
       PA.dist.min = PA.dist.min)
-    #This plotting methods takes way too long!!! 
-#     jpeg_name=paste(sp_nm,"_loc_data_used2.jpg", sep = "")
-#     jpeg(jpeg_name,
-#          width = 10, height = 10, units = "in",pointsize = 12, quality = 90, bg = "white", res = 300)
-#     plot(myBiomodData)
-#     dev.off()
+    #This plotting methods takes way too long!!!  (but it is useful since it plots PAs selected)
+    jpeg_name=paste(sp_nm,"_loc_data_used2.jpg", sep = "")
+    jpeg(jpeg_name,
+         width = 10, height = 10, units = "in",pointsize = 12, quality = 90, bg = "white", res = 300)
+    plot(myBiomodData)
+    dev.off()
     
     memory.limit(size=4095)
     myBiomodOption <- BIOMOD_ModelingOptions(
@@ -236,6 +228,8 @@ for (sp_nm in spp_nm){
     )
     
     rm("predictors", "xybackg", "PA_candidate_points", "dups2", "jnk", "jnk1", "jnk2") 
+    
+    cat('\n','fitting...')
     
     myBiomodModelOut <- BIOMOD_Modeling(myBiomodData, 
                                         models = models_to_run, models.options = myBiomodOption,
