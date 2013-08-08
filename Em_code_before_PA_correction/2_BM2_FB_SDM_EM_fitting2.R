@@ -46,7 +46,7 @@ for (sp_nm in spp_nm){
       modeling.output = myBiomodModelOut,
       chosen.models = 'all', #these are not model types (e.g., GBM), but model runs (e.g., PA1_RF)
       eval.metric = eval_stats, #c('TSS', 'ROC', 'KAPPA'); 'all', #c('TSS', 'ROC'),
-      eval.metric.quality.threshold = rep(0.15,length(eval_stats)),
+      eval.metric.quality.threshold = rep(0.5,length(eval_stats)),
       prob.mean = T,
       prob.cv = T,
       prob.ci = T,

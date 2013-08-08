@@ -40,7 +40,7 @@ spp_info=read.csv(paste(csv_dir,'FB_spp_data.csv', sep = ""))
 
 source(paste0(DR_code_S,"Ensemble_SDM/3b_modifications_of_projection_code.r")) #all of fixes to biomod2 code created by AV
 
-#sp_nm=spp_nm[1]
+sp_nm=spp_nm[1]
 for (sp_nm in spp_nm){
   sp_nm=as.character(sp_nm)  
   cat('\n',sp_nm,'model projection...')
@@ -280,50 +280,51 @@ for (sp_nm in spp_nm){
         assign(paste("TotalConsensus_EMScaledandBinnedby_", eval_stats[i], sep=""), c)
         assign(paste("TotalConsensus_EMBinnedby_", eval_stats[i], sep=""), b)
       }
-    }
+      
+      ems_a<-stack(get(paste("TotalConsensus_EMScaledandBinnedby_", eval_stats[1], sep="")))
+      if (length(eval_stats)>1){ 
+        for (i in 2:length(eval_stats)){
+          ems_a<-addLayer(ems_a, get(paste("TotalConsensus_EMScaledandBinnedby_", eval_stats[i], sep="")))
+        }}
+      
+      ems_b<-stack(get(paste("TotalConsensus_EMBinnedby_", eval_stats[1], sep="")))
+      if (length(eval_stats)>1){ 
+        for (i in 2:length(eval_stats)){
+          ems_b<-addLayer(ems_b, get(paste("TotalConsensus_EMBinnedby_", eval_stats[i], sep="")))
+        }}
+      
+      setwd(plots)
+      
+      jpeg_name=paste(proj_nm,"_", sp_nm0,"_TOTALCONSENSUS_Binandscaled_runs_.jpg", sep = "")
+      jpeg(jpeg_name, width = 5*length(eval_stats), height = 5, units = "in",
+           pointsize = 12, quality = 90, bg = "white", res = 300)  
+      par(pin = c(4,4), cex = 1, cex.main = 1, cex.axis = 0.8, mfcol=c(1,length(eval_stats)), mgp = c(1, 0.5, 0),
+          mar=c(2, 2, 1.5, 1), oma = c(0, 0, 0, 1), bg = "transparent")
+      
+      gc = c('antiquewhite1', 'transparent')
+      col5 <- colorRampPalette(c('blue', 'sandybrown', 'darkgreen'))
+      jnk <- subset(ems_b, 1)
+      try(plot(ems_a[[1]],  col = col5(255), useRaster=FALSE, axes = TRUE, addfun=F, interpolate = TRUE, legend = F, add = F, bg = "transparent"),silent=T)
+      plot(jnk, col = gc, useRaster=FALSE, axes = F, addfun=F, interpolate = TRUE, legend = F, add = T)
+      
+      if (length(eval_stats)>1){ 
+        par(mar=c(2, 0, 1.5, 0))
+        jnk <- subset(ems_b, 2)
+        try(plot(ems_a[[2]], col = col5(255), useRaster=FALSE, axes = TRUE,interpolate = TRUE, legend = F, yaxt = 'n', add = F, bg = "transparent"),silent=T)  # addfun=F, 
+        plot(jnk, col = gc, useRaster=FALSE, axes = F, addfun=F, interpolate = TRUE, yaxt = 'n', legend = F, add = T)
+      }
+      
+      if (length(eval_stats)>2){ 
+        par(mar=c(2, 0, 1.5, 3.5))
+        jnk <- subset(ems_b, 3)
+        try(plot(ems_a[[3]], col = col5(255), useRaster=FALSE, axes = T, interpolate = F, legend = T, yaxt = 'n', add = F, bg = "transparent"),silent=T)
+        plot(jnk, col = gc, useRaster=FALSE, axes = F, interpolate = F, legend = F, add = T)
+      }
+      
+      legend("bottomright",legend = c("Absent"), fill = gc[1], cex = 0.8)
+      dev.off()
+    }  
     
-    ems_a<-stack(get(paste("TotalConsensus_EMScaledandBinnedby_", eval_stats[1], sep="")))
-    if (length(eval_stats)>1){ 
-    for (i in 2:length(eval_stats)){
-      ems_a<-addLayer(ems_a, get(paste("TotalConsensus_EMScaledandBinnedby_", eval_stats[i], sep="")))
-    }}
-    
-    ems_b<-stack(get(paste("TotalConsensus_EMBinnedby_", eval_stats[1], sep="")))
-    if (length(eval_stats)>1){ 
-      for (i in 2:length(eval_stats)){
-      ems_b<-addLayer(ems_b, get(paste("TotalConsensus_EMBinnedby_", eval_stats[i], sep="")))
-    }}
-    
-    setwd(plots)
-    
-    jpeg_name=paste(proj_nm,"_", sp_nm0,"_TOTALCONSENSUS_Binandscaled_runs_.jpg", sep = "")
-    jpeg(jpeg_name, width = 5*length(eval_stats), height = 5, units = "in",
-         pointsize = 12, quality = 90, bg = "white", res = 300)  
-    par(pin = c(4,4), cex = 1, cex.main = 1, cex.axis = 0.8, mfcol=c(1,length(eval_stats)), mgp = c(1, 0.5, 0),
-        mar=c(2, 2, 1.5, 1), oma = c(0, 0, 0, 1), bg = "transparent")
-    
-    gc = c('antiquewhite1', 'transparent')
-    col5 <- colorRampPalette(c('blue', 'sandybrown', 'darkgreen'))
-    jnk <- subset(ems_b, 1)
-    try(plot(ems_a[[1]],  col = col5(255), useRaster=FALSE, axes = TRUE, addfun=F, interpolate = TRUE, legend = F, add = F, bg = "transparent"),silent=T)
-    plot(jnk, col = gc, useRaster=FALSE, axes = F, addfun=F, interpolate = TRUE, legend = F, add = T)
-    
-    if (length(eval_stats)>1){ 
-      par(mar=c(2, 0, 1.5, 0))
-    jnk <- subset(ems_b, 2)
-    try(plot(ems_a[[2]], col = col5(255), useRaster=FALSE, axes = TRUE,interpolate = TRUE, legend = F, yaxt = 'n', add = F, bg = "transparent"),silent=T)  # addfun=F, 
-    plot(jnk, col = gc, useRaster=FALSE, axes = F, addfun=F, interpolate = TRUE, yaxt = 'n', legend = F, add = T)
-    }
-    
-    if (length(eval_stats)>2){ 
-      par(mar=c(2, 0, 1.5, 3.5))
-    jnk <- subset(ems_b, 3)
-    try(plot(ems_a[[3]], col = col5(255), useRaster=FALSE, axes = T, interpolate = F, legend = T, yaxt = 'n', add = F, bg = "transparent"),silent=T)
-    plot(jnk, col = gc, useRaster=FALSE, axes = F, interpolate = F, legend = F, add = T)
-    }
-    
-    legend("bottomright",legend = c("Absent"), fill = gc[1], cex = 0.8)
-    dev.off()
     setwd(working_dir)
     if (plot_graphs==1){
       for (eval_stat in eval_stats){

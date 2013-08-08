@@ -45,8 +45,9 @@ for (sp_nm in spp_nm){
     myBiomodEM <- BIOMOD_EnsembleModeling(
       modeling.output = myBiomodModelOut,
       chosen.models = 'all', #these are not model types (e.g., GBM), but model runs (e.g., PA1_RF)
+      em.by='all',
       eval.metric = eval_stats, #c('TSS', 'ROC', 'KAPPA'); 'all', #c('TSS', 'ROC'),
-      eval.metric.quality.threshold = rep(0.15,length(eval_stats)),
+      eval.metric.quality.threshold = rep(0.5,length(eval_stats)),
       prob.mean = T,
       prob.cv = T,
       prob.ci = T,
@@ -56,7 +57,7 @@ for (sp_nm in spp_nm){
       prob.mean.weight = T,
       prob.mean.weight.decay = 'proportional' )
     cat('\n',sp_nm,'ensemble done...')
-    
+
     ###################################################
     ### code chunk number 12: ensemble_modeling_outputs
     ###################################################

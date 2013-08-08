@@ -6,8 +6,8 @@ source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
 ###################################
 local_config_dir=DR_FB_SDM_results_S #'C:/Users/lfortini/'
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
-spp_nm=c("Oahu_Amakihi","Akekee", "Anianiau", "Kauai_Amakihi", "Oahu_Amakihi","Hawaii_Akepa", "Hawaii_Elepaio", "Palila")
-project_name='test_runs_500m_rounded'
+spp_nm=c("Akekee", "Kauai_Amakihi", "Hawaii_Akepa", "Palila")
+project_name='test_runs_100m_hibar'
 server=1
 overwrite=0
 models_to_run=c('GBM','MAXENT')
@@ -20,7 +20,7 @@ memory.limit(size=24000000)
 
 if (server==1){
   working_dir=paste0(DR_FB_SDM_results_S,project_name,'/')
-  fitting_clim_data_dir=paste0(DR_FB_clim_data,"all_grd/all_baseline/500m_test/") 
+  fitting_clim_data_dir=paste0(DR_FB_clim_data,"all_grd/all_baseline/100m/") 
   necessary_run_data=paste0(DR_FB_SDM_results_S,'necessary_run_data/') #where all needed files are stored (maxent.jar, species csvs, crop rasters, etc.)
 }else{
   working_dir='C:/Users/lfortini/Data/biomod2/test/'
@@ -47,7 +47,7 @@ memory = T #keep.in.memory=memory
 dir_for_temp_files<-paste('Y:/temp/', project_name,'/', baseline_or_future, '/', sep='') #dir for temp run data (to avoid memory errors)
 
 if (server==1){
-  clim_data_2000=paste0(DR_FB_clim_data,"all_grd/all_baseline/500m_test/")
+  clim_data_2000=paste0(DR_FB_clim_data,"all_grd/all_baseline/250m/")
   clim_data_2100=paste0(DR_FB_clim_data,"all_grd/all_future/500m/")
   clim_data_2000wettest="D:/GIS_Data/REnviroLayers/mixed_data_2000_250mwettest/"
   clim_data_2000driest= "D:/GIS_Data/REnviroLayers/mixed_data_2000_250mdriest/"
@@ -67,12 +67,12 @@ dir.create(dir_for_temp_files, showWarnings=F, recursive=T)
 dir.create(working_dir, showWarnings=F)
 
 if (EM_fit){
-  source(paste0(DR_code_S,"Ensemble_SDM/1_BM2_FB_SDM_fitting_w_cropping4.r")) #this is where all configurations are at
+  source(paste0(DR_code_S,"Ensemble_SDM/Em_code_before_PA_correction/1_BM2_FB_SDM_fitting_w_cropping4.r")) #this is where all configurations are at
 }
 if (EM_ensemble){
-  source(paste0(DR_code_S,"Ensemble_SDM/2_BM2_FB_SDM_EM_fitting2.r")) #this is where all configurations are at
+  source(paste0(DR_code_S,"Ensemble_SDM/Em_code_before_PA_correction/2_BM2_FB_SDM_EM_fitting2.r")) #this is where all configurations are at
 }
 if (EM_project){
-  source(paste0(DR_code_S,"Ensemble_SDM/3_BM2_FB_SDM_EM_projection_with_crop4.r")) #this is where all configurations are at
+  source(paste0(DR_code_S,"Ensemble_SDM/Em_code_before_PA_correction/3_BM2_FB_SDM_EM_projection_with_crop4.r")) #this is where all configurations are at
 }
 
