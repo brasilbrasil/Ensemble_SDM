@@ -1,6 +1,6 @@
 rm(list = ls()) #remove all past worksheet variables
 source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
-options(error=stop) #this keeps the code from running after errors 
+#options(error=stop) #this keeps the code from running after errors 
 
 ###################################
 ####GENERAL MODEL CONFIGURATION####

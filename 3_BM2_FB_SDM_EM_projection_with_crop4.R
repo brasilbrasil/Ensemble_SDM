@@ -242,7 +242,11 @@ for (sp_nm in spp_nm){
     # subsetting the S4 class object 'myBiomomodProj_baseline'  such that it only uses the two main modelling approaches (GBM and Maxent) 
     # that do not overfit
     
-    myBiomodProjection <- LoadProjectionManually(myBiomomodProj_baseline)
+    if (apply_biomod2_fixes){
+      myBiomodProjection <- LoadProjectionManually(myBiomomodProj_baseline)
+    }else{
+      myBiomodProjection <- myBiomomodProj_baseline
+    }
     
     cat('\n',sp_nm,'projection graphs done...')
     
