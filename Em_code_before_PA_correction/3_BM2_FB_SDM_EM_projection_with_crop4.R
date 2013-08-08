@@ -32,7 +32,7 @@ library(rasterVis)
 
 if (apply_biomod2_fixes){
   rasterOptions(tmpdir=dir_for_temp_files, timer = T, progress = "text", todisk  = T)
-  source(paste0(DR_code_S,"Ensemble_SDM/3b_modifications_of_projection_code.r")) #all of fixes to biomod2 code created by AV
+  source(paste0(DR_code_S,"Ensemble_SDM/Em_code_before_PA_correction/3b_modifications_of_projection_code.r")) #all of fixes to biomod2 code created by AV
 }
 
 var_name=c()
@@ -240,8 +240,12 @@ for (sp_nm in spp_nm){
     
     # subsetting the S4 class object 'myBiomomodProj_baseline'  such that it only uses the two main modelling approaches (GBM and Maxent) 
     # that do not overfit
-    
-    myBiomodProjection <- LoadProjectionManually(myBiomomodProj_baseline)
+
+    if (apply_biomod2_fixes){
+      myBiomodProjection <- LoadProjectionManually(myBiomomodProj_baseline)
+    }else{
+      myBiomodProjection <- myBiomomodProj_baseline
+    }
     
     cat('\n',sp_nm,'projection graphs done...')
     

@@ -8,7 +8,7 @@ source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
 local_config_dir=DR_FB_SDM_results_S
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
 spp_nm=c("Akekee")#, "Kauai_Amakihi", "Oahu_Amakihi","Hawaii_Akepa", "Palila")
-project_name='test_runs_AandPAtest_nofixes'
+project_name='test_runs_temp_debug'
 server=1
 overwrite=0
 models_to_run=c('GBM','MAXENT')
@@ -38,10 +38,10 @@ csv_dir=paste(working_dir,"single_sp_CSVs/", sep="")
 ####CONFIG FOR SPECIFIC STEPS####
 #################################
 ####fit config (script#1)
-NbRunEval=3
+NbRunEval=2
 include_Abs=T #in test phase
 PAs_outside_CE=T #if T, will only consider PAs outside climate envelope of all points collected
-PA.nb.rep=3
+PA.nb.rep=2
 PA.nb.absences = 1000 #if PAs_outside_CE=T, this will be overridden! (n of PAs will be determined by P/A point density within CE 
 PA.strategy = "random"
 equiv_100m=0.0009430131
@@ -99,3 +99,4 @@ if (EM_project){
   source(paste0(DR_code_S,"Ensemble_SDM/3_BM2_FB_SDM_EM_projection_with_crop4.r")) #this is where all configurations are at
 }
 
+##add bit here at the end to save config file copy (renamed) in folder

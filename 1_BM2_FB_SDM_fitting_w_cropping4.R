@@ -164,6 +164,7 @@ for (sp_nm in spp_nm){
     n_dups=length(dups3[dups3==TRUE])
     cat('\n','out of ', length(dups3), "points, ",n_dups, "were removed because they were within the same raster cell for", sp_nm)
     mySpeciesOcc<-XY_pres_extrnoNA[!dups3, ] 
+    mySpeciesOcc[,3]=as.numeric(mySpeciesOcc[,3])
     #n_PandA=dim(XY_pres_extrnoNA)[1]
     
     mySpeciesOcc<-mySpeciesOcc[,-4] # This drops the cell column from the data frame
@@ -178,7 +179,7 @@ for (sp_nm in spp_nm){
     plot(seq((min(mySpeciesOcc[,1])-0.1),(max(mySpeciesOcc[,1])+0.1),by=((max(mySpeciesOcc[,1])+0.1)-(min(mySpeciesOcc[,1])-0.1))/5), 
          seq((min(mySpeciesOcc[,2])-0.1),(max(mySpeciesOcc[,2])+0.1),by=((max(mySpeciesOcc[,2])+0.1)-(min(mySpeciesOcc[,2])-0.1))/5), 
          type = "n", xlab="Lon", ylab="Lat")# setting up coord. system
-    points(x=mySpeciesOcc[mySpeciesOcc[,3]=='NA',1], y=mySpeciesOcc[mySpeciesOcc[,3]=='NA',2], type = "p", col = "grey", pch=20,cex = 0.7)
+    points(x=mySpeciesOcc[is.na(mySpeciesOcc[,3]),1], y=mySpeciesOcc[is.na(mySpeciesOcc[,3]),2], type = "p", col = "grey", pch=20,cex = 0.7)
     points(x=mySpeciesOcc[mySpeciesOcc[,3]==0,1], y=mySpeciesOcc[mySpeciesOcc[,3]==0,2], type = "p", col = "red", pch=20,cex = 0.7)
     points(x=mySpeciesOcc[mySpeciesOcc[,3]==1,1], y=mySpeciesOcc[mySpeciesOcc[,3]==1,2], type = "p", col = "blue", pch=20,cex = 0.7)
 
@@ -190,7 +191,6 @@ for (sp_nm in spp_nm){
     myRespName = sp_nm # Insert Species Name Here
     myRespXY = mySpeciesOcc[,1:2]
     myResp<-data.frame(Sp_Bio=mySpeciesOcc[,3])
-    myResp[myResp=='NA']=NA
     #unique(myResp)
     #head(myResp)
     
@@ -214,14 +214,10 @@ for (sp_nm in spp_nm){
     dev.off()
     }
     
-    memory.limit(size=4095)
+    #memory.limit(size=4095)
     myBiomodOption <- BIOMOD_ModelingOptions(
       GBM = list( distribution = 'bernoulli', interaction.depth = 7,  shrinkage = 0.001, bag.fraction = 0.5, train.fraction = 1, n.trees = 100,
                   cv.folds = 10),
-      MARS = list( degree = 2,
-                   penalty = 2,
-                   thresh = 0.001,
-                   prune = TRUE),
       RF = list(do.classif = TRUE, ntree = 100, mtry = 'default', max.nodes=10, corr.bias = T), 
       MAXENT = list(maximumiterations = 100, visible = F, linear = TRUE, quadratic = TRUE,
                     product = TRUE, threshold = TRUE, hinge = TRUE, lq2lqptthreshold = 80, l2lqthreshold = 10,

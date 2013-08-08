@@ -23,8 +23,7 @@ if (baseline_or_future==6){
 csv_dir=paste(working_dir,"single_sp_CSVs/", sep="")
 
 setwd(working_dir)
-spp_nm0=spp_nm
-eval_stats0=eval_stats
+
 library(biomod2)
 library(stringr)
 library(colorRamps)
@@ -57,7 +56,6 @@ for (sp_nm in spp_nm){
   
   #model run specific variables that must not be saved to workspace
   spp_nm=spp_nm0
-  eval_stats=eval_stats0  
   clim_data_dir0=clim_surface_to_use
   proj_nm=proj_nm0 
   
@@ -107,7 +105,7 @@ for (sp_nm in spp_nm){
       cat('\n',sp_nm,'projection complete...')
       cat('point 1 mem', memory.size(), memory.size(max=TRUE), 'nn')
       save.image("temp_workspace3.RData")   #to save workspace
-      rm(list=c("spp_info", "eval_stats0", "spp_nm0", "clim_surface_to_use", "proj_nm0", "overwrite", 
+      rm(list=c("spp_info", "spp_nm0", "clim_surface_to_use", "proj_nm0", "overwrite", 
                 "plot_graphs", "local_config_dir","spp_nm", "clim_data_2000", 
                 "clim_data_2100", "working_dir", "env_var_files", "csv_dir", "eval_stats"))      
       save.image(workspace_name_out0)   #to save workspace
@@ -365,7 +363,7 @@ for (sp_nm in spp_nm){
     }
     cat('\n',sp_nm,'ensemble projection figures done...')
     save.image("temp_workspace4.RData")   #to save workspace
-    rm(list=c("spp_info","eval_stats0", "spp_nm0", "crop_raster", "clim_surface_to_use", "proj_nm0", "overwrite", 
+    rm(list=c("spp_info","spp_nm0", "crop_raster", "clim_surface_to_use", "proj_nm0", "overwrite", 
               "plot_graphs", "local_config_dir","spp_nm", "clim_data_2000", "predictors_temp",
               "clim_data_2100", "working_dir", "env_var_files", "csv_dir", "eval_stats"))      
     save.image(workspace_name_out)   #to save workspace

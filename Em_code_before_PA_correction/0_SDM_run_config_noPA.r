@@ -7,10 +7,10 @@ source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
 local_config_dir=DR_FB_SDM_results_S #'C:/Users/lfortini/'
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
 spp_nm=c("Akekee")#, "Kauai_Amakihi", "Hawaii_Akepa", "Palila")
-project_name='test_runs_100m_hibar_nofixes'
+project_name='test_runs_debug_temp2'
 server=1
 overwrite=0
-models_to_run=c('GBM','MAXENT')
+models_to_run=c('GBM','MAXENT', 'RF')
 eval_stats=c("ROC")
 plot_graphs=1
 EM_fit=T
