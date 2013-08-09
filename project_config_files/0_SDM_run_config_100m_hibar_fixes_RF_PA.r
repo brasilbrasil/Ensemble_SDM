@@ -7,18 +7,18 @@ source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
 ###################################
 local_config_dir=DR_FB_SDM_results_S
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
-spp_nm=c("Akekee")#, "Kauai_Amakihi", "Oahu_Amakihi","Hawaii_Akepa", "Palila")
-project_name='test_runs_temp_debug'
+spp_nm=c("Akekee", "Kauai_Amakihi", "Oahu_Amakihi","Hawaii_Akepa", "Palila")
+project_name='test_runs_100m_hibar_fixes_RF_PA'
 server=1
 overwrite=0
-models_to_run=c('GBM','MAXENT')
+models_to_run=c('GBM','MAXENT', 'RF')
 eval_stats=c("ROC")
 plot_graphs=1
 EM_fit=T
 EM_ensemble=T
 EM_project=T
 memory.limit(size=24000000)
-apply_biomod2_fixes=F #if running large models use this option
+apply_biomod2_fixes=T #if running large models use this option
 
 if (server==1){
   working_dir=paste0(DR_FB_SDM_results_S,project_name,'/')
@@ -38,10 +38,10 @@ csv_dir=paste(working_dir,"single_sp_CSVs/", sep="")
 ####CONFIG FOR SPECIFIC STEPS####
 #################################
 ####fit config (script#1)
-NbRunEval=2
+NbRunEval=10
 include_Abs=T #in test phase
 PAs_outside_CE=T #if T, will only consider PAs outside climate envelope of all points collected
-PA.nb.rep=2
+PA.nb.rep=10
 PA.nb.absences = 1000 #if PAs_outside_CE=T, this will be overridden! (n of PAs will be determined by P/A point density within CE 
 PA.strategy = "random"
 equiv_100m=0.0009430131

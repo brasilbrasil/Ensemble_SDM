@@ -16,8 +16,9 @@ library(stringr)
 #this code below will subset species into the right number of instances started with the bat file                        
 Sys.sleep(6) #time for script process to show up on tasklist
 n_instances=length(system('tasklist /FI "IMAGENAME eq Rscript.exe" ', intern = TRUE))-3
+rsession_instances=length(system('tasklist /FI "IMAGENAME eq rsession.exe" ', intern = TRUE))-3
 cpucores=as.integer(Sys.getenv('NUMBER_OF_PROCESSORS'))
-if (n_instances>0 & cpucores>1){
+if (n_instances>0 & cpucores>1 & rsession_instances<1){
   #n_instances=1
   jnkn=length(spp_nm)
   x=c(1:jnkn)

@@ -120,9 +120,9 @@ for (sp_nm in spp_nm){
       n_PA_points=round(neg_CE_cells/CE_point_density)+jnk
       PA_candidate_points=rasterToPoints(neg_sp_CE, fun=function(x){x==1})
       
-      plot(mySREresp)
-      plot(sp_CE)
-      plot(neg_sp_CE)
+#       plot(mySREresp)
+#       plot(sp_CE)
+#       plot(neg_sp_CE)
             
     }else{
       Ps=mySpeciesOcc[,1:2]

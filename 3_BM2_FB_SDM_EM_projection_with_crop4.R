@@ -55,7 +55,6 @@ for (sp_nm in spp_nm){
     dir.create(plots, showWarnings = FALSE)}
   
   #model run specific variables that must not be saved to workspace
-  spp_nm=spp_nm0
   clim_data_dir0=clim_surface_to_use
   proj_nm=proj_nm0 
   
