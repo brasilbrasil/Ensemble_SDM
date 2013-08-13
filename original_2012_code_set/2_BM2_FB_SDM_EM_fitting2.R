@@ -1,15 +1,16 @@
-rm(list = ls()) #remove all past worksheet variables
+#rm(list = ls()) #remove all past worksheet variables
+source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
 
 ###USER CONFIGURATION
 plot_graphs=1
-local_config_dir='C:/Users/lfortini/'
-spp_nm=(read.csv(paste(local_config_dir,'spp_to_run.csv', sep = ""),header=F, stringsAsFactors=F))
-#spp_nm=c("Akekee", "Akikiki", "Anianiau", "Apapane", "Iiwi", "Kauai_Amakihi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi")   #"Akekee", "Akikiki", "Anianiau", "Apapane", "Iiwi", "Kauai_Amakihi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi"
-working_dir='Y:/FB SDM/biomod2/'
-clim_data_dir00="Y:/FB SDM/HI Forest Bird VA Current Enviro 100m/"
-env_var_files=c("slope.grd", "trasp.grd", "tri.grd", "bio15.grd", "bio16.grd", "bio2.grd", "bio3.grd", "bio4.grd", "bio5.grd", "bio6.grd") ###DEBUG!!
+#local_config_dir='C:/Users/lfortini/'
+#spp_nm=(read.csv(paste(local_config_dir,'spp_to_run.csv', sep = ""),header=F, stringsAsFactors=F))
+spp_nm=c("Akekee", "Akikiki", "Palila", "Hawaii_Creeper")#,"Kauai_Amakihi", "Anianiau", "Apapane", "Iiwi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi")   #"Akekee", "Akikiki", "Anianiau", "Apapane", "Iiwi", "Kauai_Amakihi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi"
+project_name='test_runs_old_code4'
+working_dir=paste0(DR_FB_SDM_results_S,project_name,'/')
+env_var_files=c("bio1.grd", "bio7.grd", "bio12.grd", "bio15.grd") 
 csv_dir=paste(working_dir,"single_sp_CSVs/", sep="")
-overwrite=0
+overwrite=1
 
 ####START UNDERHOOD
 setwd(working_dir)
@@ -32,7 +33,7 @@ for (sp_nm in spp_nm){
   workspace_name_out=paste(sp_nm,"_FB_EM_fit.RData", sep = "") #set name of file to load workspace data from model run
   if (file.exists(workspace_name_out)==F | overwrite==1){
     load(workspace_name)
-    clim_data_dir0=clim_data_dir00
+    #clim_data_dir0=clim_data_dir00
     sp_nm=str_replace_all(sp_nm,"_", ".")
     
     spp_info=read.csv(paste(csv_dir,'FB_spp_data.csv', sep = ""))
@@ -59,11 +60,11 @@ for (sp_nm in spp_nm){
     myBiomodEM <- BIOMOD_EnsembleModeling(
       modeling.output = myBiomodModelOut,
       chosen.models = 'all', #these are not model types (e.g., GBM), but model runs (e.g., PA1_RF)
-      eval.metric = c('TSS', 'ROC'), #c('TSS', 'ROC', 'KAPPA'); 'all', #c('TSS', 'ROC'),
-      eval.metric.quality.threshold = c(0.5, 0.5),
+      eval.metric = c('ROC'), #c('TSS', 'ROC', 'KAPPA'); 'all', #c('TSS', 'ROC'),
+      eval.metric.quality.threshold = c(0.5),
       prob.mean = T,
-      prob.cv = T,
-      prob.ci = T,
+      prob.cv = F,
+      prob.ci = F,
       prob.ci.alpha = 0.05,
       prob.median = T,
       committee.averaging = T,

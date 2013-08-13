@@ -1,21 +1,24 @@
 rm(list = ls()) #remove all past worksheet variables
+source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
 
 ###USER CONFIGURATION
 plot_graphs=1
-local_config_dir='C:/Users/lfortini/' #if specifiying sp to run by file, this is directory of where csv file is located
-spp_nm=(read.csv(paste(local_config_dir,'spp_to_run.csv', sep = ""),header=F, stringsAsFactors=F))
-#spp_nm=c("Oahu_Elepaio")   #"Akekee", "Akikiki", "Anianiau", "Apapane", "Iiwi", "Kauai_Amakihi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi"
-clim_data_2000="Y:/FB SDM/HI Forest Bird VA Current Enviro 250m/"
-clim_data_2100="Y:/FB SDM/HI Forest Bird VA Future Enviro 250m/"
+#local_config_dir='C:/Users/lfortini/'
+#spp_nm=(read.csv(paste(local_config_dir,'spp_to_run.csv', sep = ""),header=F, stringsAsFactors=F))
+spp_nm=c("Akekee", "Akikiki", "Palila", "Hawaii_Creeper")#,"Kauai_Amakihi", "Anianiau", "Apapane", "Iiwi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi")   #"Akekee", "Akikiki", "Anianiau", "Apapane", "Iiwi", "Kauai_Amakihi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi"
+clim_data_2000=paste0(DR_FB_clim_data,"all_grd/all_baseline/250m/")
+clim_data_2100=paste0(DR_FB_clim_data,"all_grd/all_future/500m/")
 clim_surface_to_use=clim_data_2000 
 proj_nm0='baseline' 
 models_to_run=c('GBM','RF','MAXENT')
 overwrite=0 #if 1, will overwrite past results
 
-working_dir='Y:/FB SDM/biomod2/'
-env_var_files=c("slope.grd", "trasp.grd", "tri.grd", "bio15.grd", "bio16.grd", "bio2.grd", "bio3.grd", "bio4.grd", "bio5.grd", "bio6.grd") ###DEBUG!!
+project_name='test_runs_old_code4'
+working_dir=paste0(DR_FB_SDM_results_S,project_name,'/')
+env_var_files=c("bio1.grd", "bio7.grd", "bio12.grd", "bio15.grd") 
 csv_dir=paste(working_dir,"single_sp_CSVs/", sep="")
-eval_stats=c("TSS", "ROC") 
+crop_raster_dir=paste(working_dir, 'map_crop/',sep="")
+eval_stats=c("ROC") 
 
 ####START UNDERHOOD
 setwd(working_dir)
@@ -38,8 +41,8 @@ for (sp_nm in spp_nm){
   cat('\n',sp_nm,'modeling...')
   sp_nm0=sp_nm
   workspace_name=paste(sp_nm,"_FB_EM_fit.RData", sep = "") #set name of file to load workspace data from model run
-  if (file.exists(workspace_name)==F){ 
-    workspace_name=paste(sp_nm,"_FB_run.RData", sep = "")}
+  #if (file.exists(workspace_name)==F){ 
+  #  workspace_name=paste(sp_nm,"_FB_run.RData", sep = "")}
   load(workspace_name)
   
   #model run specific variables that must not be saved to workspace
@@ -55,16 +58,20 @@ for (sp_nm in spp_nm){
   
   if (file.exists(workspace_name_out)==F | overwrite==1){
     #raster_based_env_grid:
-    sp_index=which(spp_info[,"Species"]==sp_nm0)
+    sp_index=which(spp_info[,"Species"]==sp_nm)
     raster_res= spp_info[sp_index,"rasterdir"]
-    clim_data_dir=paste(clim_data_dir0,raster_res,"/grd/",sep="")
+    clim_data_dir=clim_data_dir0 
     jnk0=length(env_var_files)
-    predictors = stack( paste(clim_data_dir, env_var_files[1], sep=""))
+    crop_raster=raster(paste(crop_raster_dir,raster_res,".grd",sep=""))
+    predictors = raster( paste(clim_data_dir, env_var_files[1], sep=""))
+    predictors=crop(predictors,  crop_raster)
     for (jj in 2:jnk0){
-      predictors = stack(predictors, paste(clim_data_dir, env_var_files[jj], sep=""))
+      temp=raster(paste(clim_data_dir, env_var_files[jj], sep=""))
+      temp=crop(temp,  crop_raster)
+      predictors = addLayer(predictors, temp)
     }
-    
     names(predictors)<- var_name
+    rm("crop_raster" ,"temp") 
     predictors
     cat('\n',sp_nm,'projection raster stack created...')
     

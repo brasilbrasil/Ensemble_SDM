@@ -1,25 +1,29 @@
 rm(list = ls()) #remove all past worksheet variables
+source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
 #for each species modeled, have csv of presence data in working directory for the species named speciesname_Ps.csv formated with 3 cols: x,y,pa where pa = 1
 #after running the code for whichever many species, copy results (species output folder and workspace file) to a new directory, along with the maxent.jar file
 #use the projection code to project the distribution model on different environmental surfaces (do not forget to change the working directory)
 
 ###USER CONFIGURATION
-local_config_dir='C:/Users/lfortini/'
-spp_nm=(read.csv(paste(local_config_dir,'spp_to_run.csv', sep = ""),header=F, stringsAsFactors=F))
-#spp_nm=c("Akekee")#, "Akikiki", "Anianiau", "Apapane", "Iiwi", "Kauai_Amakihi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi")   #"Akekee", "Akikiki", "Anianiau", "Apapane", "Iiwi", "Kauai_Amakihi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi"
+#local_config_dir='C:/Users/lfortini/'
+#spp_nm=(read.csv(paste(local_config_dir,'spp_to_run.csv', sep = ""),header=F, stringsAsFactors=F))
+spp_nm=c("Akekee", "Akikiki", "Palila", "Hawaii_Creeper")#,"Kauai_Amakihi", "Anianiau", "Apapane", "Iiwi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi")   #"Akekee", "Akikiki", "Anianiau", "Apapane", "Iiwi", "Kauai_Amakihi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi"
 
 models_to_run=c('GBM','RF','MAXENT')
-working_dir='Y:/FB SDM/biomod2/'
-clim_data_dir0="Y:/FB SDM/HI Forest Bird VA Current Enviro 100m/"
-env_var_files=c("slope.grd", "trasp.grd", "tri.grd", "bio15.grd", "bio16.grd", "bio2.grd", "bio3.grd", "bio4.grd", "bio5.grd", "bio6.grd") ###DEBUG!!
+project_name='test_runs_old_code4'
+working_dir=paste0(DR_FB_SDM_results_S,project_name,'/')
+#working_dir='Y:/FB SDM/biomod2/'
+clim_data_dir0=paste0(DR_FB_clim_data,"all_grd/all_baseline/100m/")
+env_var_files=c("bio1.grd", "bio7.grd", "bio12.grd", "bio15.grd") 
 csv_dir=paste(working_dir,"single_sp_CSVs/", sep="")
+crop_raster_dir=paste(working_dir, 'map_crop/',sep="")
 
 spp_info=read.csv(paste(csv_dir,'FB_spp_data.csv', sep = ""))
 ###START UNDERHOOD
 setwd(working_dir)
 library(biomod2)
 library(raster)
-library(rJava)
+#library(rJava)
 library(randomForest)
 library(dismo)
 library(mda)
@@ -30,7 +34,7 @@ for (env_var_file  in env_var_files){
   var_name=c(var_name, a[[1]][1])
 }
 
-#sp_nm=spp_nm[1]
+sp_nm=spp_nm[1]
 for (sp_nm in spp_nm){
     sp_nm=as.character(sp_nm)
     cat('\n',sp_nm,'modeling...')
@@ -56,18 +60,18 @@ for (sp_nm in spp_nm){
     ##raster_based_env_grid:
     sp_index=which(spp_info[,"Species"]==sp_nm)
     raster_res= spp_info[sp_index,"rasterdir"]
-    clim_data_dir=paste(clim_data_dir0,raster_res,"/grd/",sep="")
-    predictors = stack( paste(clim_data_dir, env_var_files[1], sep=""),
-                        paste(clim_data_dir, env_var_files[2], sep=""),
-                        paste(clim_data_dir, env_var_files[3], sep=""),
-                        paste(clim_data_dir, env_var_files[4], sep=""),
-                        paste(clim_data_dir, env_var_files[5], sep=""),
-                        paste(clim_data_dir, env_var_files[6], sep=""),
-                        paste(clim_data_dir, env_var_files[7], sep=""),
-                        paste(clim_data_dir, env_var_files[8], sep=""),
-                        paste(clim_data_dir, env_var_files[9], sep=""),
-                        paste(clim_data_dir, env_var_files[10], sep=""))
+    clim_data_dir=clim_data_dir0 
+    jnk0=length(env_var_files)
+    crop_raster=raster(paste(crop_raster_dir,raster_res,".grd",sep=""))
+    predictors = raster( paste(clim_data_dir, env_var_files[1], sep=""))
+    predictors=crop(predictors,  crop_raster)
+    for (jj in 2:jnk0){
+      temp=raster(paste(clim_data_dir, env_var_files[jj], sep=""))
+      temp=crop(temp,  crop_raster)
+      predictors = addLayer(predictors, temp)
+    }
     names(predictors)<- var_name
+    rm("crop_raster" ,"temp") 
     predictors
     
     # Ploting predictors may take a substantial amount of time, depending on the file type (i.e. ascii or grd) and resolution)
@@ -156,7 +160,7 @@ for (sp_nm in spp_nm){
                    thresh = 0.001,
                    prune = TRUE),
       RF = list(do.classif = TRUE, ntree = 100, mtry = 'default'), 
-      MAXENT = list(maximumiterations = 100, visible = TRUE, linear = TRUE, quadratic = TRUE,
+      MAXENT = list(maximumiterations = 100, visible = FALSE, linear = TRUE, quadratic = TRUE,
                     product = TRUE, threshold = TRUE, hinge = TRUE, lq2lqptthreshold = 80, l2lqthreshold = 10,
                     hingethreshold = 15, beta_threshold = -1, beta_categorical = -1, beta_lqp = -1, 
                     beta_hinge = -1,defaultprevalence = 0.5)
@@ -172,11 +176,11 @@ for (sp_nm in spp_nm){
     ## Modelling ##
     myBiomodModelOut <- BIOMOD_Modeling(myBiomodData, 
                                         models = models_to_run, models.options = myBiomodOption,
-                                        NbRunEval=50,
+                                        NbRunEval=15,
                                         DataSplit=80,
                                         Yweights=NULL, 
                                         VarImport=10,
-                                        models.eval.meth = c('TSS','ROC', 'KAPPA'),
+                                        models.eval.meth = c('ROC'),
                                         SaveObj = TRUE,
                                         rescal.all.models = TRUE)
     
@@ -187,21 +191,21 @@ for (sp_nm in spp_nm){
     myBiomodModelEval <- getModelsEvaluations(myBiomodModelOut)    
     dimnames(myBiomodModelEval)
     
-    # Outputting the validation metrics for all tests
-    myBiomodModelEval["TSS","Testing.data",,,]
-    Spp_TSS<- data.frame(myBiomodModelEval["TSS","Testing.data",,,])
-    FileName<-paste(sp_nm, "_TSS.csv")
-    write.table(Spp_TSS, file = FileName, sep=",", col.names=NA)
+#     # Outputting the validation metrics for all tests
+#     myBiomodModelEval["TSS","Testing.data",,,]
+#     Spp_TSS<- data.frame(myBiomodModelEval["TSS","Testing.data",,,])
+#     FileName<-paste(sp_nm, "_TSS.csv")
+#     write.table(Spp_TSS, file = FileName, sep=",", col.names=NA)
     
     myBiomodModelEval["ROC","Testing.data",,,]
     Spp_ROC<- data.frame(myBiomodModelEval["ROC","Testing.data",,,])
     FileName<-paste(sp_nm, "_ROC.csv")
     write.table(Spp_ROC, file = FileName, sep=",", col.names=NA)
     
-    myBiomodModelEval["KAPPA","Testing.data",,,]
-    Spp_KAP<- data.frame(myBiomodModelEval["KAPPA","Testing.data",,,])
-    FileName<-paste(sp_nm, "_KAP.csv")
-    write.table(Spp_KAP, file = FileName, sep=",", col.names=NA)
+#     myBiomodModelEval["KAPPA","Testing.data",,,]
+#     Spp_KAP<- data.frame(myBiomodModelEval["KAPPA","Testing.data",,,])
+#     FileName<-paste(sp_nm, "_KAP.csv")
+#     write.table(Spp_KAP, file = FileName, sep=",", col.names=NA)
     
     ## getting the variable importance ##
     getModelsVarImport(myBiomodModelOut)
