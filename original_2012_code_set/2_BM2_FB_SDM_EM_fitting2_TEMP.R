@@ -5,8 +5,8 @@ source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
 plot_graphs=1
 #local_config_dir='C:/Users/lfortini/'
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run.csv', sep = ""),header=F, stringsAsFactors=F))
-spp_nm=c("Hawaii_Akepa")#,("Akikiki", "Palila","Kauai_Amakihi", "Anianiau", "Apapane", "Iiwi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi")   #"Akekee", "Akikiki", "Anianiau", "Apapane", "Iiwi", "Kauai_Amakihi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi"
-project_name='test_runs_old_code4'
+spp_nm=c("Akekee", "Palila", "Hawaii_Akepa")#"Kauai_Amakihi", "Anianiau", "Apapane", "Iiwi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi")   #"Akekee", "Akikiki", "Anianiau", "Apapane", "Iiwi", "Kauai_Amakihi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi"
+project_name='test_runs_old_code_new_package'
 working_dir=paste0(DR_FB_SDM_results_S,project_name,'/')
 env_var_files=c("bio1.grd", "bio7.grd", "bio12.grd", "bio15.grd") 
 csv_dir=paste(working_dir,"single_sp_CSVs/", sep="")

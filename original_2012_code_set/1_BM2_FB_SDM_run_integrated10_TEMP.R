@@ -7,10 +7,10 @@ source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
 ###USER CONFIGURATION
 #local_config_dir='C:/Users/lfortini/'
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run.csv', sep = ""),header=F, stringsAsFactors=F))
-spp_nm=c("Hawaii_Akepa")#,("Akikiki", "Palila","Kauai_Amakihi", "Anianiau", "Apapane", "Iiwi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi")   #"Akekee", "Akikiki", "Anianiau", "Apapane", "Iiwi", "Kauai_Amakihi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi"
+spp_nm=c("Akekee", "Palila", "Hawaii_Akepa")#"Kauai_Amakihi", "Anianiau", "Apapane", "Iiwi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi")   #"Akekee", "Akikiki", "Anianiau", "Apapane", "Iiwi", "Kauai_Amakihi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi"
 
 models_to_run=c('GBM','RF','MAXENT')
-project_name='test_runs_old_code4'
+project_name='test_runs_old_code_new_package'
 working_dir=paste0(DR_FB_SDM_results_S,project_name,'/')
 #working_dir='Y:/FB SDM/biomod2/'
 clim_data_dir0=paste0(DR_FB_clim_data,"all_grd/all_baseline/100m/")
