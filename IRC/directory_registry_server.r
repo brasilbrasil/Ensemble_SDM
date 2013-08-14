@@ -5,7 +5,7 @@
 #PICCC data directory
 rootDir = "Y:"
 dataDir = paste0(rootDir, "/PICCC_data") #where the original data exists for SDM (PA species and environmental data) - same for server
-codeDir = paste0(rootDir, "/PICCC_analysis/code/Ensemble_SDM")
+codeDir = paste0(rootDir, "/PICCC_analysis/code/IRC/Ensemble_SDM")
 analysisDir = paste0(rootDir, "/PICCC_analysis")
 resultsDir = paste0(analysisDir, "/FB_analysis/model_results/biomod2" )
 

@@ -14,7 +14,7 @@ if (machine == 1){
     source("C:/Users/lfortini/directory_registry.r") #not sure if this is the right location for Lucas's local file
   } else {
     if (machine == 3) {
-      source("C:/USGS_Honolulu/PICCC_code/Ensemble_SDM/directory_registryIRC.r")
+      source("C:/USGS_Honolulu/PICCC_code/Ensemble_SDM/IRC/directory_registryIRC.r")
     } else {
       cat('\n','Error - invalid machine number')
     }
