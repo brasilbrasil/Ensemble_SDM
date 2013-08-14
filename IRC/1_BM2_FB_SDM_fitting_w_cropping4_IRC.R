@@ -36,7 +36,7 @@ for (dir in dirs){
 }
 cat('\n','Copying of necessary files is complete')
 
-spp_info=read.csv(paste(csv_dir,'FB_spp_data.csv', sep = ""))
+spp_info=read.csv(paste0(csv_dir,'/FB_spp_data.csv'))
 
 
 var_name=c()
