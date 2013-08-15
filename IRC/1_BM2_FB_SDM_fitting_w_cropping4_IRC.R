@@ -75,31 +75,32 @@ for (sp_nm in spp_nm){
     jpeg_name = paste0(sp_nm,"_env_vars_used.jpg") 
     jpeg(jpeg_name,
          width = 10, height = 10, units = "in",pointsize = 12, quality = 90, bg = "white", res = 300)
-    plot(predictors, col=rev(terrain.colors(255)), maxpixels = 100000, useRaster = FALSE, axes = TRUE, addfun = NULL, interpolate = TRUE) #NOT WORKING
-      #ERROR - 24 warnings to do with "interpolate"
+    dev.off() #need to use this before next line or it may not plot
+    plot(predictors, col=rev(terrain.colors(255)), maxpixels = 100000, useRaster = FALSE, axes = TRUE, addfun = NULL) #NOT WORKING
+      #ERROR - 24 warnings to do with "interpolate" check with warnings()  
     dev.off()
     
     ####species point data
-    cat('\n','loading species data...')
+    cat('\n','loading species data...') #sign-posting
     mySpeciesOcc=read.csv(paste0(csv_dir,"/",sp_nm,'_pres_abs.csv')) #FB_data_points4_PAandA
     
     #presence (and absence) data handling)
-    mySpeciesOcc=cbind(mySpeciesOcc[,2:3],pa=mySpeciesOcc[,1]) #extracts just the x, y, and PA data from the species csv
+    mySpeciesOcc = cbind(mySpeciesOcc[,2:3],pa=mySpeciesOcc[,1]) #extracts just the x, y, and PA data from the species csv
     head(mySpeciesOcc) #check header of PA data
-    
     
     ##pseudo-absence handling
     cat('\n','defining candidate PA points...')
     if (PAs_outside_CE){
-      P_and_A=mySpeciesOcc[,1:2]
-      mySREresp <- reclassify(subset(predictors,1,drop=TRUE), c(-Inf,Inf,0))
-      mySREresp[cellFromXY(mySREresp,P_and_A)] <- 1
-      sp_CE=sre(Response=mySREresp,Explanatory=predictors,NewData=predictors,Quant=0.025)
+      PA_XY = mySpeciesOcc[,1:2] #extracts the lat and long for all PA points
+      mySREresp <- reclassify(subset(predictors,1,drop=TRUE), c(-Inf,Inf,0)) #builds a raster layer based on environmental rasters for response variable
+      mySREresp[cellFromXY(mySREresp,PA_XY)] <- 1 #assigns all shared cells in "bioclim" and "PA_XY" to "1"
+      sp_CE = sre(Response = mySREresp,Explanatory = predictors,NewData = predictors,Quant = 0.025) #Calculates surface range envelope for distribution removing 2.5% of extremes 
       #calculate density of points within sre
-      n_PandA=sum(as.matrix(mySREresp), na.rm=T)
-      CE_cells=sum(as.matrix(sp_CE), na.rm=T)
-      CE_point_density=round(CE_cells/n_PandA)
+      n_PandA=sum(as.matrix(mySREresp), na.rm=T) #counts number of values (cells) where species occurence data available
+      CE_cells=sum(as.matrix(sp_CE), na.rm=T) #counts number of cells where presence predicted in climate envelope
+      CE_point_density=round(CE_cells/n_PandA) #???
       
+      #SHOULD THIS INCLUDE 1's AS WELL?
       #create raster outside CE
       neg_sp_CE=sp_CE==0
       
