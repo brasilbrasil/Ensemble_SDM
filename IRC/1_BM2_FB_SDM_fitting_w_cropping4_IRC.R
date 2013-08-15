@@ -12,19 +12,19 @@ library(randomForest)
 library(dismo)
 library(mda)
 library(stringr)
-
+library(tools)
 
 ###not in FWS code (copy necessary files)
 #this loop copies the necessary data to run the models into the working directory
-dirs=list.dirs(necessary_run_data, full.names = FALSE, recursive = TRUE)
+dirs = list.dirs(necessary_run_data, full.names = FALSE, recursive = TRUE)
 for (dir in dirs){
-  layers<-list.files(dir, pattern=NULL, full.names=FALSE, include.dirs = FALSE)
+  layers <- list.files(dir, pattern=NULL, full.names=FALSE, include.dirs = FALSE)
   for (layer in layers){
-    layer_full_nm=paste(dir,layer, sep="/")
+    layer_full_nm = paste(dir,layer, sep="/")
     if (file.info(layer_full_nm)$isdir==FALSE){
-      out_dir_nm=str_replace(dir, necessary_run_data, working_dir)
+      out_dir_nm = str_replace(dir, necessary_run_data, working_dir)
       dir.create(out_dir_nm, showWarnings = FALSE, recursive = TRUE, mode = "0777")
-      out_lyr_nm=str_replace(layer_full_nm, necessary_run_data, working_dir)
+      out_lyr_nm = str_replace(layer_full_nm, necessary_run_data, working_dir)
       if (file.exists(out_lyr_nm)==FALSE){
         cat('\n','found ', layer, 'in ', dir)
         file.copy(layer_full_nm, out_lyr_nm, overwrite = TRUE, recursive = FALSE,
@@ -36,48 +36,37 @@ for (dir in dirs){
 }
 cat('\n','Copying of necessary files is complete')
 
-spp_info=read.csv(paste0(csv_dir,'/FB_spp_data.csv'))
+#assigns where to find species information (e.g. raster directory, raster set, endemic...) in a csv file )
+spp_info = read.csv(paste0(csv_dir,'/FB_spp_data.csv'))
 
+#creates vector with bioclimatic variable names without the file extension (.grd)
+var_name <- unlist(file_path_sans_ext(env_Var_files))
 
-var_name=c()
-for (env_var_file  in env_var_files){
-  a=strsplit(env_var_file,"\\.")
-  var_name=c(var_name, a[[1]][1])
-}
-
-sp_nm=spp_nm[1]
-n_abs_removed=c()
 for (sp_nm in spp_nm){
-  sp_nm=as.character(sp_nm)
-  
-  sp_nm_temp=str_replace_all(sp_nm,"_", ".")
-  sp_dir=paste0(sp_nm_temp,"/") ###not in FWS code (dir creation)
-  dir.create(sp_dir, showWarnings = FALSE)
-  ##copy the maxent jar file into the species subdirectory
-  #file.copy("maxent.jar", paste0(sp_dir,"maxent.jar"), overwrite = TRUE, recursive = TRUE,
-  #          copy.mode = TRUE)
+  #sp_nm = as.character(sp_nm) - not needed - the list is already a character list
+  sp_dir = str_replace_all(sp_nm,"_", ".") #replaces "_" with "." in sp_nm
+  dir.create(sp_dir, showWarnings = FALSE) #creates new directory with species name
   
   cat('\n',sp_nm,'model fitting...')
-  FileName00<-paste(sp_nm, "_VariImp.csv") ###not in FWS code (orverwrite capacity)
-  if (file.exists(FileName00)==F | overwrite==1){ #check to see if the analysis for this species was already done    
+  FileName00<-paste0(sp_nm, "_VariImp.csv") ###not in FWS code - allows for overwrite capacity
+  if (file.exists(FileName00)==FALSE | overwrite==1){ #check to see if the analysis for this species was already done    
     # Start the clock!
     ptm0 <- proc.time()
-    workspace_name=paste(sp_nm,"_FB_modelfitting.RData", sep = "") #set name of file to save all workspace data after model run
+    workspace_name=paste0(sp_nm,"_FB_modelfitting.RData")} #set name of file to save all workspace data after model run
     
     #######Loading datasets#######
     
     ##raster_based_env_grid:
     cat('\n','loading rasters...')
     
-    sp_index=which(spp_info[,"Species"]==sp_nm)
-    raster_res= spp_info[sp_index,"rasterdir"]
-    clim_data_dir=fitting_clim_data_dir 
-    jnk0=length(env_var_files)
-    crop_raster=raster(paste(crop_raster_dir,raster_res,".grd",sep=""))
-    predictors = raster( paste(clim_data_dir, env_var_files[1], sep=""))
-    predictors=crop(predictors,  crop_raster)
+    sp_index = which(spp_info[,"Species"]==sp_nm) #finds which line of species .csv file has information needed
+    raster_res = paste0("/", spp_info[sp_index,"rasterdir"]) #finds which raster directory should be used for the species based on the .csv file
+    crop_raster = raster(paste0(crop_raster_dir,raster_res,".grd")) #assigns cropped raster associated with species to "crop_raster" variable
+    predictors = raster(paste0(fitting_clim_data_dir, "/", env_var_files[1])) #assigns bioclimate raster to "predictors" variable
+    predictors = crop(predictors,  crop_raster) #crops predictor grid using crop_raster
+    jnk0 = length(env_var_files) #creates variable with no. of bioclimate variables to use
     for (jj in 2:jnk0){
-      temp=raster(paste(clim_data_dir, env_var_files[jj], sep=""))
+      temp=raster(paste(fitting_clim_data_dir, env_var_files[jj], sep=""))
       temp=crop(temp,  crop_raster)
       predictors = addLayer(predictors, temp)
     }

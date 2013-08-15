@@ -37,7 +37,7 @@ if (file.exists(working_dir) == F){
 
 #choose species of interest - all (from CSV file) or subset listed
 run_all_spp = 0 #if running all species enter "1" and if only subset enter "0"
-spp_subset = c("Akekee")#, "Kauai_Amakihi", "Oahu_Amakihi","Hawaii_Akepa", "Palila") #if only subset, enter spp names here 
+spp_subset = c("Akekee","Kauai_Amakihi") # "Oahu_Amakihi","Hawaii_Akepa", "Palila") #if only subset, enter spp names here 
 
 #Biomod2 modelling options for species of interest
 models_to_run = c('GBM','MAXENT') #choose biomod2 models to run - possibilities are: 'GLM','GBM','GAM','CTA','ANN','SRE','FDA','MARS','RF','MAXENT' 
