@@ -75,7 +75,7 @@ for (sp_nm in spp_nm){
     jpeg_name = paste0(sp_nm,"_env_vars_used.jpg") 
     jpeg(jpeg_name,
          width = 10, height = 10, units = "in",pointsize = 12, quality = 90, bg = "white", res = 300)
-    plot(predictors, col=rev(terrain.colors(255)), maxpixels=100000, useRaster=FALSE, axes = TRUE, addfun=NULL) #NOT WORKING
+    plot(predictors, col=rev(terrain.colors(255)), maxpixels = 100000, useRaster = FALSE, axes = TRUE, addfun = NULL, interpolate = TRUE) #NOT WORKING
       #ERROR - 24 warnings to do with "interpolate"
     dev.off()
     
