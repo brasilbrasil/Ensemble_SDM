@@ -3,7 +3,6 @@
 
 ###START UNDERHOOD
 setwd(working_dir) #sets the working directory
-base_working_dir=working_dir #?
 
 #Load required libraries
 library(biomod2)
@@ -40,24 +39,24 @@ cat('\n','Copying of necessary files is complete')
 spp_info = read.csv(paste0(csv_dir,'/FB_spp_data.csv'))
 
 #creates vector with bioclimatic variable names without the file extension (.grd)
-var_name <- unlist(file_path_sans_ext(env_Var_files))
+var_name <- unlist(file_path_sans_ext(env_var_files))
 
 for (sp_nm in spp_nm){
-  #sp_nm = as.character(sp_nm) - not needed - the list is already a character list
+  sp_nm = as.character(sp_nm) #converts sp_nm into character variable (in case the species are numbered)
   sp_dir = str_replace_all(sp_nm,"_", ".") #replaces "_" with "." in sp_nm
   dir.create(sp_dir, showWarnings = FALSE) #creates new directory with species name
   
-  cat('\n',sp_nm,'model fitting...')
+  cat('\n',sp_nm,'model fitting...') #sign-posting
   FileName00<-paste0(sp_nm, "_VariImp.csv") ###not in FWS code - allows for overwrite capacity
-  if (file.exists(FileName00)==FALSE | overwrite==1){ #check to see if the analysis for this species was already done    
+  if (file.exists(FileName00)==FALSE | overwrite==1){ #check if analysis for species already done or overwrite requested in config    
     # Start the clock!
     ptm0 <- proc.time()
-    workspace_name=paste0(sp_nm,"_FB_modelfitting.RData")} #set name of file to save all workspace data after model run
+    workspace_name=paste0(sp_nm,"_FB_modelfitting.RData") #set name of file to save all workspace data after model run
     
     #######Loading datasets#######
     
     ##raster_based_env_grid:
-    cat('\n','loading rasters...')
+    cat('\n','loading rasters...') #sign-posting
     
     sp_index = which(spp_info[,"Species"]==sp_nm) #finds which line of species .csv file has information needed
     raster_res = paste0("/", spp_info[sp_index,"rasterdir"]) #finds which raster directory should be used for the species based on the .csv file
@@ -65,28 +64,28 @@ for (sp_nm in spp_nm){
     predictors = raster(paste0(fitting_clim_data_dir, "/", env_var_files[1])) #assigns bioclimate raster to "predictors" variable
     predictors = crop(predictors,  crop_raster) #crops predictor grid using crop_raster
     jnk0 = length(env_var_files) #creates variable with no. of bioclimate variables to use
-    for (jj in 2:jnk0){
-      temp=raster(paste(fitting_clim_data_dir, env_var_files[jj], sep=""))
-      temp=crop(temp,  crop_raster)
+    for (jj in 2:jnk0){ #this loop adds the rest of the rest of the bioclimate variables to the "predictors" raster
+      temp = raster(paste0(fitting_clim_data_dir, "/", env_var_files[jj]))
+      temp = crop(temp,  crop_raster)
       predictors = addLayer(predictors, temp)
     }
-    names(predictors)<- var_name
-    rm("crop_raster" ,"temp") 
-    predictors
+    names(predictors) <- var_name #assigns names to bioclimate raster stack
+    rm("crop_raster" ,"temp") #removes temporary variables
     
-    jpeg_name=paste(sp_nm,"_env_vars_used.jpg", sep = "")
+    jpeg_name = paste0(sp_nm,"_env_vars_used.jpg") 
     jpeg(jpeg_name,
          width = 10, height = 10, units = "in",pointsize = 12, quality = 90, bg = "white", res = 300)
-    plot(predictors, col=rev(terrain.colors(255)), maxpixels=100000, useRaster=FALSE, axes = TRUE, addfun=NULL, Interpolate = TRUE)
+    plot(predictors, col=rev(terrain.colors(255)), maxpixels=100000, useRaster=FALSE, axes = TRUE, addfun=NULL) #NOT WORKING
+      #ERROR - 24 warnings to do with "interpolate"
     dev.off()
     
     ####species point data
     cat('\n','loading species data...')
-    mySpeciesOcc=read.csv(paste(csv_dir,sp_nm,'_pres_abs.csv', sep = "")) #FB_data_points4_PAandA
+    mySpeciesOcc=read.csv(paste0(csv_dir,"/",sp_nm,'_pres_abs.csv')) #FB_data_points4_PAandA
     
     #presence (and absence) data handling)
-    mySpeciesOcc=cbind(mySpeciesOcc[,2:3],pa=mySpeciesOcc[,1])
-    head(mySpeciesOcc)
+    mySpeciesOcc=cbind(mySpeciesOcc[,2:3],pa=mySpeciesOcc[,1]) #extracts just the x, y, and PA data from the species csv
+    head(mySpeciesOcc) #check header of PA data
     
     
     ##pseudo-absence handling

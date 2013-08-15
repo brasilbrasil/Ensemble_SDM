@@ -26,7 +26,7 @@ if (machine == 1){
 ###################################
 
 #setting file locations 
-project_name = "/FB_test20130814" #assign project name to the current run
+project_name = "/FB_test20130815" #assign project name to the current run
 working_dir = paste0(resultsDir,project_name) #assign working directory
 crop_raster_dir = paste0(working_dir, "/map_crop") #assign directory for cropped raster files
 csv_dir = paste0(working_dir,"/single_sp_CSVs") #assign directory for single species CSV's
@@ -90,18 +90,19 @@ dir.create(dir_for_temp_files, showWarnings=F, recursive=T)
 
 ###not in FWS code (multi instance automation)
 #this code below will subset species into the right number of instances started with the bat file                        
-Sys.sleep(6) #time for script process to show up on tasklist
-n_instances=length(system('tasklist /FI "IMAGENAME eq Rscript.exe" ', intern = TRUE))-3
-cpucores=as.integer(Sys.getenv('NUMBER_OF_PROCESSORS'))
-if (n_instances>0 & cpucores>1){
+
+#Sys.sleep(6) #time for script process to show up on tasklist
+#n_instances=length(system('tasklist /FI "IMAGENAME eq Rscript.exe" ', intern = TRUE))-3
+#cpucores=as.integer(Sys.getenv('NUMBER_OF_PROCESSORS'))
+#if (n_instances>0 & cpucores>1){
   #n_instances=1
-  jnkn=length(spp_nm)
-  x=c(1:jnkn)
-  chunk <- function(x,n) split(x, factor(sort(rank(x)%%n)))
-  groups=chunk(x,cpucores)
-  jnk=groups[n_instances][[1]]
-  spp_nm=spp_nm[jnk]
-}
+  #jnkn=length(spp_nm)
+  #x=c(1:jnkn)
+  #chunk <- function(x,n) split(x, factor(sort(rank(x)%%n)))
+  #groups=chunk(x,cpucores)
+  #jnk=groups[n_instances][[1]]
+  #spp_nm=spp_nm[jnk]
+#}
 
 
 ####Runs script for model fitting, creating ensemble models, and projecting models according to settings above.
