@@ -97,7 +97,9 @@ for (sp_nm in spp_nm){
     #presence (and absence) data handling)
     mySpeciesOcc=cbind(mySpeciesOcc[,2:3],pa=mySpeciesOcc[,1])
     head(mySpeciesOcc)
-    
+    if (!include_Abs){
+      mySpeciesOcc=mySpeciesOcc[mySpeciesOcc$pa==1,]
+    }
     
     ##pseudo-absence handling
     cat('\n','defining candidate PA points...')
