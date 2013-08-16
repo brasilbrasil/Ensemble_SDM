@@ -66,7 +66,7 @@ if (run_all_spp == 1){
 ####fit config (script#1)
 NbRunEval = 3
 include_Abs = T #in test phase
-PAs_outside_CE = T #if T, will only consider PAs outside climate envelope of all points collected
+PseudoAbs_outside_CE = T #if T, will only consider Pseudo Absences outside climate envelope of all points collected
 PA.nb.rep = 3
 PA.nb.absences = 1000 #if PAs_outside_CE=T, this will be overridden! (n of PAs will be determined by P/A point density within CE 
 PA.strategy = "random"

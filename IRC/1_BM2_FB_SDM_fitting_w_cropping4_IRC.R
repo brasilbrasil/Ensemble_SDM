@@ -90,49 +90,48 @@ for (sp_nm in spp_nm){
     
     ##pseudo-absence handling
     cat('\n','defining candidate PA points...')
-    if (PAs_outside_CE){
-      PA_XY = mySpeciesOcc[,1:2] #extracts the lat and long for all PA points
-      mySREresp <- reclassify(subset(predictors,1,drop=TRUE), c(-Inf,Inf,0)) #builds a raster layer based on environmental rasters for response variable
-      mySREresp[cellFromXY(mySREresp,PA_XY)] <- 1 #assigns all shared cells in "bioclim" and "PA_XY" to "1"
+    PA_XY = mySpeciesOcc[,1:2] #extracts the lat and long for all PA points
+    mySREresp <- reclassify(subset(predictors,1,drop=TRUE), c(-Inf,Inf,0)) #builds a raster layer based on environmental rasters for response variable
+    mySREresp[cellFromXY(mySREresp,PA_XY)] <- 1 #assigns all shared cells in "bioclim" and "PA_XY" to "1"
+
+    #different runs to only have Pseudo Absences assigned outside climate envelope or anywhere
+    if (PseudoAbs_outside_CE){      
       sp_CE = sre(Response = mySREresp,Explanatory = predictors,NewData = predictors,Quant = 0.025) #Calculates surface range envelope for distribution removing 2.5% of extremes 
       #calculate density of points within sre
-      n_PandA=sum(as.matrix(mySREresp), na.rm=T) #counts number of values (cells) where species occurence data available
-      CE_cells=sum(as.matrix(sp_CE), na.rm=T) #counts number of cells where presence predicted in climate envelope
-      CE_point_density=round(CE_cells/n_PandA) #???
+      n_PandA = sum(as.matrix(mySREresp), na.rm=T) #counts number of cells where species occurence data available
+      CE_cells = sum(as.matrix(sp_CE), na.rm=T) #counts number of cells where presence predicted in climate envelope
+      CE_point_density = round(n_PandA/CE_cells, digits = 4) #density of points with real data within the climate envelope
       
-      #SHOULD THIS INCLUDE 1's AS WELL?
-      #create raster outside CE
-      neg_sp_CE=sp_CE==0
+      #creates raster of all cells outside CE
+      neg_sp_CE = sp_CE == 0 #IRC: SHOULD THIS ALSO INCLUDE NA? 
       
-      #calculate desired number of PA points based on PandA density within CE
-      neg_CE_cells=sum(as.matrix(neg_sp_CE), na.rm=T)
-      jnk=dim(mySpeciesOcc[mySpeciesOcc$pa==0,])[1]
-      n_PA_points=round(neg_CE_cells/CE_point_density)+jnk
-      PA_candidate_points=rasterToPoints(neg_sp_CE, fun=function(x){x==1})
+      #calculate desired number of pseudo absence points outside CE based on PandA density within CE
+      neg_CE_cells = sum(as.matrix(neg_sp_CE), na.rm=T) #calculates no. cells outside CE
+      Act_abs = dim(mySpeciesOcc[mySpeciesOcc$pa==0,])[1] #calculates number of real absences
+      n_PseudoAbs_pts = round(neg_CE_cells*CE_point_density)+Act_abs #accounts for the actual absences for calculating pseudo absences      
+      PseudoAbs_cand_pts = rasterToPoints(neg_sp_CE, fun=function(x){x==1}) #Creates matrix of candidate points (x,y,layer)
       
-      plot(mySREresp)
-      plot(sp_CE)
-      plot(neg_sp_CE)
-            
+      plot(mySREresp) #plots all cells with data
+      plot(sp_CE) #plots climate envelope
+      plot(neg_sp_CE) #plots areas outside climate envelope
+
+      # next section assigns pseudo absences anywhere (not limited to CE)       
     }else{
-      Ps=mySpeciesOcc[,1:2]
-      mySREresp <- reclassify(subset(predictors,1,drop=TRUE), c(-Inf,Inf,0))
-      mySREresp[cellFromXY(mySREresp,Ps)] <- 1
-      mySREresp=mySREresp==0
+      mySREresp = mySREresp == 0
       plot(mySREresp)
-      PA_candidate_points=rasterToPoints(mySREresp, fun=function(x){x==1})
-      n_PA_points=PA.nb.absences
+      PseudoAbs_cand_pts=rasterToPoints(mySREresp, fun=function(x){x==1})
+      n_PseudoAbs_pts=PA.nb.absences
     }  
-    PA_candidate_points=as.data.frame(PA_candidate_points[,1:2])
-    head(PA_candidate_points)
-    dim(PA_candidate_points)
-    PA_candidate_points_noNA=PA_candidate_points[complete.cases(PA_candidate_points),] #removes rows with NAs
-    PA_candidate_points_noNA=cbind(PA_candidate_points_noNA,pa=rep('NA', dim(PA_candidate_points_noNA)[1],1))
-    names(PA_candidate_points_noNA)=c('X', 'Y', 'pa') 
-    head(PA_candidate_points_noNA)
+    PseudoAbs_cand_pts=as.data.frame(PseudoAbs_cand_pts[,1:2])
+    head(PseudoAbs_cand_pts)
+    dim(PseudoAbs_cand_pts)
+    PseudoAbs_cand_pts_noNA=PseudoAbs_cand_pts[complete.cases(PseudoAbs_cand_pts),] #removes rows with NAs
+    PseudoAbs_cand_pts_noNA=cbind(PseudoAbs_cand_pts_noNA,pa=rep('NA', dim(PseudoAbs_cand_pts_noNA)[1],1))
+    names(PseudoAbs_cand_pts_noNA)=c('X', 'Y', 'pa') 
+    head(PseudoAbs_cand_pts_noNA)
     
     #merge data with pseudoabsence
-    mySpeciesOcc<-data.frame(rbind(mySpeciesOcc, PA_candidate_points_noNA))
+    mySpeciesOcc<-data.frame(rbind(mySpeciesOcc, PseudoAbs_cand_pts_noNA))
     
     #### EXTRACTION OF ENV DATA FOR POINT DATA
     cat('\n','extracting env vars to points...')
@@ -192,7 +191,7 @@ for (sp_nm in spp_nm){
       resp.xy = myRespXY,
       resp.name = myRespName,
       PA.nb.rep=PA.nb.rep,
-      PA.nb.absences = n_PA_points,
+      PA.nb.absences = n_PseudoAbs_pts,
       PA.strategy = PA.strategy,
       PA.dist.min = PA.dist.min)
     #This plotting methods takes way too long!!!  (but it is useful since it plots PAs selected)
@@ -219,7 +218,7 @@ for (sp_nm in spp_nm){
                     beta_hinge = -1,defaultprevalence = 0.5)
     )
     
-    rm("predictors", "xybackg", "PA_candidate_points", "dups2", "jnk", "jnk1", "jnk2") 
+    rm("predictors", "xybackg", "PseudoAbs_cand_pts", "dups2", "jnk", "jnk1", "jnk2") 
     
     cat('\n','fitting...')
     
