@@ -130,33 +130,41 @@ for (sp_nm in spp_nm){
       }
     }
     
-    #print sample binary model for species
-    #     if (plot_graphs==1){
-    #       for (model in models_to_run){
-    #         jpeg_name=paste(sp_nm0,"_", model, "_BIN_model", proj_nm, "runs.jpg", sep = "")
-    #         if (file.exists(jpeg_name)==F | overwrite==1){
-    #           jnk=paste(working_dir, sp_nm, "/proj_", proj_nm, "/", proj_nm, "_", sp_nm, "_bin_ROC_RasterStack" , sep = "")
-    #           if (file.exists(jnk)){
-    #             sp_bin_file=paste(proj_nm, "_", sp_nm, "_bin_ROC_RasterStack" , sep = "")
-    #             jnk=load(paste(sp_nm,"/proj_", proj_nm, "/", sp_bin_file , sep = "")) #current_BI_Akepa_bin_ROC_RasterStack
-    #             sp_bin_stack=get(jnk)
-    #             sample=c()
-    #             try(sample <- raster(sp_bin_stack, layer=paste(sp_nm, "_AllData_Full_",model,".bin" , sep = "")), TRUE)
-    #           }else{
-    #             sp_bin_file=paste(proj_nm, "_", sp_nm, "_AllData_Full_", model,"_bin_ROC_RasterLayer" , sep = "")
-    #             jnk=load(paste(sp_nm,"/proj_", proj_nm, "/", sp_bin_file , sep = "")) #current_BI_Akepa_bin_ROC_RasterStack
-    #             sample=get(jnk)
-    #           }
-    #           
-    #           jpeg(jpeg_name,
-    #                width = 10, height = 10, units = "in",
-    #                pointsize = 12, quality = 90, bg = "white", res = 300)
-    #           #par(mfrow=c(1,2))
-    #           try(plot(sample), TRUE)
-    #           dev.off()
-    #         }
-    #       }
-    #     }
+    if (plot_graphs==1){
+      for (model in models_to_run){
+        jpeg_name=paste(sp_nm0,"_", model, "_BIN_model", proj_nm, "runs.jpg", sep = "")
+        if (file.exists(jpeg_name)==F | overwrite==1){
+          sp_bin_file=paste(proj_nm, "_", sp_nm, "_bin_ROC_RasterStack" , sep = "")
+          sp_bin_file=paste(sp_nm,"/proj_", proj_nm, "/", sp_bin_file , sep = "")
+          if (file.exists(sp_bin_file)){
+            jnk=load(sp_bin_file) #current_BI_Akepa_bin_ROC_RasterStack
+            sp_bin_stack=get(jnk)
+            sample=c()
+            try(sample <- raster(sp_bin_stack, layer=paste(sp_nm, "_AllData_Full_",model,".bin" , sep = "")), TRUE)
+          }
+          sp_bin_file=paste(proj_nm, "_", sp_nm, "_AllData_Full_", model,"_bin_ROC_RasterLayer" , sep = "")
+          sp_bin_file=paste(sp_nm,"/proj_", proj_nm, "/", sp_bin_file , sep = "")          
+          if (file.exists(sp_bin_file)){
+            jnk=load(sp_bin_file) #current_BI_Akepa_bin_ROC_RasterStack
+            sample=get(jnk)
+          }
+          
+          sp_bin_file=paste(proj_nm, "_", sp_nm, "_ROCbin.grd", sep = "")
+          sp_bin_file=paste(sp_nm,"/proj_", proj_nm, "/proj_", sp_bin_file , sep = "") #current_BI_Akepa_bin_ROC_RasterStack
+          if (file.exists(sp_bin_file)){
+            sample=raster(sp_bin_file)
+            #plot(jnk)  
+          }
+          
+          jpeg(jpeg_name,
+               width = 10, height = 10, units = "in",
+               pointsize = 12, quality = 90, bg = "white", res = 300)
+          #par(mfrow=c(1,2))
+          try(plot(sample), TRUE)
+          dev.off()
+        }
+      }
+    }
     
     ###################################################
     ### code chunk number 18: Individual model plots
@@ -334,7 +342,6 @@ for (sp_nm in spp_nm){
       for (eval_stat in eval_stats){
         try(load(paste(sp_nm,"/proj_", proj_nm, "/",sp_nm,"_AllData_Full_AllAlgos_EM.",eval_stat, sep = "")), TRUE)    
         try(load(paste(sp_nm,"/proj_", proj_nm, "/",sp_nm,"_AllData_AllRun_EM.",eval_stat, sep = "")), TRUE)
-        #try(load(paste(sp_nm,"/proj_", proj_nm, "/proj_", proj_nm, "_", sp_nm,"_TotalConsensus_EMby",eval_stat, ".grd", sep = "")), TRUE)
         jpeg_name=paste(sp_nm0,"_", eval_stat,"_ensemble_", proj_nm, "runs.jpg", sep = "")
         jpeg(jpeg_name,
              width = 10, height = 8, units = "in",
@@ -342,7 +349,9 @@ for (sp_nm in spp_nm){
         par(mfrow=c(1,2))
         try(plot(get(paste(sp_nm,"_AllData_Full_AllAlgos_EM.",eval_stat, sep = ""))), TRUE)
         try(plot(get(paste(sp_nm,"_AllData_AllRun_EM.",eval_stat, sep = ""))), TRUE)
-        try(plot(raster(paste0(sp_nm,"/proj_", proj_nm, "/proj_", proj_nm, "_", sp_nm,"_TotalConsensus_EMby",eval_stat, ".grd"))), TRUE)
+        sp_bin_file=paste(proj_nm, "_", sp_nm, "_TotalConsensus_EMby", eval_stat,".grd", sep = "")
+        sp_bin_file=paste(sp_nm,"/proj_", proj_nm, "/proj_", sp_bin_file , sep = "") #current_BI_Akepa_bin_ROC_RasterStack          
+        try(plot(raster(sp_bin_file)), TRUE)
         dev.off()
         eval_stat0=eval_stat
         for (eval_stat in eval_stats){
@@ -355,7 +364,9 @@ for (sp_nm in spp_nm){
           #par(mfrow=c(1,2))
           try(plot(get(paste(sp_nm,"_AllData_Full_AllAlgos_EM.",eval_stat0,".bin.",eval_stat, sep = ""))), TRUE)
           try(plot(get(paste(sp_nm,"_AllData_AllRun_EM.",eval_stat0,".bin.",eval_stat, sep = ""))), TRUE)
-          try(plot(raster(paste0(sp_nm,"/proj_", proj_nm, "/proj_", proj_nm, "_", sp_nm,"_TotalConsensus_EMby",eval_stat,"_", eval_stat, "bin.grd"))), TRUE)
+          sp_bin_file=paste(proj_nm, "_", sp_nm, "_TotalConsensus_EMby", eval_stat0,"_",eval_stat, "bin.grd", sep = "")
+          sp_bin_file=paste(sp_nm,"/proj_", proj_nm, "/proj_", sp_bin_file , sep = "") #current_BI_Akepa_bin_ROC_RasterStack          
+          try(plot(raster(sp_bin_file)), TRUE)
           dev.off()
         }
       }
