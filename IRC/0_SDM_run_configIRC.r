@@ -26,7 +26,7 @@ if (machine == 1){
 ###################################
 
 #setting file locations 
-project_name = "/FB_test20130815" #assign project name to the current run
+project_name = "/FB_test20130819" #assign project name to the current run
 working_dir = paste0(resultsDir,project_name) #assign working directory
 crop_raster_dir = paste0(working_dir, "/map_crop") #assign directory for cropped raster files
 csv_dir = paste0(working_dir,"/single_sp_CSVs") #assign directory for single species CSV's

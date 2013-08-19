@@ -47,20 +47,20 @@ for (sp_nm in spp_nm){
   dir.create(sp_dir, showWarnings = FALSE) #creates new directory with species name
   
   cat('\n',sp_nm,'model fitting...') #sign-posting
-  FileName00<-paste0(sp_nm, "_VariImp.csv") ###not in FWS code - allows for overwrite capacity
+  FileName00 <- paste0(sp_nm, "_VariImp.csv") ###not in FWS code - allows for overwrite capacity
   if (file.exists(FileName00)==FALSE | overwrite==1){ #check if analysis for species already done or overwrite requested in config    
     # Start the clock!
     ptm0 <- proc.time()
-    workspace_name=paste0(sp_nm,"_FB_modelfitting.RData") #set name of file to save all workspace data after model run
+    workspace_name = paste0(sp_nm,"_FB_modelfitting.RData") #set name of file to save all workspace data after model run
     
     #######Loading datasets#######
     
     ##raster_based_env_grid:
     cat('\n','loading rasters...') #sign-posting
     
-    sp_index = which(spp_info[,"Species"]==sp_nm) #finds which line of species .csv file has information needed
+    sp_index = which(spp_info[,"Species"] == sp_nm) #finds which line of species .csv file has information needed
     raster_res = paste0("/", spp_info[sp_index,"rasterdir"]) #finds which raster directory should be used for the species based on the .csv file
-    crop_raster = raster(paste0(crop_raster_dir,raster_res,".grd")) #assigns cropped raster associated with species to "crop_raster" variable
+    crop_raster = raster(paste0(crop_raster_dir,raster_res,".grd")) #assigns cropped raster associated with sp_nm to "crop_raster" variable
     predictors = raster(paste0(fitting_clim_data_dir, "/", env_var_files[1])) #assigns bioclimate raster to "predictors" variable
     predictors = crop(predictors,  crop_raster) #crops predictor grid using crop_raster
     jnk0 = length(env_var_files) #creates variable with no. of bioclimate variables to use
@@ -72,10 +72,10 @@ for (sp_nm in spp_nm){
     names(predictors) <- var_name #assigns names to bioclimate raster stack
     rm("crop_raster" ,"temp") #removes temporary variables
     
-    jpeg_name = paste0(sp_nm,"_env_vars_used.jpg") 
-    jpeg(jpeg_name,
+    jpeg_name = paste0(sp_nm,"_env_vars_used.jpg") #names jpeg file to be created
+    jpeg(jpeg_name, #creates blank jpeg file in working directory
          width = 10, height = 10, units = "in",pointsize = 12, quality = 90, bg = "white", res = 300)
-    dev.off() #need to use this before next line or it may not plot
+    dev.off() #shuts down current device  - may need to use this before next line or it may not plot
     plot(predictors, col=rev(terrain.colors(255)), maxpixels = 100000, useRaster = FALSE, axes = TRUE, addfun = NULL) #NOT WORKING
       #ERROR - 24 warnings to do with "interpolate" check with warnings()  
     dev.off()
@@ -94,7 +94,7 @@ for (sp_nm in spp_nm){
     mySREresp <- reclassify(subset(predictors,1,drop=TRUE), c(-Inf,Inf,0)) #builds a raster layer based on environmental rasters for response variable
     mySREresp[cellFromXY(mySREresp,PA_XY)] <- 1 #assigns all shared cells in "bioclim" and "PA_XY" to "1"
 
-    #different runs to only have Pseudo Absences assigned outside climate envelope or anywhere
+    #this loop makes different runs depending on whether Pseudo Absences should be assigned outside climate envelope or randomly
     if (PseudoAbs_outside_CE){      
       sp_CE = sre(Response = mySREresp,Explanatory = predictors,NewData = predictors,Quant = 0.025) #Calculates surface range envelope for distribution removing 2.5% of extremes 
       #calculate density of points within sre
@@ -161,8 +161,8 @@ for (sp_nm in spp_nm){
     tail(mySpeciesOcc)
     
     ###not in FWS code (points map)
-    jpeg_name=paste(sp_nm,"_loc_data_used.jpg", sep = "")
-    jpeg(jpeg_name,
+    jpeg_name2=paste(sp_nm,"_loc_data_used.jpg", sep = "")
+    jpeg(jpeg_name2,
          width = 10, height = 10, units = "in",pointsize = 12, quality = 90, bg = "white", res = 300)
     plot(seq((min(mySpeciesOcc[,1])-0.1),(max(mySpeciesOcc[,1])+0.1),by=((max(mySpeciesOcc[,1])+0.1)-(min(mySpeciesOcc[,1])-0.1))/5), 
          seq((min(mySpeciesOcc[,2])-0.1),(max(mySpeciesOcc[,2])+0.1),by=((max(mySpeciesOcc[,2])+0.1)-(min(mySpeciesOcc[,2])-0.1))/5), 
@@ -196,8 +196,8 @@ for (sp_nm in spp_nm){
       PA.dist.min = PA.dist.min)
     #This plotting methods takes way too long!!!  (but it is useful since it plots PAs selected)
     if (plot_graphs==1 & PA.nb.rep<9){  
-    jpeg_name=paste(sp_nm,"_loc_data_used2.jpg", sep = "")
-    jpeg(jpeg_name,
+    jpeg_name3=paste(sp_nm,"_loc_data_used2.jpg", sep = "")
+    jpeg(jpeg_name3,
          width = 10, height = 10, units = "in",pointsize = 12, quality = 90, bg = "white", res = 300)
     plot(myBiomodData)
     dev.off()
