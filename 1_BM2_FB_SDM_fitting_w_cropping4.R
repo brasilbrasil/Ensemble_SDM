@@ -119,7 +119,7 @@ for (sp_nm in spp_nm){
       #calculate desired number of PA points based on PandA density within CE
       neg_CE_cells=sum(as.matrix(neg_sp_CE), na.rm=T)
       jnk=dim(mySpeciesOcc[mySpeciesOcc$pa==0,])[1]
-      n_PA_points=round(neg_CE_cells/CE_point_density)+jnk
+      n_PA_points=round(neg_CE_cells*dens_PAs_outside_CE/CE_point_density)+jnk
       PA_candidate_points=rasterToPoints(neg_sp_CE, fun=function(x){x==1})
       
 #       plot(mySREresp)
@@ -133,7 +133,11 @@ for (sp_nm in spp_nm){
       mySREresp=mySREresp==0
       plot(mySREresp)
       PA_candidate_points=rasterToPoints(mySREresp, fun=function(x){x==1})
-      n_PA_points=PA.nb.absences
+      if (candidatePA.per.PA==0){
+        n_PA_points=PA.nb.absences
+      }else{
+        n_PA_points=round(dim(PA_candidate_points)[1]/candidatePA.per.PA)        
+      }
     }  
     PA_candidate_points=as.data.frame(PA_candidate_points[,1:2])
     head(PA_candidate_points)
@@ -275,16 +279,8 @@ for (sp_nm in spp_nm){
     #FileName<-paste(sp_nm, "_VariImp.csv")
     write.table(Spp_VariImp, file = FileName00, sep=",", col.names=NA)
     
-    save.image("temp_workspace1.RData")   #to save workspace
-    rm(list=c("sp_nm","local_config_dir", "spp_nm", "models_to_run", "working_dir", 
-              "fitting_clim_data_dir", "env_var_files", "csv_dir", "spp_info", "var_name",
-              "eval_stats0", "spp_nm0", "clim_surface_to_use", "proj_nm0", "overwrite", 
-              "plot_graphs", "local_config_dir","spp_nm", "clim_data_2000", 
-              "clim_data_2100", "working_dir", "csv_dir", "eval_stats",  "crop_raster", "necessary_run_data"))      
-    save.image(workspace_name)   #save workspace
-    load("temp_workspace1.RData")        
-    
-    
+    save("myBiomodModelOut", file=workspace_name)   #save workspace
+        
     ptm1=proc.time() - ptm0
     jnk=as.numeric(ptm1[3])
     jnk=jnk/3600

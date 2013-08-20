@@ -41,6 +41,7 @@ csv_dir=paste(working_dir,"single_sp_CSVs/", sep="")
 NbRunEval=2
 include_Abs=T #in test phase
 PAs_outside_CE=T #if T, will only consider PAs outside climate envelope of all points collected
+dens_PAs_outside_CE=1 #if 1 will create PA density that is equal to point density within surveyed areas
 PA.nb.rep=2
 PA.nb.absences = 1000 #if PAs_outside_CE=T, this will be overridden! (n of PAs will be determined by P/A point density within CE 
 PA.strategy = "random"

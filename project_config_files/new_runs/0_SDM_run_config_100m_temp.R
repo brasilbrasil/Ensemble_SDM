@@ -1,5 +1,5 @@
 rm(list = ls()) #remove all past worksheet variables
-source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
+source(paste0("D:/PICCC_analysis/code/","directory_registry.r"))
 #options(error=stop) #this keeps the code from running after errors 
 
 ###################################
@@ -7,16 +7,17 @@ source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
 ###################################
 local_config_dir=DR_FB_SDM_results_S
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
-spp_nm=c("Akekee", "Kauai_Amakihi", "Oahu_Amakihi","Hawaii_Akepa", "Palila")
-project_name='test_runs_100m_hibar_fixes_RF_PA_noabs_noSRE'
+spp_nm=c("Akekee")#, "Puaiohi", "Kauai_Amakihi", "Oahu_Elepaio", "Hawaii_Akepa", "Palila", "Oahu_Amakihi")
+project_name='test_runs_temp4'
 server=1
 overwrite=0
-models_to_run=c('GBM','MAXENT', 'RF')
+models_to_run=c('GBM', 'RF')
 eval_stats=c("ROC")
 plot_graphs=1
 EM_fit=T
 EM_ensemble=T
 EM_project=T
+create_response_curves=T
 memory.limit(size=24000000)
 apply_biomod2_fixes=T #if running large models use this option
 
@@ -38,12 +39,13 @@ csv_dir=paste(working_dir,"single_sp_CSVs/", sep="")
 ####CONFIG FOR SPECIFIC STEPS####
 #################################
 ####fit config (script#1)
-NbRunEval=4
-include_Abs=F #in test phase
-PAs_outside_CE=F #if T, will only consider PAs outside climate envelope of all points collected
+NbRunEval=2
+include_Abs=T #in test phase
+PAs_outside_CE=T #if T, will only consider PAs outside climate envelope of all points collected
 dens_PAs_outside_CE=1 #if 1 will create PA density that is equal to point density within surveyed areas
-PA.nb.rep=4
-PA.nb.absences = 10000 #if PAs_outside_CE=T, this will be overridden! (n of PAs will be determined by P/A point density within CE 
+PA.nb.rep=2
+PA.nb.absences = 1000 #if PAs_outside_CE=T, this will be overridden! (n of PAs will be determined by P/A point density within CE 
+candidatePA.per.PA=0 #only used if if PAs_outside_CE=F, if value ==0, will use PA.nb.absences   
 PA.strategy = "random"
 equiv_100m=0.0009430131
 PA.dist.min = 5*equiv_100m #500 min distance from actual data points 
@@ -52,10 +54,10 @@ PA.dist.min = 5*equiv_100m #500 min distance from actual data points
 ####projection config (script#3)
 baseline_or_future=1 #1 for baseline, 4 for future
 memory = T #keep.in.memory=memory
-dir_for_temp_files<-paste('Y:/temp/', project_name,'/', baseline_or_future, '/', sep='') #dir for temp run data (to avoid memory errors)
+dir_for_temp_files<-paste(Drive,'/temp/', project_name,'/', baseline_or_future, '/', sep='') #dir for temp run data (to avoid memory errors)
 
 if (server==1){
-  clim_data_2000=paste0(DR_FB_clim_data,"all_grd/all_baseline/250m/")
+  clim_data_2000=paste0(DR_FB_clim_data,"all_grd/all_baseline/500m/")
   clim_data_2100=paste0(DR_FB_clim_data,"all_grd/all_future/500m/")
   clim_data_2000wettest="D:/GIS_Data/REnviroLayers/mixed_data_2000_250mwettest/"
   clim_data_2000driest= "D:/GIS_Data/REnviroLayers/mixed_data_2000_250mdriest/"
@@ -93,6 +95,9 @@ if (n_instances>0 & cpucores>1 & rsession_instances<1){
 
 if (EM_fit){
   source(paste0(DR_code_S,"Ensemble_SDM/1_BM2_FB_SDM_fitting_w_cropping4.r")) #this is where all configurations are at
+}
+if (create_response_curves){
+  source(paste0(DR_code_S,"Ensemble_SDM/2opt_BM2_FB_SDM_response_curves3.r"))
 }
 if (EM_ensemble){
   source(paste0(DR_code_S,"Ensemble_SDM/2_BM2_FB_SDM_EM_fitting2.r")) #this is where all configurations are at

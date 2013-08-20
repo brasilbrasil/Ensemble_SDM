@@ -1,19 +1,6 @@
-rm(list = ls()) #remove all past worksheet variables
+#rm(list = ls()) #remove all past worksheet variables
 
 ###USER CONFIGURATION
-server=1
-models_to_run=c('GBM', 'RF','MAXENT')
-overwrite=0
-local_config_dir='Y:/FB_analysis/FB_SDM/biomod2/' #'C:/Users/lfortini/'
-spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
-#spp_nm=c("Hawaii_Akepa", "Anianiau", "Kauai_Amakihi", "Kauai_Elepaio", "Puaiohi", "Oahu_Amakihi", "Oahu_Elepaio", "Apapane", "Iiwi")   #"Akekee", "Akikiki", "Anianiau", "Apapane", "Iiwi", "Kauai_Amakihi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi"
-if(server==1){
-  #working_dir='Y:/FB_analysis/FB_SDM/biomod2/response_curves/'
-  working_dir='Y:/FB_analysis/FB_SDM/biomod2/response_curves_500/'
-}else{
-  working_dir='C:/Users/lfortini/Data/biomod2/test/'
-}
-
 ####START UNDERHOOD
 setwd(working_dir)
 last_model=models_to_run[length(models_to_run)]
@@ -29,8 +16,14 @@ for (sp_nm in spp_nm){
   sp_nm=as.character(sp_nm)  
   cat('\n',sp_nm,'modeling...')
   sp_nm0=sp_nm
-  workspace_name=paste(sp_nm0,"_FB_run.RData", sep = "") #set name of file to load workspace data from model run
-  load(workspace_name)
+  
+  workspace_name=paste(sp_nm,"_FB_modelfitting.RData", sep = "") #set name of file to save all workspace data after model run
+  if (file.exists(workspace_name)){
+    load(workspace_name)    
+  }else{
+    workspace_name=paste(sp_nm0,"_FB_run.RData", sep = "") #set name of file to load workspace data from model run    
+  }
+  
   sp_nm=str_replace_all(sp_nm,"_", ".")
   
   

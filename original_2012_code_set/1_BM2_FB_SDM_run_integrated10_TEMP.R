@@ -1,5 +1,5 @@
 rm(list = ls()) #remove all past worksheet variables
-source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
+source(paste0("D:/PICCC_analysis/code/","directory_registry.r"))
 #for each species modeled, have csv of presence data in working directory for the species named speciesname_Ps.csv formated with 3 cols: x,y,pa where pa = 1
 #after running the code for whichever many species, copy results (species output folder and workspace file) to a new directory, along with the maxent.jar file
 #use the projection code to project the distribution model on different environmental surfaces (do not forget to change the working directory)
@@ -7,10 +7,10 @@ source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
 ###USER CONFIGURATION
 #local_config_dir='C:/Users/lfortini/'
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run.csv', sep = ""),header=F, stringsAsFactors=F))
-spp_nm=c("Akekee", "Palila", "Hawaii_Akepa")#"Kauai_Amakihi", "Anianiau", "Apapane", "Iiwi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi")   #"Akekee", "Akikiki", "Anianiau", "Apapane", "Iiwi", "Kauai_Amakihi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi"
+spp_nm=c("Akekee", "Puaiohi", "Kauai_Amakihi", "Oahu_Elepaio", "Hawaii_Akepa", "Palila", "Oahu_Amakihi")
 
 models_to_run=c('GBM','RF','MAXENT')
-project_name='test_runs_old_code_new_package'
+project_name='test_runs_old_code_new_package_50'
 working_dir=paste0(DR_FB_SDM_results_S,project_name,'/')
 #working_dir='Y:/FB SDM/biomod2/'
 clim_data_dir0=paste0(DR_FB_clim_data,"all_grd/all_baseline/100m/")
@@ -176,7 +176,7 @@ for (sp_nm in spp_nm){
     ## Modelling ##
     myBiomodModelOut <- BIOMOD_Modeling(myBiomodData, 
                                         models = models_to_run, models.options = myBiomodOption,
-                                        NbRunEval=15,
+                                        NbRunEval=50,
                                         DataSplit=80,
                                         Yweights=NULL, 
                                         VarImport=10,

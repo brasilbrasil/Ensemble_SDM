@@ -102,13 +102,8 @@ for (sp_nm in spp_nm){
         keep.in.memory=memory)
       gc()
       cat('\n',sp_nm,'projection complete...')
-      cat('point 1 mem', memory.size(), memory.size(max=TRUE), 'nn')
-      save.image("temp_workspace3.RData")   #to save workspace
-      rm(list=c("spp_info", "spp_nm0", "clim_surface_to_use", "proj_nm0", "overwrite", 
-                "plot_graphs", "local_config_dir","spp_nm", "clim_data_2000", 
-                "clim_data_2100", "working_dir", "env_var_files", "csv_dir", "eval_stats"))      
-      save.image(workspace_name_out0)   #to save workspace
-      load("temp_workspace3.RData")
+      #cat('point 1 mem', memory.size(), memory.size(max=TRUE), 'nn')
+      save("myBiomomodProj_baseline", file=workspace_name_out0)   #save workspace      
     }else{
       load(workspace_name_out0)
       cat('\n',sp_nm,'projection of individual models loaded from past run...')
@@ -372,16 +367,10 @@ for (sp_nm in spp_nm){
       }
     }
     cat('\n',sp_nm,'ensemble projection figures done...')
-    save.image("temp_workspace4.RData")   #to save workspace
-    rm(list=c("spp_info","spp_nm0", "crop_raster", "clim_surface_to_use", "proj_nm0", "overwrite", 
-              "plot_graphs", "local_config_dir","spp_nm", "clim_data_2000", "predictors_temp",
-              "clim_data_2100", "working_dir", "env_var_files", "csv_dir", "eval_stats"))      
-    save.image(workspace_name_out)   #to save workspace
-    load("temp_workspace4.RData")
+    save("myBiomomodProj_baseline", "myBiomodEF", file=workspace_name_out)   #save workspace
     
     removeTmpFiles(h=1)
     cat('\n',sp_nm,'done...')    
-    #save.image(workspace_name)
   }else{
     cat('\n',sp_nm,'previously calculated...')
   }

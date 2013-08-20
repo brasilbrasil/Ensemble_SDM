@@ -1,12 +1,12 @@
 #rm(list = ls()) #remove all past worksheet variables
-source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
+source(paste0("D:/PICCC_analysis/code/","directory_registry.r"))
 
 ###USER CONFIGURATION
 plot_graphs=1
 #local_config_dir='C:/Users/lfortini/'
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run.csv', sep = ""),header=F, stringsAsFactors=F))
-spp_nm=c("Akekee", "Palila", "Hawaii_Akepa")#"Kauai_Amakihi", "Anianiau", "Apapane", "Iiwi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi")   #"Akekee", "Akikiki", "Anianiau", "Apapane", "Iiwi", "Kauai_Amakihi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi"
-project_name='test_runs_old_code_new_package'
+spp_nm=c("Akekee", "Puaiohi", "Kauai_Amakihi", "Oahu_Elepaio", "Hawaii_Akepa", "Palila", "Oahu_Amakihi")
+project_name='test_runs_old_code_new_package_50'
 working_dir=paste0(DR_FB_SDM_results_S,project_name,'/')
 env_var_files=c("bio1.grd", "bio7.grd", "bio12.grd", "bio15.grd") 
 csv_dir=paste(working_dir,"single_sp_CSVs/", sep="")
@@ -23,7 +23,7 @@ for (env_var_file  in env_var_files){
   a=strsplit(env_var_file,"\\.")
   var_name=c(var_name, a[[1]][1])
 }
-memory.limit(size=4095)
+#memory.limit(size=4095)
 #sp_nm=spp_nm[1]
 for (sp_nm in spp_nm){
   sp_nm=as.character(sp_nm)  
