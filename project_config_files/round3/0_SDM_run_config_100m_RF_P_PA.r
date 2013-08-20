@@ -8,7 +8,7 @@ source(paste0("D:/PICCC_analysis/code/","directory_registry.r"))
 local_config_dir=DR_FB_SDM_results_S
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
 spp_nm=c("Akekee", "Puaiohi", "Kauai_Amakihi", "Oahu_Elepaio", "Hawaii_Akepa", "Palila", "Oahu_Amakihi")
-project_name='test_runs_round2_RF_P_A_3XPA'
+project_name='test_runs_round3_RF_P_PA'
 server=1
 overwrite=0
 models_to_run=c('GBM','MAXENT', 'RF')
@@ -40,11 +40,11 @@ csv_dir=paste(working_dir,"single_sp_CSVs/", sep="")
 #################################
 ####fit config (script#1)
 NbRunEval=5
-include_Abs=T #in test phase
-PAs_outside_CE=T #if T, will only consider PAs outside climate envelope of all points collected
-dens_PAs_outside_CE=3 #if 1 will create PA density that is equal to point density within surveyed areas
-PA.nb.rep=10
-PA.nb.absences = 1000 #if PAs_outside_CE=T, this will be overridden! (n of PAs will be determined by P/A point density within CE 
+include_Abs=F #in test phase
+PAs_outside_CE=F #if T, will only consider PAs outside climate envelope of all points collected
+dens_PAs_outside_CE=1 #if 1 will create PA density that is equal to point density within surveyed areas
+PA.nb.rep=5
+PA.nb.absences = 10000 #if PAs_outside_CE=T, this will be overridden! (n of PAs will be determined by P/A point density within CE 
 candidatePA.per.PA=0 #only used if if PAs_outside_CE=F, if value ==0, will use PA.nb.absences   
 PA.strategy = "random"
 equiv_100m=0.0009430131

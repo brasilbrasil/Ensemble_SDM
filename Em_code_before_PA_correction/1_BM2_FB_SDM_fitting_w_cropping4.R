@@ -269,14 +269,7 @@ for (sp_nm in spp_nm){
     #FileName<-paste(sp_nm, "_VariImp.csv")
     write.table(Spp_VariImp, file = FileName00, sep=",", col.names=NA)
     
-    save.image("temp_workspace1.RData")   #to save workspace
-    rm(list=c("sp_nm","local_config_dir", "spp_nm", "models_to_run", "working_dir", 
-              "fitting_clim_data_dir", "env_var_files", "csv_dir", "spp_info", "var_name",
-              "eval_stats0", "spp_nm0", "clim_surface_to_use", "proj_nm0", "overwrite", 
-              "plot_graphs", "local_config_dir","spp_nm", "clim_data_2000", 
-              "clim_data_2100", "working_dir", "csv_dir", "eval_stats",  "crop_raster", "necessary_run_data"))      
-    save.image(workspace_name)   #save workspace
-    load("temp_workspace1.RData")        
+    save("myBiomodModelOut", file=workspace_name)   #save workspace  
     
     
     ptm1=proc.time() - ptm0

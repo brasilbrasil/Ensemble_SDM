@@ -48,10 +48,10 @@ for (sp_nm in spp_nm){
       eval.metric = eval_stats, #c('TSS', 'ROC', 'KAPPA'); 'all', #c('TSS', 'ROC'),
       eval.metric.quality.threshold = rep(0.5,length(eval_stats)),
       prob.mean = T,
-      prob.cv = T,
-      prob.ci = T,
+      prob.cv = F,
+      prob.ci = F,
       prob.ci.alpha = 0.05,
-      prob.median = T,
+      prob.median = F,
       committee.averaging = T,
       prob.mean.weight = T,
       prob.mean.weight.decay = 'proportional' )
@@ -65,7 +65,15 @@ for (sp_nm in spp_nm){
     # get evaluation scores
     getEMeval(myBiomodEM)
     
-    save("myBiomodEM", "myBiomodModelOut", file=workspace_name_out)   #save workspace
+    #load(workspace_name_out)
+    save.image("temp_workspace2.RData")   #to save workspace
+    rm(list=c("spp_info","sp_nm","local_config_dir", "spp_nm", "models_to_run", "working_dir", 
+              "clim_data_dir0", "csv_dir", "spp_info", "var_name",
+              "eval_stats0", "spp_nm0", "clim_surface_to_use", "proj_nm0", "overwrite", 
+              "plot_graphs", "local_config_dir","spp_nm", "clim_data_2000", 
+              "clim_data_2100", "working_dir", "env_var_files", "csv_dir", "eval_stats"))      
+    save.image(workspace_name_out)   #to save workspace
+    load("temp_workspace2.RData")
   }else{
     cat('\n',sp_nm,'ensemble previously done...')
   }
