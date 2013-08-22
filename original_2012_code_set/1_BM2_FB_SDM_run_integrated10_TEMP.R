@@ -7,10 +7,10 @@ source(paste0("D:/PICCC_analysis/code/","directory_registry.r"))
 ###USER CONFIGURATION
 #local_config_dir='C:/Users/lfortini/'
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run.csv', sep = ""),header=F, stringsAsFactors=F))
-spp_nm=c("Akekee", "Puaiohi", "Kauai_Amakihi", "Oahu_Elepaio", "Hawaii_Akepa", "Palila", "Oahu_Amakihi")
+spp_nm=c("Hawaii_Akepa")#, "Akekee", "Puaiohi", "Kauai_Amakihi", "Oahu_Elepaio", "Palila", "Oahu_Amakihi")
 
 models_to_run=c('GBM','RF','MAXENT')
-project_name='test_runs_old_code_new_package_50'
+project_name='test_runs_old_code_temp'
 working_dir=paste0(DR_FB_SDM_results_S,project_name,'/')
 #working_dir='Y:/FB SDM/biomod2/'
 clim_data_dir0=paste0(DR_FB_clim_data,"all_grd/all_baseline/100m/")
@@ -86,6 +86,7 @@ for (sp_nm in spp_nm){
     
   
     ####Generate 10000 random background pts with good env data
+    #set.seed(42) #for debug
     xybackg<-randomPoints(predictors, n=20000) # Creates 10,000 background/absence points
     colnames(xybackg)=c('X', 'Y')
     XYabackg <- c(rep(0, nrow(xybackg)))
@@ -151,7 +152,7 @@ for (sp_nm in spp_nm){
     plot(myBiomodData)
     dev.off()
     
-    memory.limit(size=4095)
+    #memory.limit(size=4095)
     myBiomodOption <- BIOMOD_ModelingOptions(
       GBM = list( distribution = 'bernoulli', interaction.depth = 7,  shrinkage = 0.001, bag.fraction = 0.5, train.fraction = 1, n.trees = 100,
                   cv.folds = 10),
@@ -174,9 +175,10 @@ for (sp_nm in spp_nm){
     # options(na.action=na.omit)  ## Is this redundant. I thought NAs were removed.
     
     ## Modelling ##
+    #set.seed(42) #for debug
     myBiomodModelOut <- BIOMOD_Modeling(myBiomodData, 
                                         models = models_to_run, models.options = myBiomodOption,
-                                        NbRunEval=50,
+                                        NbRunEval=5,
                                         DataSplit=80,
                                         Yweights=NULL, 
                                         VarImport=10,

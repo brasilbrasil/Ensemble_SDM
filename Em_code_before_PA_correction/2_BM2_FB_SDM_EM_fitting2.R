@@ -42,6 +42,7 @@ for (sp_nm in spp_nm){
     ###################################################
     ### code chunk number 11: ensemble_modeling
     ###################################################
+    #set.seed(42) #for debug
     myBiomodEM <- BIOMOD_EnsembleModeling(
       modeling.output = myBiomodModelOut,
       chosen.models = 'all', #these are not model types (e.g., GBM), but model runs (e.g., PA1_RF)

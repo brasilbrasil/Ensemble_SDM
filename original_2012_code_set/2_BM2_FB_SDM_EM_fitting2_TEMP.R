@@ -5,8 +5,8 @@ source(paste0("D:/PICCC_analysis/code/","directory_registry.r"))
 plot_graphs=1
 #local_config_dir='C:/Users/lfortini/'
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run.csv', sep = ""),header=F, stringsAsFactors=F))
-spp_nm=c("Akekee", "Puaiohi", "Kauai_Amakihi", "Oahu_Elepaio", "Hawaii_Akepa", "Palila", "Oahu_Amakihi")
-project_name='test_runs_old_code_new_package_50'
+spp_nm=c("Hawaii_Akepa")#, "Akekee", "Puaiohi", "Kauai_Amakihi", "Oahu_Elepaio", "Palila", "Oahu_Amakihi")
+project_name='test_runs_old_code_temp'
 working_dir=paste0(DR_FB_SDM_results_S,project_name,'/')
 env_var_files=c("bio1.grd", "bio7.grd", "bio12.grd", "bio15.grd") 
 csv_dir=paste(working_dir,"single_sp_CSVs/", sep="")
@@ -57,14 +57,15 @@ for (sp_nm in spp_nm){
     ###################################################
     ### code chunk number 11: ensemble_modeling
     ###################################################
+    #set.seed(42) #for debug
     myBiomodEM <- BIOMOD_EnsembleModeling(
       modeling.output = myBiomodModelOut,
       chosen.models = 'all', #these are not model types (e.g., GBM), but model runs (e.g., PA1_RF)
       eval.metric = c('ROC'), #c('TSS', 'ROC', 'KAPPA'); 'all', #c('TSS', 'ROC'),
       eval.metric.quality.threshold = c(0.5),
       prob.mean = T,
-      prob.cv = F,
-      prob.ci = F,
+      prob.cv = T,
+      prob.ci = T,
       prob.ci.alpha = 0.05,
       prob.median = T,
       committee.averaging = T,

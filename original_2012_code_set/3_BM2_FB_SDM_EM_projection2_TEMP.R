@@ -1,11 +1,11 @@
 rm(list = ls()) #remove all past worksheet variables
-source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
+source(paste0("D:/PICCC_analysis/code/","directory_registry.r"))
 
 ###USER CONFIGURATION
 plot_graphs=1
 #local_config_dir='C:/Users/lfortini/'
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run.csv', sep = ""),header=F, stringsAsFactors=F))
-spp_nm=c("Akekee", "Palila", "Hawaii_Akepa")#"Kauai_Amakihi", "Anianiau", "Apapane", "Iiwi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi")   #"Akekee", "Akikiki", "Anianiau", "Apapane", "Iiwi", "Kauai_Amakihi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi"
+spp_nm=c("Hawaii_Akepa")#, "Akekee", "Puaiohi", "Kauai_Amakihi", "Oahu_Elepaio", "Palila", "Oahu_Amakihi")
 clim_data_2000=paste0(DR_FB_clim_data,"all_grd/all_baseline/250m/")
 clim_data_2100=paste0(DR_FB_clim_data,"all_grd/all_future/500m/")
 clim_surface_to_use=clim_data_2000 
@@ -13,7 +13,7 @@ proj_nm0='baseline'
 models_to_run=c('GBM','RF','MAXENT')
 overwrite=0 #if 1, will overwrite past results
 
-project_name='test_runs_old_code_new_package'
+project_name='test_runs_old_code_temp'
 working_dir=paste0(DR_FB_SDM_results_S,project_name,'/')
 env_var_files=c("bio1.grd", "bio7.grd", "bio12.grd", "bio15.grd") 
 csv_dir=paste(working_dir,"single_sp_CSVs/", sep="")
@@ -32,7 +32,7 @@ for (env_var_file  in env_var_files){
   a=strsplit(env_var_file,"\\.")
   var_name=c(var_name, a[[1]][1])
 }
-memory.limit(size=4095)
+#memory.limit(size=4095)
 sp_nm=spp_nm[1]
 spp_info=read.csv(paste(csv_dir,'FB_spp_data.csv', sep = ""))
 
@@ -77,6 +77,7 @@ for (sp_nm in spp_nm){
     
     workspace_name_out0=paste(sp_nm,"_FB_all_model_proj_", proj_nm, ".RData", sep = "")
     if (file.exists(workspace_name_out0)==F | overwrite==1){  
+      #set.seed(42) #for debug
       myBiomomodProj_baseline <- BIOMOD_Projection(
         modeling.output = myBiomodModelOut,
         new.env = predictors, #error: additional stack fx
@@ -157,6 +158,7 @@ for (sp_nm in spp_nm){
     ###################################################
     ### code chunk number 18: EnsembleForecasting_future
     ###################################################
+    #set.seed(42) #for debug
     myBiomodEF <- BIOMOD_EnsembleForecasting(
       projection.output = myBiomomodProj_baseline,
       EM.output = myBiomodEM, binary.meth=eval_stats) ###DEBUG### , binary.meth=c('TSS', 'KAPPA', 'ROC')

@@ -82,17 +82,27 @@ for (sp_nm in spp_nm){
     rm("crop_raster" ,"temp") 
     predictors
     
-    if (baseline_or_future==2|3|5|6){
+    alt_scen=c(2,3,4,5)
+    if (baseline_or_future %in% alt_scen){
       predictors<-stack((subset(predictors, 1)),
                         (subset(predictors, 2)),
                         (subset(predictors, 3))*4,
                         (subset(predictors, 4)))
       names(predictors)<- var_name
     }
+    
+    if (baseline_or_future==1){
+    jpeg_name=paste(sp_nm,"_env_vars_used_for_projection.jpg", sep = "")
+    jpeg(jpeg_name,
+         width = 10, height = 10, units = "in",pointsize = 12, quality = 90, bg = "white", res = 300)
+    plot(predictors, col=rev(terrain.colors(255)), maxpixels=100000, useRaster=FALSE, axes = TRUE, addfun=NULL, Interpolate = TRUE)
+    dev.off()
+    }
     cat('\n',sp_nm,'projection raster stack created...')
     gc()
     workspace_name_out0=paste(sp_nm,"_FB_all_model_proj_", proj_nm, ".RData", sep = "")
     if (file.exists(workspace_name_out0)==F | overwrite==1){  
+      #set.seed(42) #for debug
       myBiomomodProj_baseline <- BIOMOD_Projection(
         modeling.output = myBiomodModelOut,
         new.env = stack(predictors), #error: additional stack fx
@@ -100,8 +110,9 @@ for (sp_nm in spp_nm){
         selected.models = 'all',
         binary.meth = eval_stats,
         compress = 'xz',
-        clamping.mask = F, 
-        keep.in.memory=memory)
+        clamping.mask = F)#, 
+        #keep.in.memory=memory)
+      
       gc()
       cat('\n',sp_nm,'projection complete...')
       cat('point 1 mem', memory.size(), memory.size(max=TRUE), 'nn')
@@ -255,12 +266,13 @@ for (sp_nm in spp_nm){
     ###################################################
     ### code chunk number 18: EnsembleForecasting_future
     ###################################################
+    #set.seed(42) #for debug
     myBiomodEF <- BIOMOD_EnsembleForecasting(
       projection.output = myBiomodProjection,
       total.consensus = T,
       EM.output = myBiomodEM, 
-      binary.meth=eval_stats, 
-      keep.in.memory=memory)
+      binary.meth=eval_stats)#, 
+      #keep.in.memory=memory)
     cat('\n',sp_nm,'ensemble projection done...')
     cat('point 1 mem', memory.size(), memory.size(max=TRUE), 'nn')
     

@@ -121,6 +121,7 @@ for (sp_nm in spp_nm){
     dev.off()
     
     ####Generate 10000 random background pts with good env data
+    #set.seed(42) #for debug
     xybackg<-randomPoints(predictors, n=20000) # Creates 10,000 background/absence points
     colnames(xybackg)=c('X', 'Y')
     XYabackg <- c(rep(0, nrow(xybackg)))
@@ -208,7 +209,7 @@ for (sp_nm in spp_nm){
     plot(myBiomodData)
     dev.off()
     
-    memory.limit(size=4095)
+    #memory.limit(size=4095)
     myBiomodOption <- BIOMOD_ModelingOptions(
       GBM = list( distribution = 'bernoulli', interaction.depth = 7,  shrinkage = 0.001, bag.fraction = 0.5, train.fraction = 1, n.trees = 100,
                   cv.folds = 10),
@@ -225,6 +226,7 @@ for (sp_nm in spp_nm){
     
     rm("predictors", "xybackg", "XYabackg_extr", "dups2", "jnk", "jnk1", "jnk2") 
     
+    #set.seed(42) #for debug
     myBiomodModelOut <- BIOMOD_Modeling(myBiomodData, 
                                         models = models_to_run, models.options = myBiomodOption,
                                         NbRunEval=NbRunEval,

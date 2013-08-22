@@ -42,7 +42,7 @@ for (env_var_file  in env_var_files){
 spp_info=read.csv(paste(csv_dir,'FB_spp_data.csv', sep = ""))
 
 
-sp_nm=spp_nm[1]
+sp_nm=spp_nm[5]
 for (sp_nm in spp_nm){
   sp_nm=as.character(sp_nm)  
   cat('\n',sp_nm,'model projection...')
@@ -80,12 +80,20 @@ for (sp_nm in spp_nm){
     rm("crop_raster" ,"temp") 
     predictors
     
-    if (baseline_or_future==2|3|5|6){
+    alt_scen=c(2,3,4,5)
+    if (baseline_or_future %in% alt_scen){
       predictors<-stack((subset(predictors, 1)),
                         (subset(predictors, 2)),
                         (subset(predictors, 3))*4,
                         (subset(predictors, 4)))
       names(predictors)<- var_name
+    }
+    if (baseline_or_future==1){
+      jpeg_name=paste(sp_nm,"_env_vars_used_for_projection.jpg", sep = "")
+      jpeg(jpeg_name,
+           width = 10, height = 10, units = "in",pointsize = 12, quality = 90, bg = "white", res = 300)
+      plot(predictors, col=rev(terrain.colors(255)), maxpixels=100000, useRaster=FALSE, axes = TRUE, addfun=NULL, Interpolate = TRUE)
+      dev.off()
     }
     cat('\n',sp_nm,'projection raster stack created...')
     gc()
@@ -114,13 +122,15 @@ for (sp_nm in spp_nm){
     # make some plots, sub-selected by str.grep argument
     #plot(myBiomomodProj_baseline, str.grep = 'GBM')
     if (plot_graphs==1){
-      for (model in models_to_run){
-        jpeg_name=paste(sp_nm0,"_", model, "_", proj_nm, "runs.jpg", sep = "")
+      jnk=length(myBiomomodProj_baseline@models.projected)
+      jnk=jnk/(length(models_to_run)+1)
+      if (jnk<26){
+        jpeg_name=paste(sp_nm0,"_", proj_nm, "_", "runs.jpg", sep = "")
         jpeg(jpeg_name,
              width = 10, height = 10, units = "in",
              pointsize = 12, quality = 90, bg = "white", res = 300)
         par(mfrow=c(1,2))
-        try(plot(myBiomomodProj_baseline, str.grep = model), TRUE)
+        try(plot(myBiomomodProj_baseline, str.grep = "Full"), TRUE)
         dev.off()
       }
     }
@@ -129,6 +139,7 @@ for (sp_nm in spp_nm){
       for (model in models_to_run){
         jpeg_name=paste(sp_nm0,"_", model, "_BIN_model", proj_nm, "runs.jpg", sep = "")
         if (file.exists(jpeg_name)==F | overwrite==1){
+          sample=c()
           sp_bin_file=paste(proj_nm, "_", sp_nm, "_bin_ROC_RasterStack" , sep = "")
           sp_bin_file=paste(sp_nm,"/proj_", proj_nm, "/", sp_bin_file , sep = "")
           if (file.exists(sp_bin_file)){
@@ -147,16 +158,19 @@ for (sp_nm in spp_nm){
           sp_bin_file=paste(proj_nm, "_", sp_nm, "_ROCbin.grd", sep = "")
           sp_bin_file=paste(sp_nm,"/proj_", proj_nm, "/proj_", sp_bin_file , sep = "") #current_BI_Akepa_bin_ROC_RasterStack
           if (file.exists(sp_bin_file)){
-            sample=raster(sp_bin_file)
-            #plot(jnk)  
+            sample=stack(sp_bin_file)
+            names=names(sample)
+            lyr_name=paste0(sp_nm,"_PA",PA.nb.rep,"_Full_", model)
+            jnk=which(names==lyr_name)
+            sample=raster(sample,jnk)
           }
           
           jpeg(jpeg_name,
                width = 10, height = 10, units = "in",
                pointsize = 12, quality = 90, bg = "white", res = 300)
-          #par(mfrow=c(1,2))
           try(plot(sample), TRUE)
           dev.off()
+          
         }
       }
     }

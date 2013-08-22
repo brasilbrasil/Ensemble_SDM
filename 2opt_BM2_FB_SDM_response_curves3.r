@@ -22,6 +22,7 @@ for (sp_nm in spp_nm){
     load(workspace_name)    
   }else{
     workspace_name=paste(sp_nm0,"_FB_run.RData", sep = "") #set name of file to load workspace data from model run    
+    load(workspace_name)    
   }
   
   sp_nm=str_replace_all(sp_nm,"_", ".")
