@@ -82,7 +82,7 @@ for (sp_nm in spp_nm){
     
     ####species point data
     cat('\n','loading species data...') #sign-posting
-    mySpeciesOcc=read.csv(paste0(csv_dir,"/",sp_nm,'_pres_abs.csv')) #FB_data_points4_PAandA
+    mySpeciesOcc = read.csv(paste0(csv_dir,"/",sp_nm,'_pres_abs.csv')) #FB_data_points4_PAandA
     
     #presence (and absence) data handling)
     mySpeciesOcc = cbind(mySpeciesOcc[,2:3],pa=mySpeciesOcc[,1]) #extracts just the x, y, and PA data from the species csv
@@ -93,21 +93,21 @@ for (sp_nm in spp_nm){
     PA_XY = mySpeciesOcc[,1:2] #extracts the lat and long for all PA points
     mySREresp <- reclassify(subset(predictors,1,drop=TRUE), c(-Inf,Inf,0)) #builds a raster layer based on environmental rasters for response variable
     mySREresp[cellFromXY(mySREresp,PA_XY)] <- 1 #assigns all shared cells in "bioclim" and "PA_XY" to "1"
+    Act_abs = dim(mySpeciesOcc[mySpeciesOcc$pa==0,])[1] #calculates number of real absences
 
     #this loop makes different runs depending on whether Pseudo Absences should be assigned outside climate envelope or randomly
     if (PseudoAbs_outside_CE){      
       sp_CE = sre(Response = mySREresp,Explanatory = predictors,NewData = predictors,Quant = 0.025) #Calculates surface range envelope for distribution removing 2.5% of extremes 
       #calculate density of points within sre
       n_PandA = sum(as.matrix(mySREresp), na.rm=T) #counts number of cells where species occurence data available
-      CE_cells = sum(as.matrix(sp_CE), na.rm=T) #counts number of cells where presence predicted in climate envelope
+      CE_cells = sum(as.matrix(sp_CE), na.rm=T) #counts number of cells where presence or absence predicted in climate envelope
       CE_point_density = round(n_PandA/CE_cells, digits = 4) #density of points with real data within the climate envelope
       
       #creates raster of all cells outside CE
-      neg_sp_CE = sp_CE == 0 #IRC: SHOULD THIS ALSO INCLUDE NA? 
+      neg_sp_CE = sp_CE == 0 
       
       #calculate desired number of pseudo absence points outside CE based on PandA density within CE
       neg_CE_cells = sum(as.matrix(neg_sp_CE), na.rm=T) #calculates no. cells outside CE
-      Act_abs = dim(mySpeciesOcc[mySpeciesOcc$pa==0,])[1] #calculates number of real absences
       n_PseudoAbs_pts = round(neg_CE_cells*CE_point_density)+Act_abs #accounts for the actual absences for calculating pseudo absences      
       PseudoAbs_cand_pts = rasterToPoints(neg_sp_CE, fun=function(x){x==1}) #Creates matrix of candidate points (x,y,layer)
       
@@ -117,59 +117,56 @@ for (sp_nm in spp_nm){
 
       # next section assigns pseudo absences anywhere (not limited to CE)       
     }else{
-      mySREresp = mySREresp == 0
-      plot(mySREresp)
-      PseudoAbs_cand_pts=rasterToPoints(mySREresp, fun=function(x){x==1})
-      n_PseudoAbs_pts=PA.nb.absences
+      neg_mySREresp = mySREresp == 0 #creates raster of areas outside those with known data (presence and absence)
+      plot(neg_mySREresp) #plots raster outside known data (presence and absence)
+      PseudoAbs_cand_pts = rasterToPoints(neg_mySREresp, fun=function(x){x==1}) # Creates matrix of candidate pseudo absence points (x,y,layer)
+      n_PseudoAbs_pts = PA.nb.absences + Act_abs #assigns number of pseudo absence points as indicated in config code, accounting for # actual absences
     }  
-    PseudoAbs_cand_pts=as.data.frame(PseudoAbs_cand_pts[,1:2])
-    head(PseudoAbs_cand_pts)
-    dim(PseudoAbs_cand_pts)
-    PseudoAbs_cand_pts_noNA=PseudoAbs_cand_pts[complete.cases(PseudoAbs_cand_pts),] #removes rows with NAs
-    PseudoAbs_cand_pts_noNA=cbind(PseudoAbs_cand_pts_noNA,pa=rep('NA', dim(PseudoAbs_cand_pts_noNA)[1],1))
-    names(PseudoAbs_cand_pts_noNA)=c('X', 'Y', 'pa') 
-    head(PseudoAbs_cand_pts_noNA)
+    PseudoAbs_cand_pts = as.data.frame(PseudoAbs_cand_pts[,1:2]) #extracts only the geographic information for the candidate pseudo absence points
+    head(PseudoAbs_cand_pts) #checks the header for the pseudo absence 
+    dim(PseudoAbs_cand_pts) #returns dimensions of the pseudo absence points (#pts and 2 rows)
+    PseudoAbs_cand_pts_noNA=PseudoAbs_cand_pts[complete.cases(PseudoAbs_cand_pts),] #creates new data frame removing any pts with missing geographic information
+    PseudoAbs_cand_pts_noNA=cbind(PseudoAbs_cand_pts_noNA,pa=rep('NA', dim(PseudoAbs_cand_pts_noNA)[1],1)) #adds "pa" data column to dataframe and assigns "NA" to all rows for that column
+    #IRC: Is this next line necessary - seems like it already has a header with lower case x and y
+    names(PseudoAbs_cand_pts_noNA)=c('X', 'Y', 'pa') #reassigns names to capitalizes X and Y
+    head(PseudoAbs_cand_pts_noNA) #returns the first lines of the data frame
     
     #merge data with pseudoabsence
-    mySpeciesOcc<-data.frame(rbind(mySpeciesOcc, PseudoAbs_cand_pts_noNA))
+    mySpeciesOcc_w_Pseudo <- data.frame(rbind(mySpeciesOcc, PseudoAbs_cand_pts_noNA)) #creates new data frame with real data and pseudo absence candidate points combined
     
     #### EXTRACTION OF ENV DATA FOR POINT DATA
     cat('\n','extracting env vars to points...')
-    XY_pres_extr<-extract(predictors, mySpeciesOcc[,1:2], cellnumbers=T) ###NEW:This creates a new column call "cell" with the cell numbers from the rasterstack ) 
-    XY_pres_extr=data.frame(cbind(mySpeciesOcc,XY_pres_extr)) ###NEW CHANGE
-    #XY_pres_extr<-cbind(mySpeciesOcc, XY_pres_extr)
-    head(XY_pres_extr)
-    XY_pres_extrnoNA=XY_pres_extr[complete.cases(XY_pres_extr[4:dim(XY_pres_extr)[2]]),] #removes rows with NAs
-    head(XY_pres_extrnoNA) 
-    #tail(XY_pres_extrnoNA) 
+    relBioclimData <- extract(predictors, mySpeciesOcc_w_Pseudo[,1:2], cellnumbers = T) #creates new matrix with relavent bioclim variables and the cell numbers for the real data and candidate pseudo absence points
+    XY_PresAbsPA_Bioclim = data.frame(cbind(mySpeciesOcc_w_Pseudo,relBioclimData)) #creates data frame with bioclimate data for each of the points with real data and pseudo absence candidates
+    head(XY_PresAbsPA_Bioclim) #returns first lines of the dataset
+    XY_PresAbsPA_Bioclim_noNA = XY_PresAbsPA_Bioclim[complete.cases(XY_PresAbsPA_Bioclim[4:dim(XY_PresAbsPA_Bioclim)[2]]),] #creates new data frame with any rows with missing data removed
+    head(XY_PresAbsPA_Bioclim_noNA) #returns first lines of new data frame
     
-    ### NEW: Select, Count and Remove presence duplicate points in cells 
-    jnk=c(1,0, NA)
-    jnk=order(match(XY_pres_extrnoNA$pa, jnk))
-    #jnk=order(XY_pres_extrnoNA$pa, decreasing=T)
-    XY_pres_extrnoNA=XY_pres_extrnoNA[jnk,] #sorting so if duplicates, PA removed before abs, abs removed before Pres
+    ### Select, Count and Remove presence duplicate points in cells 
+    jnk = c(1,0, NA) #temporary vector with unique values for "pa" column
+    XY_PresAbsPA_Bioclim_sort <- XY_PresAbsPA_Bioclim_noNA[order(match(XY_PresAbsPA_Bioclim_noNA$pa,jnk)),] #sorting so if duplicates, PA removed before abs, abs removed before pres
     
-    dups3<- duplicated(XY_pres_extrnoNA[, c('cells')]) # Identifies duplicates in cell column 
+    dups3 <- duplicated(XY_PresAbsPA_Bioclim_sort[, c('cells')]) # Identifies duplicates in cell column 
     n_dups=length(dups3[dups3==TRUE])
     cat('\n','out of ', length(dups3), "points, ",n_dups, "were removed because they were within the same raster cell for", sp_nm)
-    mySpeciesOcc<-XY_pres_extrnoNA[!dups3, ] 
-    #n_PandA=dim(XY_pres_extrnoNA)[1]
+    mySpeciesOcc_w_Pseudo<-XY_PresAbsPA_Bioclim_sort[!dups3, ] 
+    #n_PandA=dim(XY_PresAbsPA_Bioclim_sort)[1]
     
-    mySpeciesOcc<-mySpeciesOcc[,-4] # This drops the cell column from the data frame
+    mySpeciesOcc_w_Pseudo<-mySpeciesOcc_w_Pseudo[,-4] # This drops the cell column from the data frame
     
-    head(mySpeciesOcc)
-    tail(mySpeciesOcc)
+    head(mySpeciesOcc_w_Pseudo)
+    tail(mySpeciesOcc_w_Pseudo)
     
     ###not in FWS code (points map)
     jpeg_name2=paste(sp_nm,"_loc_data_used.jpg", sep = "")
     jpeg(jpeg_name2,
          width = 10, height = 10, units = "in",pointsize = 12, quality = 90, bg = "white", res = 300)
-    plot(seq((min(mySpeciesOcc[,1])-0.1),(max(mySpeciesOcc[,1])+0.1),by=((max(mySpeciesOcc[,1])+0.1)-(min(mySpeciesOcc[,1])-0.1))/5), 
-         seq((min(mySpeciesOcc[,2])-0.1),(max(mySpeciesOcc[,2])+0.1),by=((max(mySpeciesOcc[,2])+0.1)-(min(mySpeciesOcc[,2])-0.1))/5), 
+    plot(seq((min(mySpeciesOcc_w_Pseudo[,1])-0.1),(max(mySpeciesOcc_w_Pseudo[,1])+0.1),by=((max(mySpeciesOcc_w_Pseudo[,1])+0.1)-(min(mySpeciesOcc_w_Pseudo[,1])-0.1))/5), 
+         seq((min(mySpeciesOcc_w_Pseudo[,2])-0.1),(max(mySpeciesOcc_w_Pseudo[,2])+0.1),by=((max(mySpeciesOcc_w_Pseudo[,2])+0.1)-(min(mySpeciesOcc_w_Pseudo[,2])-0.1))/5), 
          type = "n", xlab="Lon", ylab="Lat")# setting up coord. system
-    points(x=mySpeciesOcc[mySpeciesOcc[,3]=='NA',1], y=mySpeciesOcc[mySpeciesOcc[,3]=='NA',2], type = "p", col = "grey", pch=20,cex = 0.7)
-    points(x=mySpeciesOcc[mySpeciesOcc[,3]==0,1], y=mySpeciesOcc[mySpeciesOcc[,3]==0,2], type = "p", col = "red", pch=20,cex = 0.7)
-    points(x=mySpeciesOcc[mySpeciesOcc[,3]==1,1], y=mySpeciesOcc[mySpeciesOcc[,3]==1,2], type = "p", col = "blue", pch=20,cex = 0.7)
+    points(x=mySpeciesOcc_w_Pseudo[mySpeciesOcc_w_Pseudo[,3]=='NA',1], y=mySpeciesOcc_w_Pseudo[mySpeciesOcc_w_Pseudo[,3]=='NA',2], type = "p", col = "grey", pch=20,cex = 0.7)
+    points(x=mySpeciesOcc_w_Pseudo[mySpeciesOcc_w_Pseudo[,3]==0,1], y=mySpeciesOcc_w_Pseudo[mySpeciesOcc_w_Pseudo[,3]==0,2], type = "p", col = "red", pch=20,cex = 0.7)
+    points(x=mySpeciesOcc_w_Pseudo[mySpeciesOcc_w_Pseudo[,3]==1,1], y=mySpeciesOcc_w_Pseudo[mySpeciesOcc_w_Pseudo[,3]==1,2], type = "p", col = "blue", pch=20,cex = 0.7)
 
     dev.off()
     
@@ -177,17 +174,17 @@ for (sp_nm in spp_nm){
     ###defining the variables used by biomod2
     cat('\n','biomod model config...')
     myRespName = sp_nm # Insert Species Name Here
-    myRespXY = mySpeciesOcc[,1:2]
-    myResp<-data.frame(Sp_Bio=mySpeciesOcc[,3])
+    myRespXY = mySpeciesOcc_w_Pseudo[,1:2]
+    myResp<-data.frame(Sp_Bio=mySpeciesOcc_w_Pseudo[,3])
     myResp[myResp=='NA']=NA
     #unique(myResp)
     #head(myResp)
     
     
-    jnk=dim(mySpeciesOcc)[2]
+    jnk=dim(mySpeciesOcc_w_Pseudo)[2]
     myBiomodData <- BIOMOD_FormatingData(
       resp.var = myResp,
-      expl.var = mySpeciesOcc[,4:jnk], # Modify based on number of variables 
+      expl.var = mySpeciesOcc_w_Pseudo[,4:jnk], # Modify based on number of variables 
       resp.xy = myRespXY,
       resp.name = myRespName,
       PA.nb.rep=PA.nb.rep,
