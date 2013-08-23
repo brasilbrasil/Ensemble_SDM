@@ -26,7 +26,7 @@ if (machine == 1){
 ###################################
 
 #setting file locations 
-project_name = "/FB_test20130822" #assign project name to the current run
+project_name = "/FB_test20130822pm2" #assign project name to the current run
 working_dir = paste0(resultsDir,project_name) #assign working directory
 crop_raster_dir = paste0(working_dir, "/map_crop") #assign directory for cropped raster files
 csv_dir = paste0(working_dir,"/single_sp_CSVs") #assign directory for single species CSV's
@@ -64,14 +64,14 @@ if (run_all_spp == 1){
 ####CONFIG FOR SPECIFIC STEPS####
 #################################
 ####fit config (script#1)
-NbRunEval = 3
+NbRunEval = 3 #number of evaluation runs for ensemble modeling
 include_Abs = T #in test phase
 PseudoAbs_outside_CE = T #if T, will only consider Pseudo Absences outside climate envelope of all points collected
 PA.nb.rep = 3
 PA.nb.absences = 1000 #asssign number of Pseudo absence points (if PAs_outside_CE=T, this will be overridden! (n of PAs will be determined by P/A point density within CE)) 
-PA.strategy = "random"
+PA.strategy = "random" #strategy for selecting pseudo absences ('random', 'sre', 'disk' or 'user.defined')
 equiv_100m = 0.0009430131
-PA.dist.min = 5*equiv_100m #500 min distance from actual data points 
+PA.dist.min = 5*equiv_100m #500m min distance from actual data points - only for 'disk' absences selection
 
 ####ensemble config (script#2)
 

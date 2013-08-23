@@ -69,13 +69,13 @@ for (sp_nm in spp_nm){
       temp = crop(temp,  crop_raster)
       predictors = addLayer(predictors, temp)
     }
+    rm(jnk0, jj)
     names(predictors) <- var_name #assigns names to bioclimate raster stack
     rm("crop_raster" ,"temp") #removes temporary variables
     
     jpeg_name = paste0(sp_nm,"_env_vars_used.jpg") #names jpeg file to be created
     jpeg(jpeg_name, #creates blank jpeg file in working directory
          width = 10, height = 10, units = "in",pointsize = 12, quality = 90, bg = "white", res = 300)
-    dev.off() #shuts down current device  - may need to use this before next line or it may not plot
     plot(predictors, col=rev(terrain.colors(255)), maxpixels = 100000, useRaster = FALSE, axes = TRUE, addfun = NULL) #NOT WORKING
       #ERROR - 24 warnings to do with "interpolate" check with warnings()  
     dev.off()
@@ -123,7 +123,7 @@ for (sp_nm in spp_nm){
       n_PseudoAbs_pts = PA.nb.absences + Act_abs #assigns number of pseudo absence points as indicated in config code, accounting for # actual absences
     }  
     PseudoAbs_cand_pts = as.data.frame(PseudoAbs_cand_pts[,1:2]) #extracts only the geographic information for the candidate pseudo absence points
-    head(PseudoAbs_cand_pts) #checks the header for the pseudo absence 
+    head(PseudoAbs_cand_pts) #returns the first lines for the pseudo absence candidate pts 
     dim(PseudoAbs_cand_pts) #returns dimensions of the pseudo absence points (#pts and 2 rows)
     PseudoAbs_cand_pts_noNA=PseudoAbs_cand_pts[complete.cases(PseudoAbs_cand_pts),] #creates new data frame removing any pts with missing geographic information
     PseudoAbs_cand_pts_noNA=cbind(PseudoAbs_cand_pts_noNA,pa=rep('NA', dim(PseudoAbs_cand_pts_noNA)[1],1)) #adds "pa" data column to dataframe and assigns "NA" to all rows for that column
@@ -145,62 +145,56 @@ for (sp_nm in spp_nm){
     ### Select, Count and Remove presence duplicate points in cells 
     jnk = c(1,0, NA) #temporary vector with unique values for "pa" column
     XY_PresAbsPA_Bioclim_sort <- XY_PresAbsPA_Bioclim_noNA[order(match(XY_PresAbsPA_Bioclim_noNA$pa,jnk)),] #sorting so if duplicates, PA removed before abs, abs removed before pres
+    rm(jnk)
     
-    dups3 <- duplicated(XY_PresAbsPA_Bioclim_sort[, c('cells')]) # Identifies duplicates in cell column 
-    n_dups=length(dups3[dups3==TRUE])
-    cat('\n','out of ', length(dups3), "points, ",n_dups, "were removed because they were within the same raster cell for", sp_nm)
-    mySpeciesOcc_w_Pseudo<-XY_PresAbsPA_Bioclim_sort[!dups3, ] 
-    #n_PandA=dim(XY_PresAbsPA_Bioclim_sort)[1]
+    dupEntries <- duplicated(XY_PresAbsPA_Bioclim_sort$cells) # Identifies duplicates in cell column 
+    n_dups = length(dupEntries[dupEntries == TRUE]) #calculates number of duplicate entries
+    cat('\n','Out of ', length(dupEntries), "points, ",n_dups, "were removed because they were within the same raster cell for", sp_nm) #sign-posting
+    PresAbsPA_noDup <- XY_PresAbsPA_Bioclim_sort[!dupEntries, -4] #creates new dataframe with duplicates and cell column removed
+    head(PresAbsPA_noDup)
     
-    mySpeciesOcc_w_Pseudo<-mySpeciesOcc_w_Pseudo[,-4] # This drops the cell column from the data frame
-    
-    head(mySpeciesOcc_w_Pseudo)
-    tail(mySpeciesOcc_w_Pseudo)
-    
-    ###not in FWS code (points map)
-    jpeg_name2=paste(sp_nm,"_loc_data_used.jpg", sep = "")
+    ###PLOTS MAPS OF DATA (PRESENCE, ABSENCE, AND PSEUDO ABSENCE)
+    jpeg_name2=paste0(sp_nm,"_loc_data_used.jpg") #assigning filename to jpeg
     jpeg(jpeg_name2,
-         width = 10, height = 10, units = "in",pointsize = 12, quality = 90, bg = "white", res = 300)
-    plot(seq((min(mySpeciesOcc_w_Pseudo[,1])-0.1),(max(mySpeciesOcc_w_Pseudo[,1])+0.1),by=((max(mySpeciesOcc_w_Pseudo[,1])+0.1)-(min(mySpeciesOcc_w_Pseudo[,1])-0.1))/5), 
-         seq((min(mySpeciesOcc_w_Pseudo[,2])-0.1),(max(mySpeciesOcc_w_Pseudo[,2])+0.1),by=((max(mySpeciesOcc_w_Pseudo[,2])+0.1)-(min(mySpeciesOcc_w_Pseudo[,2])-0.1))/5), 
+         width = 10, height = 10, units = "in",pointsize = 12, quality = 90, bg = "white", res = 300) #creating blank jpeg file
+    plot(seq((min(PresAbsPA_noDup[,1])-0.1),(max(PresAbsPA_noDup[,1])+0.1),by=((max(PresAbsPA_noDup[,1])+0.1)-(min(PresAbsPA_noDup[,1])-0.1))/5), 
+         seq((min(PresAbsPA_noDup[,2])-0.1),(max(PresAbsPA_noDup[,2])+0.1),by=((max(PresAbsPA_noDup[,2])+0.1)-(min(PresAbsPA_noDup[,2])-0.1))/5), 
          type = "n", xlab="Lon", ylab="Lat")# setting up coord. system
-    points(x=mySpeciesOcc_w_Pseudo[mySpeciesOcc_w_Pseudo[,3]=='NA',1], y=mySpeciesOcc_w_Pseudo[mySpeciesOcc_w_Pseudo[,3]=='NA',2], type = "p", col = "grey", pch=20,cex = 0.7)
-    points(x=mySpeciesOcc_w_Pseudo[mySpeciesOcc_w_Pseudo[,3]==0,1], y=mySpeciesOcc_w_Pseudo[mySpeciesOcc_w_Pseudo[,3]==0,2], type = "p", col = "red", pch=20,cex = 0.7)
-    points(x=mySpeciesOcc_w_Pseudo[mySpeciesOcc_w_Pseudo[,3]==1,1], y=mySpeciesOcc_w_Pseudo[mySpeciesOcc_w_Pseudo[,3]==1,2], type = "p", col = "blue", pch=20,cex = 0.7)
-
+    points(x=PresAbsPA_noDup[PresAbsPA_noDup[,3]=='NA',1], y=PresAbsPA_noDup[PresAbsPA_noDup[,3]=='NA',2], type = "p", col = "grey", pch=20,cex = 0.7)
+    points(x=PresAbsPA_noDup[PresAbsPA_noDup[,3]==0,1], y=PresAbsPA_noDup[PresAbsPA_noDup[,3]==0,2], type = "p", col = "red", pch=20,cex = 0.7)
+    points(x=PresAbsPA_noDup[PresAbsPA_noDup[,3]==1,1], y=PresAbsPA_noDup[PresAbsPA_noDup[,3]==1,2], type = "p", col = "blue", pch=20,cex = 0.7)
     dev.off()
     
     
     ###defining the variables used by biomod2
-    cat('\n','biomod model config...')
-    myRespName = sp_nm # Insert Species Name Here
-    myRespXY = mySpeciesOcc_w_Pseudo[,1:2]
-    myResp<-data.frame(Sp_Bio=mySpeciesOcc_w_Pseudo[,3])
-    myResp[myResp=='NA']=NA
-    #unique(myResp)
-    #head(myResp)
+    cat('\n','biomod model config...') #sign-posting
+    myRespXY = PresAbsPA_noDup[,1:2] #new data frame with the x and y coordinates only
+    myResp <- data.frame(Sp_Bio = PresAbsPA_noDup[,3]) #new data frame with only one column for whether it is a presence (1), absence (0), or PA (NA)
+    myResp[myResp =='NA'] = NA #re-assigns all "NA" (text) to real <NA> 
+    myExpl = PresAbsPA_noDup[,4:dim(PresAbsPA_noDup)[2]] #new data frame with only the explanatory variables
     
-    
-    jnk=dim(mySpeciesOcc_w_Pseudo)[2]
     myBiomodData <- BIOMOD_FormatingData(
       resp.var = myResp,
-      expl.var = mySpeciesOcc_w_Pseudo[,4:jnk], # Modify based on number of variables 
+      expl.var = myExpl,
       resp.xy = myRespXY,
-      resp.name = myRespName,
-      PA.nb.rep=PA.nb.rep,
+      resp.name = sp_nm,
+      PA.nb.rep = PA.nb.rep,
       PA.nb.absences = n_PseudoAbs_pts,
       PA.strategy = PA.strategy,
-      PA.dist.min = PA.dist.min)
+      PA.dist.min = PA.dist.min) #checking formatting of biomod 2 variables
+    
     #This plotting methods takes way too long!!!  (but it is useful since it plots PAs selected)
-    if (plot_graphs==1 & PA.nb.rep<9){  
-    jpeg_name3=paste(sp_nm,"_loc_data_used2.jpg", sep = "")
+    if (plot_graphs == 1 & PA.nb.rep < 9){  
+    jpeg_name3=paste0(sp_nm,"_loc_data_used2.jpg") #assigning location for jpeg file
     jpeg(jpeg_name3,
-         width = 10, height = 10, units = "in",pointsize = 12, quality = 90, bg = "white", res = 300)
-    plot(myBiomodData)
-    dev.off()
+         width = 10, height = 10, units = "in",pointsize = 12, quality = 90, bg = "white", res = 300) #creating blank jpeg file
+    plot(myBiomodData) #plots the psuedo absences, real data, and candidate points used
+    dev.off() 
     }
     
-    memory.limit(size=4095)
+    memory.limit(size=4095) #increases computer memory allocation
+    
+    #SETTING MODELING OPTIONS FOR EACH MODEL TYPE
     myBiomodOption <- BIOMOD_ModelingOptions(
       GBM = list( distribution = 'bernoulli', interaction.depth = 7,  shrinkage = 0.001, bag.fraction = 0.5, train.fraction = 1, n.trees = 100,
                   cv.folds = 10),
@@ -214,19 +208,19 @@ for (sp_nm in spp_nm){
                     hingethreshold = 15, beta_threshold = -1, beta_categorical = -1, beta_lqp = -1, 
                     beta_hinge = -1,defaultprevalence = 0.5)
     )
+     
+    cat('\n','fitting...') #sign-posting
     
-    rm("predictors", "xybackg", "PseudoAbs_cand_pts", "dups2", "jnk", "jnk1", "jnk2") 
-    
-    cat('\n','fitting...')
-    
+    #CREATING ENSEMBLE MODEL
     myBiomodModelOut <- BIOMOD_Modeling(myBiomodData, 
-                                        models = models_to_run, models.options = myBiomodOption,
-                                        NbRunEval=NbRunEval,
-                                        DataSplit=80,
-                                        Yweights=NULL, 
-                                        VarImport=10,
-                                        do.full.models=T,
-                                        models.eval.meth = eval_stats, #c('TSS','ROC', 'KAPPA'),
+                                        models = models_to_run, #from config file
+                                        models.options = myBiomodOption, #from above
+                                        NbRunEval = NbRunEval, #from config file
+                                        DataSplit = 80,
+                                        Yweights = NULL, 
+                                        VarImport = 10,
+                                        models.eval.meth = eval_stats, #c('TSS','ROC', 'KAPPA') #set in config file
+                                        do.full.models = T,
                                         SaveObj = TRUE,
                                         rescal.all.models = TRUE)
     
