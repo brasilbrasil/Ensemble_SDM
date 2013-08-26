@@ -135,45 +135,45 @@ for (sp_nm in spp_nm){
       }
     }
     
-    if (plot_graphs==1){
-      for (model in models_to_run){
-        jpeg_name=paste(sp_nm0,"_", model, "_BIN_model", proj_nm, "runs.jpg", sep = "")
-        if (file.exists(jpeg_name)==F | overwrite==1){
-          sample=c()
-          sp_bin_file=paste(proj_nm, "_", sp_nm, "_bin_ROC_RasterStack" , sep = "")
-          sp_bin_file=paste(sp_nm,"/proj_", proj_nm, "/", sp_bin_file , sep = "")
-          if (file.exists(sp_bin_file)){
-            jnk=load(sp_bin_file) #current_BI_Akepa_bin_ROC_RasterStack
-            sp_bin_stack=get(jnk)
-            sample=c()
-            try(sample <- raster(sp_bin_stack, layer=paste(sp_nm, "_AllData_Full_",model,".bin" , sep = "")), TRUE)
-          }
-          sp_bin_file=paste(proj_nm, "_", sp_nm, "_AllData_Full_", model,"_bin_ROC_RasterLayer" , sep = "")
-          sp_bin_file=paste(sp_nm,"/proj_", proj_nm, "/", sp_bin_file , sep = "")          
-          if (file.exists(sp_bin_file)){
-            jnk=load(sp_bin_file) #current_BI_Akepa_bin_ROC_RasterStack
-            sample=get(jnk)
-          }
-          
-          sp_bin_file=paste(proj_nm, "_", sp_nm, "_ROCbin.grd", sep = "")
-          sp_bin_file=paste(sp_nm,"/proj_", proj_nm, "/proj_", sp_bin_file , sep = "") #current_BI_Akepa_bin_ROC_RasterStack
-          if (file.exists(sp_bin_file)){
-            sample=stack(sp_bin_file)
-            names=names(sample)
-            lyr_name=paste0(sp_nm,"_PA",PA.nb.rep,"_Full_", model)
-            jnk=which(names==lyr_name)
-            sample=raster(sample,jnk)
-          }
-          
-          jpeg(jpeg_name,
-               width = 10, height = 10, units = "in",
-               pointsize = 12, quality = 90, bg = "white", res = 300)
-          try(plot(sample), TRUE)
-          dev.off()
-          
-        }
-      }
-    }
+#     if (plot_graphs==1){ ###this has to be fixed- in situations where there is only enough data for a single PA, no others are run
+#       for (model in models_to_run){
+#         jpeg_name=paste(sp_nm0,"_", model, "_BIN_model", proj_nm, "runs.jpg", sep = "")
+#         if (file.exists(jpeg_name)==F | overwrite==1){
+#           sample=c()
+#           sp_bin_file=paste(proj_nm, "_", sp_nm, "_bin_ROC_RasterStack" , sep = "")
+#           sp_bin_file=paste(sp_nm,"/proj_", proj_nm, "/", sp_bin_file , sep = "")
+#           if (file.exists(sp_bin_file)){
+#             jnk=load(sp_bin_file) #current_BI_Akepa_bin_ROC_RasterStack
+#             sp_bin_stack=get(jnk)
+#             sample=c()
+#             try(sample <- raster(sp_bin_stack, layer=paste(sp_nm, "_AllData_Full_",model,".bin" , sep = "")), TRUE)
+#           }
+#           sp_bin_file=paste(proj_nm, "_", sp_nm, "_AllData_Full_", model,"_bin_ROC_RasterLayer" , sep = "")
+#           sp_bin_file=paste(sp_nm,"/proj_", proj_nm, "/", sp_bin_file , sep = "")          
+#           if (file.exists(sp_bin_file)){
+#             jnk=load(sp_bin_file) #current_BI_Akepa_bin_ROC_RasterStack
+#             sample=get(jnk)
+#           }
+#           
+#           sp_bin_file=paste(proj_nm, "_", sp_nm, "_ROCbin.grd", sep = "")
+#           sp_bin_file=paste(sp_nm,"/proj_", proj_nm, "/proj_", sp_bin_file , sep = "") #current_BI_Akepa_bin_ROC_RasterStack
+#           if (file.exists(sp_bin_file)){
+#             sample=stack(sp_bin_file)
+#             names=names(sample)
+#             lyr_name=paste0(sp_nm,"_PA",PA.nb.rep,"_Full_", model)
+#             jnk=which(names==lyr_name)
+#             sample=raster(sample,jnk)
+#           }
+#           
+#           jpeg(jpeg_name,
+#                width = 10, height = 10, units = "in",
+#                pointsize = 12, quality = 90, bg = "white", res = 300)
+#           try(plot(sample), TRUE)
+#           dev.off()
+#           
+#         }
+#       }
+#     }
     
     ###################################################
     ### code chunk number 18: Individual model plots
@@ -274,7 +274,7 @@ for (sp_nm in spp_nm){
       binary.meth=eval_stats, 
       keep.in.memory=memory)
     cat('\n',sp_nm,'ensemble projection done...')
-    cat('point 1 mem', memory.size(), memory.size(max=TRUE), 'nn')
+    #cat('point 1 mem', memory.size(), memory.size(max=TRUE), 'nn')
     
     ###################################################
     ### code chunk number 19: EnsembleForecasting_loading_res

@@ -104,12 +104,13 @@ for (sp_nm in spp_nm){
     ##pseudo-absence handling
     cat('\n','defining candidate PA points...')
     if (PAs_outside_CE){
+      sre_tail=0.025
       P_and_A=mySpeciesOcc[,1:2]
       mySREresp <- reclassify(subset(predictors,1,drop=TRUE), c(-Inf,Inf,0))
       mySREresp[cellFromXY(mySREresp,P_and_A)] <- 1
-      sp_CE=sre(Response=mySREresp,Explanatory=predictors,NewData=predictors,Quant=0.025)
+      sp_CE=sre(Response=mySREresp,Explanatory=predictors,NewData=predictors,Quant=sre_tail)
       #calculate density of points within sre
-      n_PandA=sum(as.matrix(mySREresp), na.rm=T)
+      n_PandA=sum(as.matrix(mySREresp), na.rm=T)*(1-sre_tail*2) #this corrects value for density calc 
       CE_cells=sum(as.matrix(sp_CE), na.rm=T)
       CE_point_density=round(CE_cells/n_PandA)
       
@@ -178,6 +179,16 @@ for (sp_nm in spp_nm){
     head(mySpeciesOcc)
     tail(mySpeciesOcc)
     
+    #write.table(mySpeciesOcc, file = paste0(sp_nm,"_loc_data_table.csv"), sep=",", col.names=NA) #this generates a table way to large
+    sp_loc_summary=table(mySpeciesOcc$pa, useNA = "ifany")
+    sp_loc_summary=as.data.frame(sp_loc_summary)
+    levels(sp_loc_summary$Var1)=c(0, 1, NA, "n to select")
+    jnk=c("n to select", n_PA_points)#3 is code for n of PAs to select per run
+    sp_loc_summary=rbind(sp_loc_summary, jnk)
+    names(sp_loc_summary)=c("Data_type", "Freq")
+    write.table(sp_loc_summary, file = paste0(sp_nm,"_loc_data_summary.csv"), sep=",", col.names=NA)
+
+    
     ###not in FWS code (points map)
     jpeg_name=paste(sp_nm,"_loc_data_used.jpg", sep = "")
     jpeg(jpeg_name,
@@ -241,7 +252,7 @@ for (sp_nm in spp_nm){
                                         DataSplit=80,
                                         Yweights=NULL, 
                                         VarImport=10,
-                                        do.full.models=T,
+                                        do.full.models=do.full.models,
                                         models.eval.meth = eval_stats, #c('TSS','ROC', 'KAPPA'),
                                         SaveObj = TRUE,
                                         rescal.all.models = TRUE)
