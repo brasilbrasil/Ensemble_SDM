@@ -76,7 +76,7 @@ for (sp_nm in spp_nm){
     jpeg_name = paste0(sp_nm,"_env_vars_used.jpg") #names jpeg file to be created
     jpeg(jpeg_name, #creates blank jpeg file in working directory
          width = 10, height = 10, units = "in",pointsize = 12, quality = 90, bg = "white", res = 300)
-    plot(predictors, col=rev(terrain.colors(255)), maxpixels = 100000, useRaster = FALSE, axes = TRUE, addfun = NULL) #NOT WORKING
+    plot(predictors, col=rev(terrain.colors(255)), maxpixels = 100000, useRaster = FALSE, axes = TRUE, addfun = NULL) #
       #ERROR - 24 warnings to do with "interpolate" check with warnings()  
     dev.off()
     
@@ -219,59 +219,57 @@ for (sp_nm in spp_nm){
                                         DataSplit = 80,
                                         Yweights = NULL, 
                                         VarImport = 10,
-                                        models.eval.meth = eval_stats, #c('TSS','ROC', 'KAPPA') #set in config file
+                                        models.eval.meth = eval_stats, #c('TSS','ROC', 'KAPPA') #options set in config file
                                         do.full.models = T,
                                         SaveObj = TRUE,
                                         rescal.all.models = TRUE)
     
     ## Output the biomod models
-    myBiomodModelOut
+    myBiomodModelOut #returns summary of model runs
     
     # output model evaluation metrics
-    myBiomodModelEval <- getModelsEvaluations(myBiomodModelOut)    
-    dimnames(myBiomodModelEval)
+    myBiomodModelEval <- getModelsEvaluations(myBiomodModelOut) #creates an array with model evaluation results for all models   
+    dimnames(myBiomodModelEval) #returns the header names for the model evaluation array 
     
     # Outputting the validation metrics for all tests
     if ("TSS" %in% eval_stats){
-      myBiomodModelEval["TSS","Testing.data",,,]
-      Spp_TSS<- data.frame(myBiomodModelEval["TSS","Testing.data",,,])
-      FileName<-paste(sp_nm, "_TSS.csv")
-      write.table(Spp_TSS, file = FileName, sep=",", col.names=NA)
+      myBiomodModelEval["TSS","Testing.data",,,] #returns variable importances based on TSS for each model
+      Spp_TSS<- data.frame(myBiomodModelEval["TSS","Testing.data",,,]) #creates data frame with TSS variable importances
+      FileName<-paste0(sp_nm, "_TSS.csv") #assigns file path for results
+      write.table(Spp_TSS, file = FileName, sep=",", col.names=NA) #creates csv file with TSS variable importances
     }
     
     if ("ROC" %in% eval_stats){
       myBiomodModelEval["ROC","Testing.data",,,]
       Spp_ROC<- data.frame(myBiomodModelEval["ROC","Testing.data",,,])
-      FileName<-paste(sp_nm, "_ROC.csv")
+      FileName<-paste0(sp_nm, "_ROC.csv")
       write.table(Spp_ROC, file = FileName, sep=",", col.names=NA)
     }
     if ("KAPAA" %in% eval_stats){
       myBiomodModelEval["KAPPA","Testing.data",,,]
       Spp_KAP<- data.frame(myBiomodModelEval["KAPPA","Testing.data",,,])
-      FileName<-paste(sp_nm, "_KAP.csv")
+      FileName<-paste0(sp_nm, "_KAP.csv")
       write.table(Spp_KAP, file = FileName, sep=",", col.names=NA)
     }
     ## getting the variable importance ##
-    getModelsVarImport(myBiomodModelOut)
-    Spp_VariImp<- data.frame(getModelsVarImport(myBiomodModelOut))
-    #FileName<-paste(sp_nm, "_VariImp.csv")
-    write.table(Spp_VariImp, file = FileName00, sep=",", col.names=NA)
+    getModelsVarImport(myBiomodModelOut) #returns an array with model variable importances (i.e bio1, bio7, etc)
+    Spp_VariImp<- data.frame(getModelsVarImport(myBiomodModelOut)) #creates data frame with model variable importances
+    write.table(Spp_VariImp, file = FileName00, sep=",", col.names=NA) #creates csv of variable importances with name assigned above.
     
-    save.image("temp_workspace1.RData")   #to save workspace
-    rm(list=c("sp_nm","local_config_dir", "spp_nm", "models_to_run", "working_dir", 
-              "fitting_clim_data_dir", "env_var_files", "csv_dir", "spp_info", "var_name",
-              "eval_stats0", "spp_nm0", "clim_surface_to_use", "proj_nm0", "overwrite", 
-              "plot_graphs", "local_config_dir","spp_nm", "clim_data_2000", 
-              "clim_data_2100", "working_dir", "csv_dir", "eval_stats",  "crop_raster", "necessary_run_data"))      
-    save.image(workspace_name)   #save workspace
+    save.image("temp_workspace1.RData")   #saves workspace
+    rm(list=c("sp_nm", "spp_nm", "models_to_run", "working_dir", 
+              "fitting_clim_data_dir", "env_var_files", "csv_dir", "spp_info", 
+              "var_name", "overwrite", "plot_graphs", "clim_data_2000", 
+              "clim_data_2100", "eval_stats", "necessary_run_data"))      
+    save.image(workspace_name)   #saves workspace
     load("temp_workspace1.RData")        
     
-    
-    ptm1=proc.time() - ptm0
-    jnk=as.numeric(ptm1[3])
-    jnk=jnk/3600
-    cat('\n','It took ', jnk, "hours to model", sp_nm)
+     
+    ptm1=proc.time() - ptm0 #calculates time it took to run all code
+    jnk=as.numeric(ptm1[3]) #assigns temporary variable to the numeric value of the time elapsed
+    jnk=jnk/3600 #converts elapsed time into hours
+    cat('\n','It took ', jnk, "hours to model", sp_nm) #sign-posting
   }else{
-    cat('\n','fitting for ',sp_nm,'already done...')  
+    cat('\n','fitting for ',sp_nm,'already done...') #sign-posting in case file for variable importance has already been created (indicating this species has already been run)  
   }    
 }

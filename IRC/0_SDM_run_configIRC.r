@@ -26,7 +26,7 @@ if (machine == 1){
 ###################################
 
 #setting file locations 
-project_name = "/FB_test20130822pm2" #assign project name to the current run
+project_name = "/FB_test20130826am5" #assign project name to the current run
 working_dir = paste0(resultsDir,project_name) #assign working directory
 crop_raster_dir = paste0(working_dir, "/map_crop") #assign directory for cropped raster files
 csv_dir = paste0(working_dir,"/single_sp_CSVs") #assign directory for single species CSV's
@@ -44,7 +44,7 @@ models_to_run = c('GBM','MAXENT') #choose biomod2 models to run - possibilities 
 eval_stats = c('ROC') #choose evaluation methods - possibilties are: 'KAPPA','TSS','ROC'
 env_var_files = c("bio1.grd", "bio7.grd", "bio12.grd", "bio15.grd") #choose bioclimatic variables of interest
 plot_graphs = 1 #plot graphs of results (=1) or not (=0)
-EM_fit = F #if you want to run the model fitting = T
+EM_fit = T #if you want to run the model fitting = T
 EM_ensemble = F #if you want to run the ensemble modelling = T
 EM_project = F #if you want to project the model results = T
 apply_biomod2_fixes = F #if running large models use this option - solves memory problems
@@ -107,12 +107,12 @@ dir.create(dir_for_temp_files, showWarnings=F, recursive=T)
 
 ####Runs script for model fitting, creating ensemble models, and projecting models according to settings above.
 if (EM_fit){
-  source(paste0(codeDir,"/1_BM2_FB_SDM_fitting_w_cropping4.r")) #this is where all configurations are at
+  source(paste0(codeDir,"/IRC/1_BM2_FB_SDM_fitting_w_cropping4_IRC.r")) #this is where all configurations are at
 }
 if (EM_ensemble){
-  source(paste0(codeDir,"/2_BM2_FB_SDM_EM_fitting2.r")) #this is where all configurations are at
+  source(paste0(codeDir,"/IRC/2_BM2_FB_SDM_EM_fitting2_IRC.r")) #this is where all configurations are at
 }
 if (EM_project){
-  source(paste0(codeDir,"/3_BM2_FB_SDM_EM_projection_with_crop4.r")) #this is where all configurations are at
+  source(paste0(codeDir,"/IRC/3_BM2_FB_SDM_EM_projection_with_crop4_IRC.r")) #this is where all configurations are at
 }
 
