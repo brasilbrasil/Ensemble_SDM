@@ -11,7 +11,7 @@ spp_nm=c("Oahu_Amakihi", "Maui_Parrotbill")
 #spp_nm=c("Akekee", "Puaiohi", "Kauai_Amakihi", "Oahu_Elepaio", "Hawaii_Akepa", "Palila", "Oahu_Amakihi", "Maui_Parrotbill")
 project_name='test_runs_round5_250m_RF__P_A_lowPAdens_0.5'
 server=1
-overwrite=0
+overwrite=0; paralelize=F
 models_to_run=c('GBM','MAXENT', 'RF')
 eval_stats=c("ROC")
 plot_graphs=1
@@ -87,7 +87,7 @@ Sys.sleep(6) #time for script process to show up on tasklist
 n_instances=length(system('tasklist /FI "IMAGENAME eq Rscript.exe" ', intern = TRUE))-3
 rsession_instances=length(system('tasklist /FI "IMAGENAME eq rsession.exe" ', intern = TRUE))-3
 cpucores=as.integer(Sys.getenv('NUMBER_OF_PROCESSORS'))
-if (n_instances>0 & cpucores>1 & rsession_instances<1){
+if (n_instances>0 & cpucores>1 & rsession_instances<1 & paralelize){
   #n_instances=1
   jnkn=length(spp_nm)
   x=c(1:jnkn)

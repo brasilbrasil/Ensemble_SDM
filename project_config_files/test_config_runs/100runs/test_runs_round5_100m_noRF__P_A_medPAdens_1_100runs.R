@@ -7,8 +7,8 @@ source(paste0("D:/PICCC_analysis/code/","directory_registry.r"))
 ###################################
 local_config_dir=DR_FB_SDM_results_S
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
-spp_nm=c("Akekee", "Puaiohi", "Kauai_Amakihi", "Oahu_Elepaio", "Hawaii_Akepa", "Palila", "Oahu_Amakihi", "Maui_Parrotbill")
-project_name='test_runs_round5_250m_noRF__P_1600PA'
+spp_nm=c("Akekee", "Oahu_Elepaio", "Hawaii_Akepa", "Palila", "Maui_Parrotbill")
+project_name='test_runs_round6_100m_noRF__P_A_medPAdens_1_100runs'
 server=1
 overwrite=0; paralelize=F
 models_to_run=c('GBM','MAXENT')
@@ -23,7 +23,7 @@ apply_biomod2_fixes=T #if running large models use this option
 
 if (server==1){
   working_dir=paste0(DR_FB_SDM_results_S,project_name,'/')
-  fitting_clim_data_dir=paste0(DR_FB_clim_data,"all_grd/all_baseline/250m/") 
+  fitting_clim_data_dir=paste0(DR_FB_clim_data,"all_grd/all_baseline/100m/") 
   necessary_run_data=paste0(DR_FB_SDM_results_S,'necessary_run_data/') #where all needed files are stored (maxent.jar, species csvs, crop rasters, etc.)
 }else{
   working_dir='C:/Users/lfortini/Data/biomod2/test/'
@@ -40,12 +40,12 @@ csv_dir=paste(working_dir,"single_sp_CSVs/", sep="")
 #################################
 ####fit config (script#1)
 NbRunEval=5
-include_Abs=F #in test phase
-PAs_outside_CE=F #if T, will only consider PAs outside climate envelope of all points collected
-dens_PAs_outside_CE=3 #if 1 will create PA density that is equal to point density within surveyed areas
+include_Abs=T #in test phase
+PAs_outside_CE=T #if T, will only consider PAs outside climate envelope of all points collected
+dens_PAs_outside_CE=1 #if 1 will create PA density that is equal to point density within surveyed areas
 PA.nb.rep=5
-PA.nb.absences = 1600 #if PAs_outside_CE=T, this will be overridden! (n of PAs will be determined by P/A point density within CE 
-candidatePA.per.PA=0 #only used if if PAs_outside_CE=F, if value ==0, will use PA.nb.absences   
+PA.nb.absences = 10000 #only used if if PAs_outside_CE=F, this will be overridden! (n of PAs will be determined by P/A point density within CE 
+candidatePA.per.PA=50 #only used if if PAs_outside_CE=F, if value ==0, will use PA.nb.absences   
 PA.strategy = "random"
 equiv_100m=0.0009430131
 PA.dist.min = 5*equiv_100m #500 min distance from actual data points 
@@ -54,7 +54,7 @@ do.full.models=T
 eval.metric.threshold = rep(0.5,length(eval_stats))
 
 ####projection config (script#3)
-baseline_or_future=4 #1 for baseline, 4 for future
+baseline_or_future=1 #1 for baseline, 4 for future
 memory = T #keep.in.memory=memory
 dir_for_temp_files<-paste(Drive,'/temp/', project_name,'/', baseline_or_future, '/', sep='') #dir for temp run data (to avoid memory errors)
 
