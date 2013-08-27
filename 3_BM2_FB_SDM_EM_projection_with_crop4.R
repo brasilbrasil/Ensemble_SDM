@@ -80,7 +80,7 @@ for (sp_nm in spp_nm){
     rm("crop_raster" ,"temp") 
     predictors
     
-    alt_scen=c(2,3,4,5)
+    alt_scen=c(2,3,5,6)
     if (baseline_or_future %in% alt_scen){
       predictors<-stack((subset(predictors, 1)),
                         (subset(predictors, 2)),

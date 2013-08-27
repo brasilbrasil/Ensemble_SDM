@@ -10,7 +10,7 @@ local_config_dir=DR_FB_SDM_results_S
 spp_nm=c("Akekee", "Puaiohi", "Kauai_Amakihi", "Oahu_Elepaio", "Hawaii_Akepa", "Palila", "Oahu_Amakihi", "Maui_Parrotbill")
 project_name='test_runs_round5_100m_noRF__P_hiPAdens_50'
 server=1
-overwrite=0
+overwrite=0; paralelize=F
 models_to_run=c('GBM','MAXENT')
 eval_stats=c("ROC")
 plot_graphs=1
@@ -54,7 +54,7 @@ do.full.models=T
 eval.metric.threshold = rep(0.5,length(eval_stats))
 
 ####projection config (script#3)
-baseline_or_future=1 #1 for baseline, 4 for future
+baseline_or_future=4 #1 for baseline, 4 for future
 memory = T #keep.in.memory=memory
 dir_for_temp_files<-paste(Drive,'/temp/', project_name,'/', baseline_or_future, '/', sep='') #dir for temp run data (to avoid memory errors)
 
@@ -85,7 +85,7 @@ Sys.sleep(6) #time for script process to show up on tasklist
 n_instances=length(system('tasklist /FI "IMAGENAME eq Rscript.exe" ', intern = TRUE))-3
 rsession_instances=length(system('tasklist /FI "IMAGENAME eq rsession.exe" ', intern = TRUE))-3
 cpucores=as.integer(Sys.getenv('NUMBER_OF_PROCESSORS'))
-if (n_instances>0 & cpucores>1 & rsession_instances<1){
+if (n_instances>0 & cpucores>1 & rsession_instances<1 & paralelize){
   #n_instances=1
   jnkn=length(spp_nm)
   x=c(1:jnkn)
