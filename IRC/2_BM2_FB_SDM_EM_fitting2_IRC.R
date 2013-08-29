@@ -2,80 +2,81 @@
 #see 0_sdm_config file.r
 
 ####START UNDERHOOD
-setwd(working_dir)
+setwd(working_dir) #sets working directory
 
+##Loading package libraries
 library(biomod2)
 library(stringr)
-#sp_nm="Akepa" #debug
 
-memory.limit(size=4095)
-sp_nm=spp_nm[1]
+memory.limit(size = 4095) #increases memory limit size
+sp_nm = spp_nm[1] #resets so the first species to run is the first one listed in config file or csv
 for (sp_nm in spp_nm){
-  sp_nm=as.character(sp_nm)  
+  sp_nm = as.character(sp_nm) #defines the species name as a character string - not needed if it is already a text name
   cat('\n',sp_nm,'ensemble creation...')
-  sp_nm0=sp_nm
-  workspace_name=paste(sp_nm0,"_FB_modelfitting.RData", sep = "") #set name of file to load workspace data from model run
-  workspace_name_out=paste(sp_nm0,"_FB_EM_fit.RData", sep = "") #set name of file to load workspace data from model run
-  if (file.exists(workspace_name_out)==F | overwrite==1){
-    load(workspace_name)
-    sp_nm=str_replace_all(sp_nm,"_", ".")
+  workspace_name = paste0(sp_nm,"_FB_modelfitting.RData") #set name of file to load workspace data from model run
+  workspace_name_out = paste0(sp_nm,"_FB_EM_fit.RData") #set name of file to load workspace data from model run
+  if (file.exists(workspace_name_out) == F | overwrite == 1){ #run only if file does not already exist and overwrite is turned off (in config file)
+    # Start the clock!
+    ptm0 <- proc.time()
     
-    spp_info=read.csv(paste(csv_dir,'FB_spp_data.csv', sep = ""))
+    load(workspace_name) #loads the model results from the species of interest
+    sp_nm = str_replace_all(sp_nm,"_", ".") #replaces any "_" with "." in the species name
+    spp_info=read.csv(paste(csv_dir,'FB_spp_data.csv', sep = "/")) #creates data frame from species info csv file
     ###################################################
     ### code chunk number 8: modeling_summary
     ###################################################
-    myBiomodModelOut
+    myBiomodModelOut #returns summary of biomod2 model fit run for species
     
     
     ###################################################
     ### code chunk number 9: modeling_model_evaluation
     ###################################################
     # get all models evaluation
-    myBiomodModelEval <- getModelsEvaluations(myBiomodModelOut)
+    myBiomodModelEval <- getModelsEvaluations(myBiomodModelOut) #creates an array with model evaluation results for each species model
     
     ###################################################
     ### code chunk number 10: modeling_variable_importance
     ###################################################
     # print variable importances
-    getModelsVarImport(myBiomodModelOut)
+    getModelsVarImport(myBiomodModelOut) #returns an array with model variable importances (i.e bio1, bio7, etc)
     
     ###################################################
     ### code chunk number 11: ensemble_modeling
     ###################################################
-    myBiomodEM <- BIOMOD_EnsembleModeling(
-      modeling.output = myBiomodModelOut,
+    #combines models and make ensemble predictions built with BIOMOD_Modeling in module 1
+    myBiomodEM <- BIOMOD_EnsembleModeling( 
+      modeling.output = myBiomodModelOut, #the output from BIOMO_Modeling in previous step
       chosen.models = 'all', #these are not model types (e.g., GBM), but model runs (e.g., PA1_RF)
-      em.by='all',
+      em.by='all', #Available values are 'PA_dataset+repet' (default), 'PA_dataset+algo', 'PA_dataset', 'algo' and 'all'
       eval.metric = eval_stats, #c('TSS', 'ROC', 'KAPPA'); 'all', #c('TSS', 'ROC'),
-      eval.metric.quality.threshold = rep(0.5,length(eval_stats)),
+      eval.metric.quality.threshold = eval.metric.threshold,
       prob.mean = T,
       prob.cv = T,
       prob.ci = T,
-      prob.ci.alpha = 0.05,
+      prob.ci.alpha = 0.05, #signficance level for estimating confidence interval
       prob.median = T,
       committee.averaging = T,
       prob.mean.weight = T,
-      prob.mean.weight.decay = 'proportional' )
+      prob.mean.weight.decay = 'proportional' ) #defines relative importance of weights; default is 'proportional'
     cat('\n',sp_nm,'ensemble done...')
 
     ###################################################
     ### code chunk number 12: ensemble_modeling_outputs
     ###################################################
     # print summary
-    myBiomodEM
-    # get evaluation scores
-    getEMeval(myBiomodEM)
+    myBiomodEM #returns summary of ensemble modeling
     
-    #load(workspace_name_out)
-    save.image("temp_workspace2.RData")   #to save workspace
-    rm(list=c("spp_info","sp_nm","local_config_dir", "spp_nm", "models_to_run", "working_dir", 
-              "clim_data_dir0", "csv_dir", "spp_info", "var_name",
-              "eval_stats0", "spp_nm0", "clim_surface_to_use", "proj_nm0", "overwrite", 
-              "plot_graphs", "local_config_dir","spp_nm", "clim_data_2000", 
-              "clim_data_2100", "working_dir", "env_var_files", "csv_dir", "eval_stats"))      
-    save.image(workspace_name_out)   #to save workspace
-    load("temp_workspace2.RData")
-  }else{
-    cat('\n',sp_nm,'ensemble previously done...')
+    # get evaluation scores
+    getEMeval(myBiomodEM) #returns evaluation stats (testing.data, cutoff, sensitivity, and specificity) for mean, cv, etc.    
+    save("myBiomodEM", "myBiomodModelOut", file=workspace_name_out)   #save workspace with ensemble model results to file set above.
+    
+    #Stop the clock
+    ptm1 = proc.time() - ptm0 #calculates time it took to run all code
+    jnk = as.numeric(ptm1[3]) #assigns temporary variable to the numeric value of the time elapsed
+    jnk = jnk/3600 #converts elapsed time into hours
+    cat('\n','It took ', jnk, "hours to ensemble model", sp_nm) #sign-posting
+    
+    }else{
+    cat('\n',sp_nm,'ensemble previously done...') #if file already exists for this run
   }
 }

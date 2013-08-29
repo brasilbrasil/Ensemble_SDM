@@ -23,8 +23,7 @@ if (baseline_or_future==6){
 csv_dir=paste(working_dir,"single_sp_CSVs/", sep="")
 
 setwd(working_dir)
-spp_nm0=spp_nm
-eval_stats0=eval_stats
+
 library(biomod2)
 library(stringr)
 library(colorRamps)
@@ -43,7 +42,7 @@ for (env_var_file  in env_var_files){
 spp_info=read.csv(paste(csv_dir,'FB_spp_data.csv', sep = ""))
 
 
-sp_nm=spp_nm[1]
+sp_nm=spp_nm[5]
 for (sp_nm in spp_nm){
   sp_nm=as.character(sp_nm)  
   cat('\n',sp_nm,'model projection...')
@@ -56,8 +55,6 @@ for (sp_nm in spp_nm){
     dir.create(plots, showWarnings = FALSE)}
   
   #model run specific variables that must not be saved to workspace
-  spp_nm=spp_nm0
-  eval_stats=eval_stats0  
   clim_data_dir0=clim_surface_to_use
   proj_nm=proj_nm0 
   
@@ -83,12 +80,20 @@ for (sp_nm in spp_nm){
     rm("crop_raster" ,"temp") 
     predictors
     
-    if (baseline_or_future==2|3|5|6){
+    alt_scen=c(2,3,5,6)
+    if (baseline_or_future %in% alt_scen){
       predictors<-stack((subset(predictors, 1)),
                         (subset(predictors, 2)),
                         (subset(predictors, 3))*4,
                         (subset(predictors, 4)))
       names(predictors)<- var_name
+    }
+    if (baseline_or_future==1){
+      jpeg_name=paste(sp_nm,"_env_vars_used_for_projection.jpg", sep = "")
+      jpeg(jpeg_name,
+           width = 10, height = 10, units = "in",pointsize = 12, quality = 90, bg = "white", res = 300)
+      plot(predictors, col=rev(terrain.colors(255)), maxpixels=100000, useRaster=FALSE, axes = TRUE, addfun=NULL, Interpolate = TRUE)
+      dev.off()
     }
     cat('\n',sp_nm,'projection raster stack created...')
     gc()
@@ -105,13 +110,8 @@ for (sp_nm in spp_nm){
         keep.in.memory=memory)
       gc()
       cat('\n',sp_nm,'projection complete...')
-      cat('point 1 mem', memory.size(), memory.size(max=TRUE), 'nn')
-      save.image("temp_workspace3.RData")   #to save workspace
-      rm(list=c("spp_info", "eval_stats0", "spp_nm0", "clim_surface_to_use", "proj_nm0", "overwrite", 
-                "plot_graphs", "local_config_dir","spp_nm", "clim_data_2000", 
-                "clim_data_2100", "working_dir", "env_var_files", "csv_dir", "eval_stats"))      
-      save.image(workspace_name_out0)   #to save workspace
-      load("temp_workspace3.RData")
+      #cat('point 1 mem', memory.size(), memory.size(max=TRUE), 'nn')
+      save("myBiomomodProj_baseline", file=workspace_name_out0)   #save workspace      
     }else{
       load(workspace_name_out0)
       cat('\n',sp_nm,'projection of individual models loaded from past run...')
@@ -122,44 +122,58 @@ for (sp_nm in spp_nm){
     # make some plots, sub-selected by str.grep argument
     #plot(myBiomomodProj_baseline, str.grep = 'GBM')
     if (plot_graphs==1){
-      for (model in models_to_run){
-        jpeg_name=paste(sp_nm0,"_", model, "_", proj_nm, "runs.jpg", sep = "")
+      jnk=length(myBiomomodProj_baseline@models.projected)
+      jnk=jnk/(length(models_to_run)+1)
+      if (jnk<26){
+        jpeg_name=paste(sp_nm0,"_", proj_nm, "_", "runs.jpg", sep = "")
         jpeg(jpeg_name,
              width = 10, height = 10, units = "in",
              pointsize = 12, quality = 90, bg = "white", res = 300)
         par(mfrow=c(1,2))
-        try(plot(myBiomomodProj_baseline, str.grep = model), TRUE)
+        try(plot(myBiomomodProj_baseline, str.grep = "Full"), TRUE)
         dev.off()
       }
     }
     
-    #print sample binary model for species
-    #     if (plot_graphs==1){
-    #       for (model in models_to_run){
-    #         jpeg_name=paste(sp_nm0,"_", model, "_BIN_model", proj_nm, "runs.jpg", sep = "")
-    #         if (file.exists(jpeg_name)==F | overwrite==1){
-    #           jnk=paste(working_dir, sp_nm, "/proj_", proj_nm, "/", proj_nm, "_", sp_nm, "_bin_ROC_RasterStack" , sep = "")
-    #           if (file.exists(jnk)){
-    #             sp_bin_file=paste(proj_nm, "_", sp_nm, "_bin_ROC_RasterStack" , sep = "")
-    #             jnk=load(paste(sp_nm,"/proj_", proj_nm, "/", sp_bin_file , sep = "")) #current_BI_Akepa_bin_ROC_RasterStack
-    #             sp_bin_stack=get(jnk)
-    #             sample=c()
-    #             try(sample <- raster(sp_bin_stack, layer=paste(sp_nm, "_AllData_Full_",model,".bin" , sep = "")), TRUE)
-    #           }else{
-    #             sp_bin_file=paste(proj_nm, "_", sp_nm, "_AllData_Full_", model,"_bin_ROC_RasterLayer" , sep = "")
-    #             jnk=load(paste(sp_nm,"/proj_", proj_nm, "/", sp_bin_file , sep = "")) #current_BI_Akepa_bin_ROC_RasterStack
-    #             sample=get(jnk)
-    #           }
-    #           
-    #           jpeg(jpeg_name,
-    #                width = 10, height = 10, units = "in",
-    #                pointsize = 12, quality = 90, bg = "white", res = 300)
-    #           #par(mfrow=c(1,2))
-    #           try(plot(sample), TRUE)
-    #           dev.off()
-    #         }
-    #       }
-    #     }
+#     if (plot_graphs==1){ ###this has to be fixed- in situations where there is only enough data for a single PA, no others are run
+#       for (model in models_to_run){
+#         jpeg_name=paste(sp_nm0,"_", model, "_BIN_model", proj_nm, "runs.jpg", sep = "")
+#         if (file.exists(jpeg_name)==F | overwrite==1){
+#           sample=c()
+#           sp_bin_file=paste(proj_nm, "_", sp_nm, "_bin_ROC_RasterStack" , sep = "")
+#           sp_bin_file=paste(sp_nm,"/proj_", proj_nm, "/", sp_bin_file , sep = "")
+#           if (file.exists(sp_bin_file)){
+#             jnk=load(sp_bin_file) #current_BI_Akepa_bin_ROC_RasterStack
+#             sp_bin_stack=get(jnk)
+#             sample=c()
+#             try(sample <- raster(sp_bin_stack, layer=paste(sp_nm, "_AllData_Full_",model,".bin" , sep = "")), TRUE)
+#           }
+#           sp_bin_file=paste(proj_nm, "_", sp_nm, "_AllData_Full_", model,"_bin_ROC_RasterLayer" , sep = "")
+#           sp_bin_file=paste(sp_nm,"/proj_", proj_nm, "/", sp_bin_file , sep = "")          
+#           if (file.exists(sp_bin_file)){
+#             jnk=load(sp_bin_file) #current_BI_Akepa_bin_ROC_RasterStack
+#             sample=get(jnk)
+#           }
+#           
+#           sp_bin_file=paste(proj_nm, "_", sp_nm, "_ROCbin.grd", sep = "")
+#           sp_bin_file=paste(sp_nm,"/proj_", proj_nm, "/proj_", sp_bin_file , sep = "") #current_BI_Akepa_bin_ROC_RasterStack
+#           if (file.exists(sp_bin_file)){
+#             sample=stack(sp_bin_file)
+#             names=names(sample)
+#             lyr_name=paste0(sp_nm,"_PA",PA.nb.rep,"_Full_", model)
+#             jnk=which(names==lyr_name)
+#             sample=raster(sample,jnk)
+#           }
+#           
+#           jpeg(jpeg_name,
+#                width = 10, height = 10, units = "in",
+#                pointsize = 12, quality = 90, bg = "white", res = 300)
+#           try(plot(sample), TRUE)
+#           dev.off()
+#           
+#         }
+#       }
+#     }
     
     ###################################################
     ### code chunk number 18: Individual model plots
@@ -260,7 +274,7 @@ for (sp_nm in spp_nm){
       binary.meth=eval_stats, 
       keep.in.memory=memory)
     cat('\n',sp_nm,'ensemble projection done...')
-    cat('point 1 mem', memory.size(), memory.size(max=TRUE), 'nn')
+    #cat('point 1 mem', memory.size(), memory.size(max=TRUE), 'nn')
     
     ###################################################
     ### code chunk number 19: EnsembleForecasting_loading_res
@@ -337,7 +351,6 @@ for (sp_nm in spp_nm){
       for (eval_stat in eval_stats){
         try(load(paste(sp_nm,"/proj_", proj_nm, "/",sp_nm,"_AllData_Full_AllAlgos_EM.",eval_stat, sep = "")), TRUE)    
         try(load(paste(sp_nm,"/proj_", proj_nm, "/",sp_nm,"_AllData_AllRun_EM.",eval_stat, sep = "")), TRUE)
-        #try(load(paste(sp_nm,"/proj_", proj_nm, "/proj_", proj_nm, "_", sp_nm,"_TotalConsensus_EMby",eval_stat, ".grd", sep = "")), TRUE)
         jpeg_name=paste(sp_nm0,"_", eval_stat,"_ensemble_", proj_nm, "runs.jpg", sep = "")
         jpeg(jpeg_name,
              width = 10, height = 8, units = "in",
@@ -345,7 +358,9 @@ for (sp_nm in spp_nm){
         par(mfrow=c(1,2))
         try(plot(get(paste(sp_nm,"_AllData_Full_AllAlgos_EM.",eval_stat, sep = ""))), TRUE)
         try(plot(get(paste(sp_nm,"_AllData_AllRun_EM.",eval_stat, sep = ""))), TRUE)
-        try(plot(raster(paste0(sp_nm,"/proj_", proj_nm, "/proj_", proj_nm, "_", sp_nm,"_TotalConsensus_EMby",eval_stat, ".grd"))), TRUE)
+        sp_bin_file=paste(proj_nm, "_", sp_nm, "_TotalConsensus_EMby", eval_stat,".grd", sep = "")
+        sp_bin_file=paste(sp_nm,"/proj_", proj_nm, "/proj_", sp_bin_file , sep = "") #current_BI_Akepa_bin_ROC_RasterStack          
+        try(plot(raster(sp_bin_file)), TRUE)
         dev.off()
         eval_stat0=eval_stat
         for (eval_stat in eval_stats){
@@ -358,22 +373,18 @@ for (sp_nm in spp_nm){
           #par(mfrow=c(1,2))
           try(plot(get(paste(sp_nm,"_AllData_Full_AllAlgos_EM.",eval_stat0,".bin.",eval_stat, sep = ""))), TRUE)
           try(plot(get(paste(sp_nm,"_AllData_AllRun_EM.",eval_stat0,".bin.",eval_stat, sep = ""))), TRUE)
-          try(plot(raster(paste0(sp_nm,"/proj_", proj_nm, "/proj_", proj_nm, "_", sp_nm,"_TotalConsensus_EMby",eval_stat,"_", eval_stat, "bin.grd"))), TRUE)
+          sp_bin_file=paste(proj_nm, "_", sp_nm, "_TotalConsensus_EMby", eval_stat0,"_",eval_stat, "bin.grd", sep = "")
+          sp_bin_file=paste(sp_nm,"/proj_", proj_nm, "/proj_", sp_bin_file , sep = "") #current_BI_Akepa_bin_ROC_RasterStack          
+          try(plot(raster(sp_bin_file)), TRUE)
           dev.off()
         }
       }
     }
     cat('\n',sp_nm,'ensemble projection figures done...')
-    save.image("temp_workspace4.RData")   #to save workspace
-    rm(list=c("spp_info","eval_stats0", "spp_nm0", "crop_raster", "clim_surface_to_use", "proj_nm0", "overwrite", 
-              "plot_graphs", "local_config_dir","spp_nm", "clim_data_2000", "predictors_temp",
-              "clim_data_2100", "working_dir", "env_var_files", "csv_dir", "eval_stats"))      
-    save.image(workspace_name_out)   #to save workspace
-    load("temp_workspace4.RData")
+    save("myBiomomodProj_baseline", "myBiomodEF", file=workspace_name_out)   #save workspace
     
     removeTmpFiles(h=1)
     cat('\n',sp_nm,'done...')    
-    #save.image(workspace_name)
   }else{
     cat('\n',sp_nm,'previously calculated...')
   }
