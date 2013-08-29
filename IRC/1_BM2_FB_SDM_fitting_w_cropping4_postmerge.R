@@ -93,14 +93,14 @@ for (sp_nm in spp_nm){
     }
     
     ##pseudo-absence handling
-    cat('\n','defining candidate PA points...')
+    cat('\n','defining candidate PA points...') #sign-posting
     PA_XY = mySpeciesOcc[,1:2] #extracts the lat and long for all PA points
     mySREresp <- reclassify(subset(predictors,1,drop=TRUE), c(-Inf,Inf,0)) #builds a raster layer based on environmental rasters for response variable
     mySREresp[cellFromXY(mySREresp,PA_XY)] <- 1 #assigns all shared cells in "bioclim" and "PA_XY" to "1"
     Act_abs = dim(mySpeciesOcc[mySpeciesOcc$pa==0,])[1] #calculates number of real absences
 
     #this loop makes different runs depending on whether pseudo absences should be assigned outside climate envelope or randomly
-    if (PAs_outside_CE){
+    if (PseudoAbs_outside_CE){
       sre_tail = 0.025
       sp_CE = sre(Response = mySREresp, Explanatory = predictors,NewData = predictors, Quant = sre_tail) #Calculates surface range envelope for distribution removing a percentage of extremes (based on sre_tail
       #calculate density of points within sre
@@ -166,7 +166,7 @@ for (sp_nm in spp_nm){
     sp_loc_summary = table(PresAbsPA_noDup$pa, useNA = "ifany")
     sp_loc_summary = as.data.frame(sp_loc_summary)
     levels(sp_loc_summary$Var1) = c(0, 1, NA, "n to select")
-    jnk = c("n to select", n_PA_points)#3 is code for n of pseudo absences to select per run
+    jnk = c("n to select", n_PseudoAbs_pts)#3 is code for n of pseudo absences to select per run
     sp_loc_summary = rbind(sp_loc_summary, jnk)
     names(sp_loc_summary) = c("Data_type", "Freq")
     write.table(sp_loc_summary, file = paste0(sp_nm,"_loc_data_summary.csv"), sep = ",", col.names = NA)

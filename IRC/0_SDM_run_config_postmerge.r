@@ -27,7 +27,7 @@ if (machine == 1){
 ###################################
 
 #setting file locations 
-project_name = "/FB_test20130826pm1_postmerge" #assign project name to the current run
+project_name = "/FB_test20130829am6" #assign project name to the current run
 working_dir = paste0(resultsDir, project_name) #assign working directory
 crop_raster_dir = paste0(working_dir, "/map_crop") #assign directory for cropped raster files
 csv_dir = paste0(working_dir,"/single_sp_CSVs") #assign directory for single species CSV's
@@ -79,6 +79,7 @@ PA.nb.absences = 1000 #asssign number of Pseudo absence points (if PseudoAbs_out
 PA.strategy = "random" #strategy for selecting pseudo absences ('random', 'sre', 'disk' or 'user.defined')
 equiv_100m = 0.0009430131
 PA.dist.min = 5*equiv_100m #500m min distance from actual data points - only for 'disk' absences selection
+do.full.models = T
 
 ####ensemble config (script#2)
 
@@ -114,7 +115,7 @@ dir.create(dir_for_temp_files, showWarnings=F, recursive=T)
 
 ####Runs script for model fitting, creating ensemble models, and projecting models according to settings above.
 if (EM_fit){
-  source(paste0(codeDir,"/IRC/1_BM2_FB_SDM_fitting_w_cropping4_IRC.r")) #this is where all configurations are at
+  source(paste0(codeDir,"/IRC/1_BM2_FB_SDM_fitting_w_cropping4_postmerge.r")) #this is where all configurations are at
 }
 if (EM_ensemble){
   source(paste0(codeDir,"/IRC/2_BM2_FB_SDM_EM_fitting2_IRC.r")) #this is where all configurations are at
