@@ -27,8 +27,8 @@ if (machine == 1){
 ###################################
 
 #setting file locations 
-project_name = "/FB_test20130829am7" #assign project name to the current run
-working_dir = paste0(resultsDir, project_name) #assign working directory
+project_name = "FB_test20130829am7" #assign project name to the current run
+working_dir = paste(resultsDir, project_name, sep = "/") #assign working directory
 crop_raster_dir = paste0(working_dir, "/map_crop") #assign directory for cropped raster files
 csv_dir = paste0(working_dir,"/single_sp_CSVs") #assign directory for single species CSV's
 
@@ -87,7 +87,7 @@ eval.metric.threshold = rep(0.5,length(eval_stats)) #sets the minimum scores bel
 ####projection config (script#3)
 baseline_or_future = 1 #1 for baseline, 4 for future
 memory = T #keep.in.memory=memory
-dir_for_temp_files <- paste0(rootDir,'/temp', project_name,'/', baseline_or_future, '/') #dir for temp run data (to avoid memory errors)
+dir_for_temp_files <- paste(rootDir,'temp', project_name, baseline_or_future, sep = "/") #dir for temp run data (to avoid memory errors)
 
 ##########################
 ####RUNNING SCRIPTS!!!####

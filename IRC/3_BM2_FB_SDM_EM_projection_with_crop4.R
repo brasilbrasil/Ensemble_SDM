@@ -2,91 +2,84 @@
 #see 0_sdm_config file.r
 
 ####START UNDERHOOD
-if (baseline_or_future==1){
-  clim_surface_to_use=clim_data_2000 
-  proj_nm0='baseline'}
-if (baseline_or_future==2){
-  clim_surface_to_use=clim_data_2000wettest
-  proj_nm0='baseline_wettest'}
-if (baseline_or_future==3){
-  clim_surface_to_use=clim_data_2000driest
-  proj_nm0='baseline_driest'}
-if (baseline_or_future==4){
-  clim_surface_to_use=clim_data_2100 
-  proj_nm0='future'}
-if (baseline_or_future==5){
-  clim_surface_to_use=clim_data_2100wettest
-  proj_nm0='future_wettest'}
-if (baseline_or_future==6){
-  clim_surface_to_use=clim_data_2100driest
-  proj_nm0='future_driest'}
-csv_dir=paste(working_dir,"single_sp_CSVs/", sep="")
+#assigning projected climate data to use depending on scenario
+if (baseline_or_future == 1){
+  clim_data_dir = clim_data_2000 
+  proj_nm = 'baseline'}
+if (baseline_or_future == 2){
+  clim_data_dir = clim_data_2000wettest
+  proj_nm ='baseline_wettest'}
+if (baseline_or_future == 3){
+  clim_data_dir = clim_data_2000driest
+  proj_nm = 'baseline_driest'}
+if (baseline_or_future == 4){
+  clim_data_dir = clim_data_2100 
+  proj_nm = 'future'}
+if (baseline_or_future == 5){
+  clim_data_dir = clim_data_2100wettest
+  proj_nm = 'future_wettest'}
+if (baseline_or_future == 6){
+  clim_data_dir = clim_data_2100driest
+  proj_nm = 'future_driest'}
 
 setwd(working_dir)
 
+#loading package libraries
 library(biomod2)
 library(stringr)
 library(colorRamps)
 library(rasterVis)
+library(tools)
 
 if (apply_biomod2_fixes){
-  rasterOptions(tmpdir=dir_for_temp_files, timer = T, progress = "text", todisk  = T)
-  source(paste0(DR_code_S,"Ensemble_SDM/3b_modifications_of_projection_code.r")) #all of fixes to biomod2 code created by AV
+  rasterOptions(tmpdir = dir_for_temp_files, timer = T, progress = "text", todisk  = T) #set options for raster package
+  source(paste(codeDir,"Ensemble_SDM/3b_modifications_of_projection_code.r", sep = "/")) #all of fixes to biomod2 code created by AV
 }
 
-var_name=c()
-for (env_var_file  in env_var_files){
-  a=strsplit(env_var_file,"\\.")
-  var_name=c(var_name, a[[1]][1])
-}
-spp_info=read.csv(paste(csv_dir,'FB_spp_data.csv', sep = ""))
+#creates vector with bioclimatic variable names without the file extension (.grd)
+var_names <- unlist(file_path_sans_ext(env_var_files))
 
+spp_info=read.csv(paste(csv_dir,'FB_spp_data.csv', sep = "/")) #creates data frame from species info csv file
 
-sp_nm=spp_nm[5]
+sp_nm=spp_nm[1] #resets so the first species to run is the first one listed in config file or csv
 for (sp_nm in spp_nm){
-  sp_nm=as.character(sp_nm)  
-  cat('\n',sp_nm,'model projection...')
-  sp_nm0=sp_nm
-  workspace_name=paste(sp_nm0,"_FB_EM_fit.RData", sep = "") #set name of file to load workspace data from model run
-  load(workspace_name)
+  sp_nm = as.character(sp_nm) #defines the species name as a character string - not needed if it is already a text name 
+  cat('\n',sp_nm,'model projection...') #sign-posting
+  workspace_name = paste0(sp_nm,"_FB_EM_fit.RData") #set name of file to load workspace data from model run
+  load(workspace_name) #loads workspace from previous ensemble modelling step
   
-  plots=paste(working_dir,"/AllEMplots_pmw/",  sep="")
-  if (file.exists(plots)==F | overwrite==1){
-    dir.create(plots, showWarnings = FALSE)}
+  plots = paste(working_dir,"AllEMplots_pmw",  sep="/") #assigns location for all plots
+  if (file.exists(plots) == F | overwrite == 1){ #run only if plots have not already been collected and the overwrite function is off
+    dir.create(plots, showWarnings = FALSE)} #create directory for plots
   
-  #model run specific variables that must not be saved to workspace
-  clim_data_dir0=clim_surface_to_use
-  proj_nm=proj_nm0 
+  workspace_name_out = paste0(sp_nm,"_FB_EM_proj_", proj_nm, ".RData") #assigns name to save workspace
   
-  sp_nm=str_replace_all(sp_nm,"_", ".")
-  workspace_name_out=paste(sp_nm,"_FB_EM_proj_", proj_nm, ".RData", sep = "")
-  
-  if (file.exists(workspace_name_out)==F | overwrite==1){
+  if (file.exists(workspace_name_out) == F | overwrite == 1){ #does not run if file already exists and overwrite is on
     #raster_based_env_grid:
-    sp_index=which(spp_info[,"Species"]==sp_nm0)
-    raster_res= spp_info[sp_index,"rasterdir"]
-    clim_data_dir=clim_data_dir0 
-    jnk0=length(env_var_files)
-    cat('\n','using these env files for projection raster:', env_var_files, '\n', 'from dir:', clim_data_dir)
-    crop_raster=raster(paste(crop_raster_dir,raster_res,".grd",sep=""))
-    predictors = raster( paste(clim_data_dir, env_var_files[1], sep=""))
-    predictors=crop(predictors,  crop_raster)
-    for (jj in 2:jnk0){
-      temp=raster(paste(clim_data_dir, env_var_files[jj], sep=""))
-      temp=crop(temp,  crop_raster)
-      predictors = addLayer(predictors, temp)
+    sp_index = which(spp_info[,"Species"] == sp_nm) #assigns index for the line associated with the target species
+    raster_res = spp_info[sp_index,"rasterdir"] #assigns the raster resolution to the directory for the species of interest
+    cat('\n','using these env files for projection raster:', env_var_files, '\n', 'from dir:', clim_data_dir) #sign-posting
+    crop_raster = raster(paste0(crop_raster_dir,"/",raster_res,".grd")) #creates a rasterLayer object from an existing .grd file
+    predictors = raster(paste(clim_data_dir, env_var_files[1], sep="/")) #creates rasterLayer from the bioclim .grd file
+    predictors = crop(predictors,  crop_raster) #crops bioclimate rasterLayer by the raster resolution .grd
+    jnk0 = length(env_var_files) #assigns number of bioclimate variables to a variable
+    for (jj in 2:jnk0){ #for all except the first bioclimate variable (which was done above)
+      temp = raster(paste(clim_data_dir, env_var_files[jj], sep = "/")) #creates temporary rater layer from bioclimate .grd
+      temp = crop(temp,  crop_raster) #crops temporary bioclimate raster layer with the extent raster
+      predictors = addLayer(predictors, temp) #adds the new bioclimate raster layer to existing one
     }
-    names(predictors)<- var_name
-    rm("crop_raster" ,"temp") 
-    predictors
+    names(predictors) <- var_name #renames the layers of the raster with the bioclim variable names
+    rm("crop_raster" ,"temp", "jnk0") #removes temporary variables
+    predictors #returns summary of the predictor rasterStack
     
-    alt_scen=c(2,3,5,6)
-    if (baseline_or_future %in% alt_scen){
+    ###changing settings for the "wettest" and "driest" scenarios 
+    alt_scen = c(2,3,5,6) 
+    if (baseline_or_future %in% alt_scen){ #for wet and dry scenarios, multiply bio12 variable (quarterly precipitation) by 4
       predictors<-stack((subset(predictors, 1)),
                         (subset(predictors, 2)),
                         (subset(predictors, 3))*4,
                         (subset(predictors, 4)))
-      names(predictors)<- var_name
+      names(predictors) <- var_name #assigns names to raster stack again.
     }
     if (baseline_or_future==1){
       jpeg_name=paste(sp_nm,"_env_vars_used_for_projection.jpg", sep = "")
@@ -125,7 +118,7 @@ for (sp_nm in spp_nm){
       jnk=length(myBiomomodProj_baseline@models.projected)
       jnk=jnk/(length(models_to_run)+1)
       if (jnk<26){
-        jpeg_name=paste(sp_nm0,"_", proj_nm, "_", "runs.jpg", sep = "")
+        jpeg_name=paste(sp_nm,"_", proj_nm, "_", "runs.jpg", sep = "")
         jpeg(jpeg_name,
              width = 10, height = 10, units = "in",
              pointsize = 12, quality = 90, bg = "white", res = 300)
@@ -137,7 +130,7 @@ for (sp_nm in spp_nm){
     
 #     if (plot_graphs==1){ ###this has to be fixed- in situations where there is only enough data for a single PA, no others are run
 #       for (model in models_to_run){
-#         jpeg_name=paste(sp_nm0,"_", model, "_BIN_model", proj_nm, "runs.jpg", sep = "")
+#         jpeg_name=paste(sp_nm,"_", model, "_BIN_model", proj_nm, "runs.jpg", sep = "")
 #         if (file.exists(jpeg_name)==F | overwrite==1){
 #           sample=c()
 #           sp_bin_file=paste(proj_nm, "_", sp_nm, "_bin_ROC_RasterStack" , sep = "")
@@ -221,7 +214,7 @@ for (sp_nm in spp_nm){
         }
         
         setwd(plots)
-        jpeg_name=paste(proj_nm,"_", sp_nm0,"_All_", eval_stats[ii], "Models_Binandscaled_runs_.jpg", sep = "")
+        jpeg_name=paste(proj_nm,"_", sp_nm,"_All_", eval_stats[ii], "Models_Binandscaled_runs_.jpg", sep = "")
         jpeg(jpeg_name, width = 5*length(models_to_run), height = 5, units = "in",
              pointsize = 12, quality = 90, bg = "white", res = 300)  
         
@@ -316,7 +309,7 @@ for (sp_nm in spp_nm){
       
       setwd(plots)
       
-      jpeg_name=paste(proj_nm,"_", sp_nm0,"_TOTALCONSENSUS_Binandscaled_runs_.jpg", sep = "")
+      jpeg_name=paste(proj_nm,"_", sp_nm,"_TOTALCONSENSUS_Binandscaled_runs_.jpg", sep = "")
       jpeg(jpeg_name, width = 5*length(eval_stats), height = 5, units = "in",
            pointsize = 12, quality = 90, bg = "white", res = 300)  
       par(pin = c(4,4), cex = 1, cex.main = 1, cex.axis = 0.8, mfcol=c(1,length(eval_stats)), mgp = c(1, 0.5, 0),
@@ -351,7 +344,7 @@ for (sp_nm in spp_nm){
       for (eval_stat in eval_stats){
         try(load(paste(sp_nm,"/proj_", proj_nm, "/",sp_nm,"_AllData_Full_AllAlgos_EM.",eval_stat, sep = "")), TRUE)    
         try(load(paste(sp_nm,"/proj_", proj_nm, "/",sp_nm,"_AllData_AllRun_EM.",eval_stat, sep = "")), TRUE)
-        jpeg_name=paste(sp_nm0,"_", eval_stat,"_ensemble_", proj_nm, "runs.jpg", sep = "")
+        jpeg_name=paste(sp_nm,"_", eval_stat,"_ensemble_", proj_nm, "runs.jpg", sep = "")
         jpeg(jpeg_name,
              width = 10, height = 8, units = "in",
              pointsize = 12, quality = 90, bg = "white", res = 300)
@@ -366,7 +359,7 @@ for (sp_nm in spp_nm){
         for (eval_stat in eval_stats){
           try(load(paste(sp_nm,"/proj_", proj_nm, "/",sp_nm,"_AllData_Full_AllAlgos_EM.",eval_stat0,".bin.",eval_stat, sep = "")), TRUE)    
           try(load(paste(sp_nm,"/proj_", proj_nm, "/",sp_nm,"_AllData_AllRun_EM.",eval_stat0,".bin.",eval_stat, sep = "")), TRUE)
-          jpeg_name=paste(sp_nm0,"_", eval_stat0,"_ensemble_", proj_nm, "_bin_",eval_stat,"runs.jpg", sep = "")
+          jpeg_name=paste(sp_nm,"_", eval_stat0,"_ensemble_", proj_nm, "_bin_",eval_stat,"runs.jpg", sep = "")
           jpeg(jpeg_name,
                width = 10, height = 8, units = "in",
                pointsize = 12, quality = 90, bg = "white", res = 300)
