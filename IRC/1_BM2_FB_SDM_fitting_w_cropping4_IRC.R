@@ -39,7 +39,7 @@ cat('\n','Copying of necessary files is complete')
 spp_info = read.csv(paste0(csv_dir,'/FB_spp_data.csv'))
 
 #creates vector with bioclimatic variable names without the file extension (.grd)
-var_name <- unlist(file_path_sans_ext(env_var_files))
+var_names <- unlist(file_path_sans_ext(env_var_files))
 
 for (sp_nm in spp_nm){
   sp_nm = as.character(sp_nm) #converts sp_nm into character variable (in case the species are numbered)
@@ -70,7 +70,7 @@ for (sp_nm in spp_nm){
       predictors = addLayer(predictors, temp)
     }
     rm(jnk0, jj)
-    names(predictors) <- var_name #assigns names to bioclimate raster stack
+    names(predictors) <- var_names #assigns names to bioclimate raster stack
     rm("crop_raster" ,"temp") #removes temporary variables
     
     jpeg_name = paste0(sp_nm,"_env_vars_used.jpg") #names jpeg file to be created
@@ -259,7 +259,7 @@ for (sp_nm in spp_nm){
     save.image("temp_workspace1.RData")   #saves workspace
     rm(list=c("sp_nm", "spp_nm", "models_to_run", "working_dir", 
               "fitting_clim_data_dir", "env_var_files", "csv_dir", "spp_info", 
-              "var_name", "overwrite", "plot_graphs", "clim_data_2000", 
+              "var_names", "overwrite", "plot_graphs", "clim_data_2000", 
               "clim_data_2100", "eval_stats", "necessary_run_data"))      
     save.image(workspace_name)   #saves workspace
     load("temp_workspace1.RData")        

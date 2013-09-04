@@ -39,7 +39,7 @@ cat('\n','Copying of necessary files is complete')
 spp_info = read.csv(paste0(csv_dir,'/FB_spp_data.csv'))
 
 #creates vector with bioclimatic variable names without the file extension (.grd)
-var_name <- unlist(file_path_sans_ext(env_var_files))
+var_names <- unlist(file_path_sans_ext(env_var_files))
 
 sp_nm = spp_nm[1]
 n_abs_removed = c()
@@ -71,7 +71,7 @@ for (sp_nm in spp_nm){
       temp = crop(temp,  crop_raster)
       predictors = addLayer(predictors, temp)
     }
-    names(predictors) <- var_name #assigns names to bioclimate raster stack
+    names(predictors) <- var_names #assigns names to bioclimate raster stack
     rm("jnk0","jj","crop_raster" ,"temp") #removes temporary variables
     
     jpeg_name = paste0(sp_nm,"_env_vars_used.jpg") #names jpeg file to be created

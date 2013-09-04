@@ -93,7 +93,7 @@ for (sp_nm in spp_nm){
       dev.off() #turns off jpeg device
     }
     cat('\n',sp_nm,'projection raster stack created...') #sign-posting
-    gc()
+    gc() #reclaims memory that is no longer used and returns summary of memory usage
     workspace_name_out0=paste(sp_nm,"_FB_all_model_proj_", proj_nm, ".RData", sep = "")
     if (file.exists(workspace_name_out0)==F | overwrite==1){  
       myBiomomodProj_baseline <- BIOMOD_Projection(
