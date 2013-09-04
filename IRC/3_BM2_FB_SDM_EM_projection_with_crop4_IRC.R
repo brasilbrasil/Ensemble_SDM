@@ -1,8 +1,17 @@
 ###USER CONFIGURATION
 #see 0_sdm_config file.r
 
+setwd(working_dir)
+
+#loading package libraries
+library(biomod2)
+library(stringr)
+library(colorRamps)
+library(rasterVis)
+library(tools)
+
 ####START UNDERHOOD
-#assigning projected climate data to use depending on scenario
+#assigning which projected climate data set to use depending on scenario
 if (baseline_or_future == 1){
   clim_data_dir = clim_data_2000 
   proj_nm = 'baseline'}
@@ -22,26 +31,15 @@ if (baseline_or_future == 6){
   clim_data_dir = clim_data_2100driest
   proj_nm = 'future_driest'}
 
-setwd(working_dir)
-
-#loading package libraries
-library(biomod2)
-library(stringr)
-library(colorRamps)
-library(rasterVis)
-library(tools)
-
+#sets options for biomod2 fixes in code (if assigned TRUE in config file)
 if (apply_biomod2_fixes){
   rasterOptions(tmpdir = dir_for_temp_files, timer = T, progress = "text", todisk  = T) #set options for raster package
   source(paste(codeDir,"Ensemble_SDM/3b_modifications_of_projection_code.r", sep = "/")) #all of fixes to biomod2 code created by AV
 }
 
-#creates vector with bioclimatic variable names without the file extension (.grd)
-var_names <- unlist(file_path_sans_ext(env_var_files))
+spp_info = read.csv(paste(csv_dir,'FB_spp_data.csv', sep = "/")) #creates data frame from species info csv file
 
-spp_info=read.csv(paste(csv_dir,'FB_spp_data.csv', sep = "/")) #creates data frame from species info csv file
-
-sp_nm=spp_nm[1] #resets so the first species to run is the first one listed in config file or csv
+sp_nm = spp_nm[1] #resets so the first species to run is the first one listed in config file or csv
 for (sp_nm in spp_nm){
   sp_nm = as.character(sp_nm) #defines the species name as a character string - not needed if it is already a text name 
   cat('\n',sp_nm,'model projection...') #sign-posting
@@ -54,41 +52,47 @@ for (sp_nm in spp_nm){
   
   workspace_name_out = paste0(sp_nm,"_FB_EM_proj_", proj_nm, ".RData") #assigns name to save workspace
   
-  if (file.exists(workspace_name_out) == F | overwrite == 1){ #does not run if file already exists and overwrite is on
+  if (file.exists(workspace_name_out) == F | overwrite == 1){ #does not run if file already exists and overwrite is off
     #raster_based_env_grid:
     sp_index = which(spp_info[,"Species"] == sp_nm) #assigns index for the line associated with the target species
     raster_res = spp_info[sp_index,"rasterdir"] #assigns the raster resolution to the directory for the species of interest
     cat('\n','using these env files for projection raster:', env_var_files, '\n', 'from dir:', clim_data_dir) #sign-posting
-    crop_raster = raster(paste0(crop_raster_dir,"/",raster_res,".grd")) #creates a rasterLayer object from an existing .grd file
+    crop_raster = raster(paste0(crop_raster_dir,"/",raster_res,".grd")) #creates a rasterLayer object from an existing .grd file for ther extent
     predictors = raster(paste(clim_data_dir, env_var_files[1], sep="/")) #creates rasterLayer from the bioclim .grd file
     predictors = crop(predictors,  crop_raster) #crops bioclimate rasterLayer by the raster resolution .grd
-    jnk0 = length(env_var_files) #assigns number of bioclimate variables to a variable
+    jnk0 = length(env_var_files) #assigns the number of bioclimate variables to a temporary variable for runs
+    
+    ##creates raster stack from raster layers for all bioclimatic variables of interest
     for (jj in 2:jnk0){ #for all except the first bioclimate variable (which was done above)
       temp = raster(paste(clim_data_dir, env_var_files[jj], sep = "/")) #creates temporary rater layer from bioclimate .grd
       temp = crop(temp,  crop_raster) #crops temporary bioclimate raster layer with the extent raster
       predictors = addLayer(predictors, temp) #adds the new bioclimate raster layer to existing one
     }
-    names(predictors) <- var_name #renames the layers of the raster with the bioclim variable names
+    
+    var_names <- unlist(file_path_sans_ext(env_var_files)) #creates vector with bioclimatic variable names without the file extension (.grd)
+    names(predictors) <- var_names #renames the layers of the raster with the bioclim variable names
     rm("crop_raster" ,"temp", "jnk0") #removes temporary variables
     predictors #returns summary of the predictor rasterStack
     
-    ###changing settings for the "wettest" and "driest" scenarios 
+    ###changing rasterStack for the "wettest" and "driest" scenarios 
     alt_scen = c(2,3,5,6) 
-    if (baseline_or_future %in% alt_scen){ #for wet and dry scenarios, multiply bio12 variable (quarterly precipitation) by 4
+    if (baseline_or_future %in% alt_scen){ 
       predictors<-stack((subset(predictors, 1)),
                         (subset(predictors, 2)),
-                        (subset(predictors, 3))*4,
+                        (subset(predictors, 3))*4,#for wet and dry scenarios, multiply bio12 variable (quarterly precipitation) by 4
                         (subset(predictors, 4)))
-      names(predictors) <- var_name #assigns names to raster stack again.
+      names(predictors) <- var_names #assigns names to raster stack again.
     }
-    if (baseline_or_future==1){
-      jpeg_name=paste(sp_nm,"_env_vars_used_for_projection.jpg", sep = "")
-      jpeg(jpeg_name,
-           width = 10, height = 10, units = "in",pointsize = 12, quality = 90, bg = "white", res = 300)
-      plot(predictors, col=rev(terrain.colors(255)), maxpixels=100000, useRaster=FALSE, axes = TRUE, addfun=NULL, Interpolate = TRUE)
-      dev.off()
+    
+    if (baseline_or_future == 1){ #for "baseline" runs
+      jpeg_name = paste0(sp_nm,"_env_vars_used_for_projection.jpg") #assigns location for map jpeg file
+      jpeg(jpeg_name, #settings for map jpeg file
+           width = 10, height = 10, units = "in", pointsize = 12, quality = 90, bg = "white", res = 300) 
+      plot(predictors, col = rev(terrain.colors(255)), maxpixels = 100000, useRaster = FALSE, axes = TRUE, addfun = NULL, interpolate = TRUE) #builds raster map and sends to jpeg file
+      ##RESULTS IN WARNINGS RELATED TO "INTERPOLATE IS NOT A GRAPHICAL PARAMETER" BUT WORK
+      dev.off() #turns off jpeg device
     }
-    cat('\n',sp_nm,'projection raster stack created...')
+    cat('\n',sp_nm,'projection raster stack created...') #sign-posting
     gc()
     workspace_name_out0=paste(sp_nm,"_FB_all_model_proj_", proj_nm, ".RData", sep = "")
     if (file.exists(workspace_name_out0)==F | overwrite==1){  
