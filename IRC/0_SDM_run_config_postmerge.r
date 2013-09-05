@@ -51,13 +51,13 @@ spp_subset = c("Akekee","Kauai_Amakihi") # "Oahu_Amakihi","Hawaii_Akepa", "Palil
 models_to_run = c('GBM','MAXENT') #choose biomod2 models to run - possibilities are: 'GLM','GBM','GAM','CTA','ANN','SRE','FDA','MARS','RF','MAXENT' 
 eval_stats = c('ROC') #choose evaluation methods - possibilties are: 'KAPPA','TSS','ROC'
 env_var_files = c("bio1.grd", "bio7.grd", "bio12.grd", "bio15.grd") #choose bioclimatic variables of interest
-plot_graphs = 1 #plot graphs of results (=1) or not (=0)
+plot_graphs = T #plot graphs of results (T) or not (F)
 EM_fit = T #if you want to run the model fitting = T
 EM_ensemble = T #if you want to run the ensemble modelling = T
 EM_project = F #if you want to project the model results = T
 apply_biomod2_fixes = F #if running large models use this option - solves memory problems
 memory.limit(size = 4000) #increases memory allocation
-overwrite=0
+overwrite = 0
 
 #Assigns the species names either according to csv file (all) or list
 if (run_all_spp == 1){
@@ -86,7 +86,8 @@ eval.metric.threshold = rep(0.5,length(eval_stats)) #sets the minimum scores bel
 
 ####projection config (script#3)
 baseline_or_future = 1 #1 for baseline, 4 for future
-memory = T #keep.in.memory=memory
+clampingMask = F #if T clamping mask will be saved
+memory = T #keep.in.memory = memory; if T and clamping Mask = T, clamping mask will be saved to hard drive 
 dir_for_temp_files <- paste(rootDir,'temp', project_name, baseline_or_future, sep = "/") #dir for temp run data (to avoid memory errors)
 
 ##########################

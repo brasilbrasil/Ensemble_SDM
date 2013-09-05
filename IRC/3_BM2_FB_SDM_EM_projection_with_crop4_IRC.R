@@ -94,62 +94,61 @@ for (sp_nm in spp_nm){
     }
     cat('\n',sp_nm,'projection raster stack created...') #sign-posting
     gc() #reclaims memory that is no longer used and returns summary of memory usage
-    workspace_name_out0=paste(sp_nm,"_FB_all_model_proj_", proj_nm, ".RData", sep = "")
-    if (file.exists(workspace_name_out0)==F | overwrite==1){  
-      myBiomomodProj_baseline <- BIOMOD_Projection(
-        modeling.output = myBiomodModelOut,
-        new.env = stack(predictors), #error: additional stack fx
-        proj.name = proj_nm,
-        selected.models = 'all',
-        binary.meth = eval_stats,
-        compress = 'xz',
-        clamping.mask = F, 
-        keep.in.memory=memory)
-      gc()
-      cat('\n',sp_nm,'projection complete...')
-      #cat('point 1 mem', memory.size(), memory.size(max=TRUE), 'nn')
-      save("myBiomomodProj_baseline", file=workspace_name_out0)   #save workspace      
+    workspace_name_out0 = paste0(sp_nm,"_FB_all_model_proj_", proj_nm, ".RData") #sets location to save R data
+    
+    if (file.exists(workspace_name_out0) == F | overwrite == 1){ #does not run if RData file already exists and overwrite is off  
+      myBiomodProj_baseline <- BIOMOD_Projection(
+        modeling.output = myBiomodModelOut, #results from previous model step
+        new.env = predictors, #new environment to project onto (in case of baseline it is not new)
+        proj.name = proj_nm, #name for save folder
+        selected.models = 'all', #whether all of a subset of the models should be used
+        binary.meth = eval_stats, #vector of evaluation statistics to use for projection to presence/ absence
+        compress = 'xz', #compression format for files
+        build.clamping.mask = clampingMask, #whether a clamping mask should be saved or not
+        keep.in.memory = memory) #whether or not the clamping mask should be saved to hard disk
+      gc() #reclaims memory that is no longer used.
+      cat('\n',sp_nm,'projection complete...') #sign-posting
+      cat('point 1 mem', memory.size(), memory.size(max=TRUE), 'nn') #sign-posting
+      save("myBiomodProj_baseline", file = workspace_name_out0)   #save projection workspace      
     }else{
-      load(workspace_name_out0)
-      cat('\n',sp_nm,'projection of individual models loaded from past run...')
+      load(workspace_name_out0) #loads existing workspace
+      cat('\n',sp_nm,'projection of individual models loaded from past run...') #sign-posting
     }
     ###################################################
     ### code chunk number 17: projection_current_plot
     ###################################################
-    # make some plots, sub-selected by str.grep argument
-    #plot(myBiomomodProj_baseline, str.grep = 'GBM')
-    if (plot_graphs==1){
-      jnk=length(myBiomomodProj_baseline@models.projected)
-      jnk=jnk/(length(models_to_run)+1)
-      if (jnk<26){
-        jpeg_name=paste(sp_nm,"_", proj_nm, "_", "runs.jpg", sep = "")
-        jpeg(jpeg_name,
+    
+    if (plot_graphs == T){ #set in the config file
+      jnk = length(myBiomodProj_baseline@models.projected) #assigns number of projection models from output
+      jnk = jnk/(length(models_to_run)+1) #calculates the number of projections per model type +1
+      if (jnk<26){ 
+        jpeg_nam = paste0(sp_nm,"_", proj_nm, "_", "runs.jpg") #assigns location for map jpeg
+        jpeg(jpeg_name, #settings for the jpeg map
              width = 10, height = 10, units = "in",
              pointsize = 12, quality = 90, bg = "white", res = 300)
-        par(mfrow=c(1,2))
-        try(plot(myBiomomodProj_baseline, str.grep = "Full"), TRUE)
-        dev.off()
+        par(mfrow = c(1,2)) #subsequent figures are drawn in an array of 1 by 2
+        try(plot(myBiomodProj_baseline, str.grep = "Full"), TRUE) #attempts to plot results of full models but saves error if not
+        dev.off() #turns device off - saves plot as jpeg
       }
     }
     
-#     if (plot_graphs==1){ ###this has to be fixed- in situations where there is only enough data for a single PA, no others are run
-#       for (model in models_to_run){
-#         jpeg_name=paste(sp_nm,"_", model, "_BIN_model", proj_nm, "runs.jpg", sep = "")
-#         if (file.exists(jpeg_name)==F | overwrite==1){
+#     if (plot_graphs == T){ ###this has to be fixed- in situations where there is only enough data for a single PA, no others are run
+#       for (model in models_to_run){ #runs for each model
+#         jpeg_name = paste0(sp_nm,"_", model, "_BIN_model", proj_nm, "runs.jpg")
+#         if (file.exists(jpeg_name) == F | overwrite == 1){ #does not run if file exists and overwrite is off
 #           sample=c()
-#           sp_bin_file=paste(proj_nm, "_", sp_nm, "_bin_ROC_RasterStack" , sep = "")
-#           sp_bin_file=paste(sp_nm,"/proj_", proj_nm, "/", sp_bin_file , sep = "")
-#           if (file.exists(sp_bin_file)){
-#             jnk=load(sp_bin_file) #current_BI_Akepa_bin_ROC_RasterStack
-#             sp_bin_stack=get(jnk)
-#             sample=c()
-#             try(sample <- raster(sp_bin_stack, layer=paste(sp_nm, "_AllData_Full_",model,".bin" , sep = "")), TRUE)
+#           sp_bin_file = paste0(proj_nm, "_", sp_nm, "_bin_ROC_RasterStack")
+#           sp_bin_dir = paste0(sp_nm,"/proj_", proj_nm, "/", sp_bin_file)
+#           if (file.exists(sp_bin_dir)){
+#             jnk = load(sp_bin_file) #current_BI_Akepa_bin_ROC_RasterStack
+#             sp_bin_stack = get(jnk)
+#             try(sample <- raster(sp_bin_stack, layer = paste0(sp_nm, "_AllData_Full_",model,".bin")), TRUE)
 #           }
-#           sp_bin_file=paste(proj_nm, "_", sp_nm, "_AllData_Full_", model,"_bin_ROC_RasterLayer" , sep = "")
-#           sp_bin_file=paste(sp_nm,"/proj_", proj_nm, "/", sp_bin_file , sep = "")          
+#           sp_bin_file = paste0(proj_nm, "_", sp_nm, "_AllData_Full_", model,"_bin_ROC_RasterLayer")
+#           sp_bin_file = paste0(sp_nm,"/proj_", proj_nm, "/", sp_bin_file)          
 #           if (file.exists(sp_bin_file)){
-#             jnk=load(sp_bin_file) #current_BI_Akepa_bin_ROC_RasterStack
-#             sample=get(jnk)
+#             jnk = load(sp_bin_file) #current_BI_Akepa_bin_ROC_RasterStack
+#             sample = get(jnk)
 #           }
 #           
 #           sp_bin_file=paste(proj_nm, "_", sp_nm, "_ROCbin.grd", sep = "")
@@ -176,34 +175,35 @@ for (sp_nm in spp_nm){
     ### code chunk number 18: Individual model plots
     ###################################################
     # plotting the individual pmw modelling approaches in a single graph for all eval-stats --------    
-    if (plot_graphs==1){
-      for (ii in 1:length(eval_stats)){         
-        for (i in 1:length(models_to_run)){
-          #setwd(working_dir)
-          
-          a <- stack(paste(working_dir, sp_nm,"/proj_", proj_nm, "/proj_", proj_nm, '_', sp_nm, "_", eval_stats[ii], "bin.grd", sep = ""))
-          
-          a<-subset(a, (length(names(a)) - (length(models_to_run)))-1+i)#:length(names(a)))
-          nm<-names(a)
-          a1<-a
-          rcl <- c(NA, 0)
-          rcl <- matrix(rcl, ncol=2, byrow=TRUE)
-          a <-reclassify(a, rcl)
-          names(a)<-nm
+    if (plot_graphs == T){ #set in config file
+      for (ii in 1:length(eval_stats)){ #for each evaluation statistic        
+        for (i in 1:length(models_to_run)){ #for each model type
+          sp_nm = str_replace_all(sp_nm,"_",".") #replaces all "_" with "." to account for biomod2 naming
+          binGrdDir <- paste0(working_dir, "/", sp_nm,"/proj_", proj_nm, "/proj_", proj_nm, '_', sp_nm, "_", eval_stats[ii], "bin.grd") #points to location of bin.grd file
+          binGrdStack <- stack(binGrdDir) #creates a raster stack from the bin.grd file
+          #not sure what next line is attempting
+          binGrdSub <- subset(binGrdStack, (length(names(binGrdStack)) - (length(models_to_run)))-1+i) #selects a layer of the rasterStack
+          binGrdNames <- names(binGrdSub)
+          ###IRC STOPPED HERE###
+          a1 <- binGrdSub
+          rclassVect <- c(NA, 0)
+          rclassMatrix <- matrix(rcl, ncol=2, byrow=TRUE)
+          binGrdSub <- reclassify(binGrdSub, rclassMatrix)
+          names(binGrdSub) <- binGrdNames
           
           b <- stack(paste(working_dir, sp_nm,"/proj_", proj_nm, "/proj_", proj_nm,"_", sp_nm, ".grd", sep = ""))
-          b<-subset(b, (length(names(b)) - (length(models_to_run)))-1+i)
+          b <- subset(b, (length(names(b)) - (length(models_to_run)))-1+i)
           
           
-          b<-subset(b, length(names(b)))
-          c<-a*b
+          b <- subset(b, length(names(b)))
+          c <- a*b
           rcl <- c(0, NA)
           rcl <- matrix(rcl, ncol=2, byrow=TRUE)
-          c<-reclassify(c, rcl)
-          names(c)<-nm
+          c <- reclassify(c, rcl)
+          names(c) <- binGrdNames
           
-          assign(paste(eval_stats[ii], '_', models_to_run[i], "_scaled_andbinnedEM_pmw", sep = ""), c)
-          assign(paste(eval_stats[ii], '_', models_to_run[i], "_binnedEM_pmw", sep = ""), a1)
+          assign(paste0(eval_stats[ii], '_', models_to_run[i], "_scaled_andbinnedEM_pmw"), c)
+          assign(paste0(eval_stats[ii], '_', models_to_run[i], "_binnedEM_pmw"), a1)
         }
         
         
@@ -250,13 +250,13 @@ for (sp_nm in spp_nm){
     setwd(working_dir)
     cat('/n',sp_nm,'done with individual model plots...')
     
-    # subsetting the S4 class object 'myBiomomodProj_baseline'  such that it only uses the two main modelling approaches (GBM and Maxent) 
+    # subsetting the S4 class object 'myBiomodProj_baseline'  such that it only uses the two main modelling approaches (GBM and Maxent) 
     # that do not overfit
     
     if (apply_biomod2_fixes){
-      myBiomodProjection <- LoadProjectionManually(myBiomomodProj_baseline)
+      myBiomodProjection <- LoadProjectionManually(myBiomodProj_baseline)
     }else{
-      myBiomodProjection <- myBiomomodProj_baseline
+      myBiomodProjection <- myBiomodProj_baseline
     }
     
     cat('\n',sp_nm,'projection graphs done...')
@@ -346,15 +346,15 @@ for (sp_nm in spp_nm){
     setwd(working_dir)
     if (plot_graphs==1){
       for (eval_stat in eval_stats){
-        try(load(paste(sp_nm,"/proj_", proj_nm, "/",sp_nm,"_AllData_Full_AllAlgos_EM.",eval_stat, sep = "")), TRUE)    
-        try(load(paste(sp_nm,"/proj_", proj_nm, "/",sp_nm,"_AllData_AllRun_EM.",eval_stat, sep = "")), TRUE)
-        jpeg_name=paste(sp_nm,"_", eval_stat,"_ensemble_", proj_nm, "runs.jpg", sep = "")
+        try(load(paste0(sp_nm,"/proj_", proj_nm, "/",sp_nm,"_AllData_Full_AllAlgos_EM.",eval_stat)), TRUE)    
+        try(load(paste0(sp_nm,"/proj_", proj_nm, "/",sp_nm,"_AllData_AllRun_EM.",eval_stat)), TRUE)
+        jpeg_name=paste0(sp_nm,"_", eval_stat,"_ensemble_", proj_nm, "runs.jpg")
         jpeg(jpeg_name,
              width = 10, height = 8, units = "in",
              pointsize = 12, quality = 90, bg = "white", res = 300)
         par(mfrow=c(1,2))
-        try(plot(get(paste(sp_nm,"_AllData_Full_AllAlgos_EM.",eval_stat, sep = ""))), TRUE)
-        try(plot(get(paste(sp_nm,"_AllData_AllRun_EM.",eval_stat, sep = ""))), TRUE)
+        try(plot(get(paste0(sp_nm,"_AllData_Full_AllAlgos_EM.",eval_stat))), TRUE)
+        try(plot(get(paste0(sp_nm,"_AllData_AllRun_EM.",eval_stat))), TRUE)
         sp_bin_file=paste(proj_nm, "_", sp_nm, "_TotalConsensus_EMby", eval_stat,".grd", sep = "")
         sp_bin_file=paste(sp_nm,"/proj_", proj_nm, "/proj_", sp_bin_file , sep = "") #current_BI_Akepa_bin_ROC_RasterStack          
         try(plot(raster(sp_bin_file)), TRUE)
@@ -378,7 +378,7 @@ for (sp_nm in spp_nm){
       }
     }
     cat('\n',sp_nm,'ensemble projection figures done...')
-    save("myBiomomodProj_baseline", "myBiomodEF", file=workspace_name_out)   #save workspace
+    save("myBiomodProj_baseline", "myBiomodEF", file=workspace_name_out)   #save workspace
     
     removeTmpFiles(h=1)
     cat('\n',sp_nm,'done...')    
