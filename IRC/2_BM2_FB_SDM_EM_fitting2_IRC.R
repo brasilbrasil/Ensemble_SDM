@@ -15,9 +15,9 @@ for (sp_nm in spp_nm){
   cat('\n',sp_nm,'ensemble creation...')
   workspace_name = paste0(sp_nm,"_FB_modelfitting.RData") #set name of file to load workspace data from model run
   workspace_name_out = paste0(sp_nm,"_FB_EM_fit.RData") #set name of file to load workspace data from model run
-  if (file.exists(workspace_name_out) == F | overwrite == 1){ #run only if file does not already exist and overwrite is turned off (in config file)
+  if (file.exists(workspace_name_out) == F | overwriteData == T){ #run only if file does not already exist and overwrite is turned off (in config file)
     # Start the clock!
-    ptm0 <- proc.time()
+    ptmModule2Start <- proc.time()
     
     load(workspace_name) #loads the model results from the species of interest
     sp_nm = str_replace_all(sp_nm,"_", ".") #replaces any "_" with "." in the species name
@@ -71,10 +71,10 @@ for (sp_nm in spp_nm){
     save("myBiomodEM", "myBiomodModelOut", file=workspace_name_out)   #save workspace with ensemble model results to file set above.
     
     #Stop the clock
-    ptm1 = proc.time() - ptm0 #calculates time it took to run all code
-    jnk = as.numeric(ptm1[3]) #assigns temporary variable to the numeric value of the time elapsed
-    jnk = jnk/3600 #converts elapsed time into hours
-    cat('\n','It took ', jnk, "hours to ensemble model", sp_nm) #sign-posting
+    ptmModule2Elaps = proc.time() - ptmModule2Start #calculates time it took to run all code
+    jnk = as.numeric(ptmModule2Elaps[3]) #assigns temporary variable to the numeric value of the time elapsed
+    jnk = jnk/60 #converts elapsed time into minutes
+    cat('\n','It took ', jnk, "minutes to ensemble model", sp_nm) #sign-posting
     
     }else{
     cat('\n',sp_nm,'ensemble previously done...') #if file already exists for this run

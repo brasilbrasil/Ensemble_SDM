@@ -9,7 +9,7 @@ codeDir = paste0(rootDir, "/PICCC_code/Ensemble_SDM")
 analysisDir = paste0(rootDir, "/PICCC_analysis/biomod2") #same for server - assigns location for analysis directory (results)
 resultsDir=paste0(analysisDir,"/results")
 
-#checks if results directory exists and creates it
+#checks if results directory exists and creates it if not
 if (file.exists(resultsDir) == FALSE){
   dir.create(resultsDir)
 }

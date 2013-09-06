@@ -50,9 +50,9 @@ for (sp_nm in spp_nm){
   
   cat('\n',sp_nm,'model fitting...') #sign-posting
   FileName00 <- paste0(sp_nm, "_VariImp.csv") ###not in FWS code - allows for overwrite capacity
-  if (file.exists(FileName00) == FALSE | overwrite == 1){ #check if analysis for species already done or overwrite requested in config    
+  if (file.exists(FileName00) == F | overwriteData == T){ #check if analysis for species already done or overwrite requested in config    
     # Start the clock!
-    ptm0 <- proc.time()
+    ptmModule1Start <- proc.time()
     workspace_name = paste0(sp_nm,"_FB_modelfitting.RData") #set name of file to save all workspace data after model run
     
     #######Loading datasets#######
@@ -77,9 +77,8 @@ for (sp_nm in spp_nm){
     jpeg_name = paste0(sp_nm,"_env_vars_used.jpg") #names jpeg file to be created
     jpeg(jpeg_name, #creates blank jpeg file in working directory
          width = 10, height = 10, units = "in",pointsize = 12, quality = 90, bg = "white", res = 300)
-    plot(predictors, col=rev(terrain.colors(255)), maxpixels = 100000, useRaster = FALSE, axes = TRUE, addfun = NULL) #
-      #ERROR - 24 warnings to do with "interpolate"  - check with warnings()  
-    dev.off()
+    plot(predictors, col=rev(terrain.colors(255)), maxpixels = 100000, useRaster = useRasterDef, axes = TRUE, addfun = NULL)  
+    dev.off() #saves file to jpeg
     
     ####species point data
     cat('\n','loading species data...') #sign-posting
@@ -275,10 +274,10 @@ for (sp_nm in spp_nm){
     
     save("myBiomodModelOut", file=workspace_name)   #save workspace      
      
-    ptm1 = proc.time() - ptm0 #calculates time it took to run all code
-    jnk = as.numeric(ptm1[3]) #assigns temporary variable to the numeric value of the time elapsed
-    jnk = jnk/3600 #converts elapsed time into hours
-    cat('\n','It took ', jnk, "hours to model", sp_nm) #sign-posting
+    ptmModule1Elaps = proc.time() - ptmModule1Start #calculates time it took to run all code
+    jnk = as.numeric(ptmModule1Elaps[3]) #assigns temporary variable to the numeric value of the time elapsed
+    jnk = jnk/60 #converts elapsed time into minutes
+    cat('\n','It took ', jnk, "minutes to model", sp_nm) #sign-posting
   }else{
     cat('\n','fitting for ',sp_nm,'already done...') #sign-posting in case file for variable importance has already been created (indicating this species has already been run)  
   }    

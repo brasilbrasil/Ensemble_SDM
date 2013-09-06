@@ -45,18 +45,18 @@ for (sp_nm in spp_nm){
   cat('\n',sp_nm,'model projection...') #sign-posting
   workspace_name = paste0(sp_nm,"_FB_EM_fit.RData") #set name of file to load workspace data from model run
   load(workspace_name) #loads workspace from previous ensemble modelling step
-  
   plots = paste(working_dir,"AllEMplots_pmw",  sep="/") #assigns location for all plots
-  if (file.exists(plots) == F | overwrite == 1){ #run only if plots have not already been collected and the overwrite function is off
+  if (file.exists(plots) == F | overwriteData == T){ #run only if plots have not already been collected and the overwrite function is off
     dir.create(plots, showWarnings = FALSE)} #create directory for plots
   
   workspace_name_out = paste0(sp_nm,"_FB_EM_proj_", proj_nm, ".RData") #assigns name to save workspace
   
-  if (file.exists(workspace_name_out) == F | overwrite == 1){ #does not run if file already exists and overwrite is off
+  if (file.exists(workspace_name_out) == F | overwriteData == T){ #does not run if file already exists and overwrite is off
     #raster_based_env_grid:
     sp_index = which(spp_info[,"Species"] == sp_nm) #assigns index for the line associated with the target species
     raster_res = spp_info[sp_index,"rasterdir"] #assigns the raster resolution to the directory for the species of interest
-    cat('\n','using these env files for projection raster:', env_var_files, '\n', 'from dir:', clim_data_dir) #sign-posting
+    cat('\n','using these env files for projection raster:', env_var_files, 
+        '\n', 'from dir:', clim_data_dir) #sign-posting
     crop_raster = raster(paste0(crop_raster_dir,"/",raster_res,".grd")) #creates a rasterLayer object from an existing .grd file for ther extent
     predictors = raster(paste(clim_data_dir, env_var_files[1], sep="/")) #creates rasterLayer from the bioclim .grd file
     predictors = crop(predictors,  crop_raster) #crops bioclimate rasterLayer by the raster resolution .grd
@@ -87,16 +87,18 @@ for (sp_nm in spp_nm){
     if (baseline_or_future == 1){ #for "baseline" runs
       jpeg_name = paste0(sp_nm,"_env_vars_used_for_projection.jpg") #assigns location for map jpeg file
       jpeg(jpeg_name, #settings for map jpeg file
-           width = 10, height = 10, units = "in", pointsize = 12, quality = 90, bg = "white", res = 300) 
-      plot(predictors, col = rev(terrain.colors(255)), maxpixels = 100000, useRaster = FALSE, axes = TRUE, addfun = NULL, interpolate = TRUE) #builds raster map and sends to jpeg file
-      ##RESULTS IN WARNINGS RELATED TO "INTERPOLATE IS NOT A GRAPHICAL PARAMETER" BUT WORK
-      dev.off() #turns off jpeg device
+           width = 10, height = 10, units = "in", pointsize = 12, 
+           quality = 90, bg = "white", res = 300) 
+      plot(predictors, col = rev(terrain.colors(255)), maxpixels = 100000, 
+           useRaster = useRasterDef, axes = TRUE, addfun = NULL, 
+           interpolate = interpolateDef) #builds raster map and sends to jpeg file  
+      dev.off() #saves plot to jpeg
     }
     cat('\n',sp_nm,'projection raster stack created...') #sign-posting
     gc() #reclaims memory that is no longer used and returns summary of memory usage
     workspace_name_out0 = paste0(sp_nm,"_FB_all_model_proj_", proj_nm, ".RData") #sets location to save R data
     
-    if (file.exists(workspace_name_out0) == F | overwrite == 1){ #does not run if RData file already exists and overwrite is off  
+    if (file.exists(workspace_name_out0) == F | overwriteData == T){ #does not run if RData file already exists and overwrite is off  
       myBiomodProj_baseline <- BIOMOD_Projection(
         modeling.output = myBiomodModelOut, #results from previous model step
         new.env = predictors, #new environment to project onto (in case of baseline it is not new)
@@ -135,7 +137,7 @@ for (sp_nm in spp_nm){
 #     if (plot_graphs == T){ ###this has to be fixed- in situations where there is only enough data for a single PA, no others are run
 #       for (model in models_to_run){ #runs for each model
 #         jpeg_name = paste0(sp_nm,"_", model, "_BIN_model", proj_nm, "runs.jpg")
-#         if (file.exists(jpeg_name) == F | overwrite == 1){ #does not run if file exists and overwrite is off
+#         if (file.exists(jpeg_name) == F | overwriteData == T){ #does not run if file exists and overwrite is off
 #           sample=c()
 #           sp_bin_file = paste0(proj_nm, "_", sp_nm, "_bin_ROC_RasterStack")
 #           sp_bin_dir = paste0(sp_nm,"/proj_", proj_nm, "/", sp_bin_file)
@@ -178,22 +180,21 @@ for (sp_nm in spp_nm){
     if (plot_graphs == T){ #set in config file
       for (ii in 1:length(eval_stats)){ #for each evaluation statistic        
         for (i in 1:length(models_to_run)){ #for each model type
+          
           sp_nm = str_replace_all(sp_nm,"_",".") #replaces all "_" with "." to account for biomod2 naming
           binGrdDir <- paste0(working_dir, "/", sp_nm,"/proj_", proj_nm, "/proj_", proj_nm, '_', sp_nm, "_", eval_stats[ii], "bin.grd") #points to location of bin.grd file
           binGrdStack <- stack(binGrdDir) #creates a raster stack from the bin.grd file
           #not sure what next line is attempting
           binGrdSub <- subset(binGrdStack, (length(names(binGrdStack)) - (length(models_to_run)))-1+i) #selects a layer of the rasterStack
-          binGrdNames <- names(binGrdSub)
-          ###IRC STOPPED HERE###
-          a1 <- binGrdSub
-          rclassVect <- c(NA, 0)
-          rclassMatrix <- matrix(rcl, ncol=2, byrow=TRUE)
-          binGrdSub <- reclassify(binGrdSub, rclassMatrix)
-          names(binGrdSub) <- binGrdNames
-          
+          binGrdNames <- names(binGrdSub) #assigns names of the rasterStack Layer to a new vector
+          rclassVect <- c(NA, 0) #creates relassification vector to change 'NA' to '0'
+          rclassMatrix <- matrix(rcl, ncol=2, byrow=TRUE) #creates reclassification matrix from the reclassification vector
+          BinGrdReclass <- reclassify(binGrdSub, rclassMatrix)
+          names(BinGrdReclass) <- binGrdNames
+          ##STOPPED HERE
           b <- stack(paste(working_dir, sp_nm,"/proj_", proj_nm, "/proj_", proj_nm,"_", sp_nm, ".grd", sep = ""))
           b <- subset(b, (length(names(b)) - (length(models_to_run)))-1+i)
-          
+          #????? CHECK IF CODE MISSING HERE
           
           b <- subset(b, length(names(b)))
           c <- a*b
@@ -203,7 +204,7 @@ for (sp_nm in spp_nm){
           names(c) <- binGrdNames
           
           assign(paste0(eval_stats[ii], '_', models_to_run[i], "_scaled_andbinnedEM_pmw"), c)
-          assign(paste0(eval_stats[ii], '_', models_to_run[i], "_binnedEM_pmw"), a1)
+          assign(paste0(eval_stats[ii], '_', models_to_run[i], "_binnedEM_pmw"), binGrdSub)
         }
         
         
@@ -230,18 +231,18 @@ for (sp_nm in spp_nm){
         col5 <- colorRampPalette(c('blue', 'sandybrown', 'darkgreen'))
         
         jnk <- subset(a2, 1)
-        try(plot(c2, 1,  col = col5(255), useRaster=FALSE, axes = TRUE, addfun=F, interpolate = TRUE, legend = F, add = F, bg = "transparent"),silent=T)
-        plot(jnk, col = gc, useRaster=FALSE, axes = F, addfun=F, interpolate = TRUE, legend = F, add = T)
+        try(plot(c2, 1,  col = col5(255), useRaster=useRasterDef, axes = TRUE, addfun=F, interpolate = interpolateDef, legend = F, add = F, bg = "transparent"),silent=T)
+        plot(jnk, col = gc, useRaster=useRasterDef, axes = F, addfun=F, interpolate = interpolateDef, legend = F, add = T)
         
         par(mar=c(2, 0, 1.5, 3)) # comment this out if there are three models_to_run
         jnk <- subset(a2, 2)
-        try(plot(c2, 2, col = col5(255), useRaster=FALSE, axes = TRUE,  interpolate = TRUE, legend = T, yaxt = 'n', add = F, bg = "transparent"),silent=T)  #addfun=F,
-        plot(jnk, col = gc, useRaster=FALSE, axes = F, interpolate = F,  legend = F, add = T)#plot(jnk, col = gc, useRaster=FALSE, axes = F, addfun=F, interpolate = TRUE, yaxt = 'n', legend = F, add = T)
+        try(plot(c2, 2, col = col5(255), useRaster=useRasterDef, axes = TRUE,  interpolate = interpolateDef, legend = T, yaxt = 'n', add = F, bg = "transparent"),silent=T)  #addfun=F,
+        plot(jnk, col = gc, useRaster=useRasterDef, axes = F, interpolate = interpolateDef,  legend = F, add = T)#plot(jnk, col = gc, useRaster=useRasterDef, axes = F, addfun=F, interpolate = interpolateDef, yaxt = 'n', legend = F, add = T)
         
         #         par(mar=c(2, 0, 1.5, 3))
         #         jnk <- subset(a2, 3)
-        #         plot(c2, 3, col = col5(255), useRaster=FALSE, axes = T, interpolate = F, legend = T, yaxt = 'n', add = F, bg = "transparent")
-        #         plot(jnk, col = gc, useRaster=FALSE, axes = F, interpolate = F, legend = F, add = T)
+        #         plot(c2, 3, col = col5(255), useRaster=useRasterDef, axes = T, interpolate = interpolateDef, legend = T, yaxt = 'n', add = F, bg = "transparent")
+        #         plot(jnk, col = gc, useRaster=useRasterDef, axes = F, interpolate = interpolateDef, legend = F, add = T)
         #         
         legend("bottomright",legend = c("Absent"), fill = gc[1], cex = 0.8)
         dev.off()
@@ -322,21 +323,21 @@ for (sp_nm in spp_nm){
       gc = c('antiquewhite1', 'transparent')
       col5 <- colorRampPalette(c('blue', 'sandybrown', 'darkgreen'))
       jnk <- subset(ems_b, 1)
-      try(plot(ems_a[[1]],  col = col5(255), useRaster=FALSE, axes = TRUE, addfun=F, interpolate = TRUE, legend = F, add = F, bg = "transparent"),silent=T)
-      plot(jnk, col = gc, useRaster=FALSE, axes = F, addfun=F, interpolate = TRUE, legend = F, add = T)
+      try(plot(ems_a[[1]],  col = col5(255), useRaster=useRasterDef, axes = TRUE, addfun=F, interpolate = interpolateDef, legend = F, add = F, bg = "transparent"),silent=T)
+      plot(jnk, col = gc, useRaster=useRasterDef, axes = F, addfun=F, interpolate = interpolateDef, legend = F, add = T)
       
       if (length(eval_stats)>1){ 
         par(mar=c(2, 0, 1.5, 0))
         jnk <- subset(ems_b, 2)
-        try(plot(ems_a[[2]], col = col5(255), useRaster=FALSE, axes = TRUE,interpolate = TRUE, legend = F, yaxt = 'n', add = F, bg = "transparent"),silent=T)  # addfun=F, 
-        plot(jnk, col = gc, useRaster=FALSE, axes = F, addfun=F, interpolate = TRUE, yaxt = 'n', legend = F, add = T)
+        try(plot(ems_a[[2]], col = col5(255), useRaster=useRasterDef, axes = TRUE,interpolate = interpolateDef, legend = F, yaxt = 'n', add = F, bg = "transparent"),silent=T)  # addfun=F, 
+        plot(jnk, col = gc, useRaster=useRasterDef, axes = F, addfun=F, interpolate = interpolateDef, yaxt = 'n', legend = F, add = T)
       }
       
       if (length(eval_stats)>2){ 
         par(mar=c(2, 0, 1.5, 3.5))
         jnk <- subset(ems_b, 3)
-        try(plot(ems_a[[3]], col = col5(255), useRaster=FALSE, axes = T, interpolate = F, legend = T, yaxt = 'n', add = F, bg = "transparent"),silent=T)
-        plot(jnk, col = gc, useRaster=FALSE, axes = F, interpolate = F, legend = F, add = T)
+        try(plot(ems_a[[3]], col = col5(255), useRaster=useRasterDef, axes = T, interpolate = interpolateDef, legend = T, yaxt = 'n', add = F, bg = "transparent"),silent=T)
+        plot(jnk, col = gc, useRaster=useRasterDef, axes = F, interpolate = interpolateDef, legend = F, add = T)
       }
       
       legend("bottomright",legend = c("Absent"), fill = gc[1], cex = 0.8)

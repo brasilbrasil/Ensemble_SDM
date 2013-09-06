@@ -76,7 +76,7 @@ for (sp_nm in spp_nm){
     jpeg_name = paste0(sp_nm,"_env_vars_used.jpg") #names jpeg file to be created
     jpeg(jpeg_name, #creates blank jpeg file in working directory
          width = 10, height = 10, units = "in",pointsize = 12, quality = 90, bg = "white", res = 300)
-    plot(predictors, col=rev(terrain.colors(255)), maxpixels = 100000, useRaster = FALSE, axes = TRUE, addfun = NULL) #
+    plot(predictors, col=rev(terrain.colors(255)), maxpixels = 100000, useRaster = useRasterDef, axes = TRUE, addfun = NULL) #
       #ERROR - 24 warnings to do with "interpolate" check with warnings()  
     dev.off()
     
