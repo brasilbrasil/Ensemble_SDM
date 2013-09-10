@@ -28,6 +28,7 @@ for (dir in dirs){
         cat('\n','found ', layer, 'in ', dir)
         file.copy(layer_full_nm, out_lyr_nm, overwrite = TRUE, recursive = TRUE,
                   copy.mode = TRUE)
+        #42 warnings - 'recursive' will be ignored as 'to' is a single existing directory
         cat('\n','saved as ', out_lyr_nm)
       }
     }

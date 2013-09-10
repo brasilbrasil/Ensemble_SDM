@@ -133,8 +133,8 @@ for (sp_nm in spp_nm){
         dev.off() #turns device off - saves plot as jpeg
       }
     }
-    
-#     if (plot_graphs == T){ ###this has to be fixed- in situations where there is only enough data for a single PA, no others are run
+  
+#     if (plot_graphs == T){ ###this has to be fixed- in situations where there is only enough data for a single pseudo absence, no others are run
 #       for (model in models_to_run){ #runs for each model
 #         jpeg_name = paste0(sp_nm,"_", model, "_BIN_model", proj_nm, "runs.jpg")
 #         if (file.exists(jpeg_name) == F | overwriteData == T){ #does not run if file exists and overwrite is off
@@ -180,80 +180,90 @@ for (sp_nm in spp_nm){
     if (plot_graphs == T){ #set in config file
       for (ii in 1:length(eval_stats)){ #for each evaluation statistic        
         for (i in 1:length(models_to_run)){ #for each model type
-          
           sp_nm = str_replace_all(sp_nm,"_",".") #replaces all "_" with "." to account for biomod2 naming
-          binGrdDir <- paste0(working_dir, "/", sp_nm,"/proj_", proj_nm, "/proj_", proj_nm, '_', sp_nm, "_", eval_stats[ii], "bin.grd") #points to location of bin.grd file
-          binGrdStack <- stack(binGrdDir) #creates a raster stack from the bin.grd file
+          spEvalGrdDir <- paste0(working_dir, "/", sp_nm,"/proj_", proj_nm, "/proj_", proj_nm, '_', sp_nm, "_", eval_stats[ii], "bin.grd") #points to location of bin.grd file
+          spEvalGrdStack <- stack(spEvalGrdDir) #creates a raster stack from the bin.grd file
           #not sure what next line is attempting
-          binGrdSub <- subset(binGrdStack, (length(names(binGrdStack)) - (length(models_to_run)))-1+i) #selects a layer of the rasterStack
-          binGrdNames <- names(binGrdSub) #assigns names of the rasterStack Layer to a new vector
+          spEvalGrdSub <- subset(spEvalGrdStack, (length(names(spEvalGrdStack)) - (length(models_to_run)))-1+i) #selects a layer of the rasterStack
+          spEvalGrdNames <- names(spEvalGrdSub) #assigns names of the rasterStack Layer to a new vector
           rclassVect <- c(NA, 0) #creates relassification vector to change 'NA' to '0'
-          rclassMatrix <- matrix(rcl, ncol=2, byrow=TRUE) #creates reclassification matrix from the reclassification vector
-          BinGrdReclass <- reclassify(binGrdSub, rclassMatrix)
-          names(BinGrdReclass) <- binGrdNames
-          ##STOPPED HERE
-          b <- stack(paste(working_dir, sp_nm,"/proj_", proj_nm, "/proj_", proj_nm,"_", sp_nm, ".grd", sep = ""))
-          b <- subset(b, (length(names(b)) - (length(models_to_run)))-1+i)
-          #????? CHECK IF CODE MISSING HERE
+          rclassMatrix <- matrix(rclassVect, ncol=2, byrow=TRUE) #creates reclassification matrix from the reclassification vector
+          spEvalGrdReclass <- reclassify(spEvalGrdSub, rclassMatrix) #reclassifies all 'NA' as '0' in bin.grd raster layer file
+          names(spEvalGrdReclass) <- spEvalGrdNames #gives name from original raster layer to reclassified layer.
+          spGrdDir <- paste0(working_dir, "/", sp_nm,"/proj_", proj_nm, "/proj_", proj_nm,"_", sp_nm, ".grd") #assigns file location for species grd file
+          spGrdStack <- stack(spGrdDir) #loads species grd file as a raster stack
+          spGrdSub <- subset(spGrdStack, (length(names(spGrdStack)) - (length(models_to_run)))-1+i) #selects a layer of the raster stack
+          #NOT SURE IF NEXT LINE NEEDED
+          spGrdSub2 <- subset(spGrdSub, length(names(spGrdSub))) #selects a layer of the previous raster layer???
           
-          b <- subset(b, length(names(b)))
-          c <- a*b
-          rcl <- c(0, NA)
-          rcl <- matrix(rcl, ncol=2, byrow=TRUE)
-          c <- reclassify(c, rcl)
-          names(c) <- binGrdNames
-          
-          assign(paste0(eval_stats[ii], '_', models_to_run[i], "_scaled_andbinnedEM_pmw"), c)
-          assign(paste0(eval_stats[ii], '_', models_to_run[i], "_binnedEM_pmw"), binGrdSub)
+          spGrdComb <- spEvalGrdReclass * spGrdSub2 #combines the species raster layer and the species evaluation raster layer
+          reclassVect2 <- c(0, NA) #creates reclassification vector to turn "0" into "NA"
+          reclassMatrix2 <- matrix(reclassVect2, ncol=2, byrow=TRUE) #creates reclassification matrix from vector
+          spGrdCombReclass <- reclassify(spGrdComb, reclassMatrix2) #reclassifies raster layer, turning "0" onto "NA"
+          names(spGrdCombReclass) <- spEvalGrdNames #assigns original layer name to reclassified layer
+          scaledBinEMStackNm <- paste0(eval_stats[ii], '_', models_to_run[i], "_scaled_andbinnedEM_pmw") #filename for scaled and binned EM 
+          assign(scaledBinEMStackNm, spGrdCombReclass) #assigns combined raster layer to a filename
+          binnedEMStackNm <- paste0(eval_stats[ii], '_', models_to_run[i], "_binnedEM_pmw") #filename for binned EM
+          assign(binnedEMStackNm, spEvalGrdSub) #assigns evaulation raster layer to a filename
         }
         
-        
-        c2<-stack(get(paste(eval_stats[ii], '_', models_to_run[1], "_scaled_andbinnedEM_pmw", sep = "")))
-        for (i in 2:length(models_to_run)){
-          c2<-addLayer(c2, get(paste(eval_stats[ii], '_', models_to_run[i], "_scaled_andbinnedEM_pmw", sep = "")))
+        scaledBinEMStack <- stack(get(paste0(eval_stats[ii], '_', models_to_run[1], "_scaled_andbinnedEM_pmw"))) #creates a raster stack from the first raster layer created in the loop above
+        for (i in 2:length(models_to_run)){ #for all model types
+          scaledBinEMStack <- addLayer(scaledBinEMStack, get(scaledBinEMStackNm)) #combine raster layers from all other model types into raster stack
+        }
+       
+        binnedEMStack <- stack(get(paste0(eval_stats[ii], '_', models_to_run[1], "_binnedEM_pmw"))) #creates a raster stack from the first raster layer created in the loop above
+        for (i in 2:length(models_to_run)){ #for all model types
+          binnedEMStack <- addLayer(binnedEMStack, get(binnedEMStackNm)) #combine raster layers from all other model types into raster stack
         }
         
-        a2<-stack(get(paste(eval_stats[ii], '_', models_to_run[1], "_binnedEM_pmw", sep= "")))
-        for (i in 2:length(models_to_run)){
-          a2<-addLayer(a2, get(paste(eval_stats[ii], '_', models_to_run[i], "_binnedEM_pmw", sep= "")))
-        }
+        setwd(plots) #set working directory 
+        jpeg_name = paste0(proj_nm,"_", sp_nm,"_All_", eval_stats[ii], 
+             "Models_BinandScaled_runs_.jpg") #assigns name for jpeg
+        jpeg(jpeg_name, width = 5*length(models_to_run), height = 5, 
+             units = "in", pointsize = 12, quality = 90, bg = "white", 
+             res = 300) #creates jpeg 
         
-        setwd(plots)
-        jpeg_name=paste(proj_nm,"_", sp_nm,"_All_", eval_stats[ii], "Models_Binandscaled_runs_.jpg", sep = "")
-        jpeg(jpeg_name, width = 5*length(models_to_run), height = 5, units = "in",
-             pointsize = 12, quality = 90, bg = "white", res = 300)  
-        
-        par(pin = c(4,4), cex = 1, cex.main = 1, cex.axis = 0.8, mfcol=c(1,length(models_to_run)), mgp = c(1, 0.5, 0),
-            mar=c(2, 2, 1.5, 0), oma = c(0, 0, 0, 1), bg = "transparent")
+        par(pin = c(4,4), cex = 1, cex.main = 1, cex.axis = 0.8, 
+            mfcol=c(1,length(models_to_run)), mgp = c(1, 0.5, 0),
+            mar=c(2, 2, 1.5, 0), oma = c(0, 0, 0, 1), 
+            bg = "transparent") #set graphical parameter
         
         gc = c('antiquewhite1', 'transparent')
         #grd <- terrain.colors(255)
         col5 <- colorRampPalette(c('blue', 'sandybrown', 'darkgreen'))
         
-        jnk <- subset(a2, 1)
-        try(plot(c2, 1,  col = col5(255), useRaster=useRasterDef, axes = TRUE, addfun=F, interpolate = interpolateDef, legend = F, add = F, bg = "transparent"),silent=T)
-        plot(jnk, col = gc, useRaster=useRasterDef, axes = F, addfun=F, interpolate = interpolateDef, legend = F, add = T)
+        jnk <- subset(binnedEMStack, 1) #junk variable assigned to first layer of raster stack
+        try(plot(scaledBinEMStack, 1,  col = col5(255), 
+                 useRaster = useRasterDef, axes = TRUE, addfun = F, 
+                 interpolate = interpolateDef, legend = F, add = F, 
+                 bg = "transparent"), silent = T) #plot first layer of scaled and binned raster stack with error recovery
+        plot(jnk, col = gc, useRaster = useRasterDef, axes = F, 
+             addfun=F, interpolate = interpolateDef, legend = F, 
+             add = T) #plot first layer of binned raster stack 
         
-        par(mar=c(2, 0, 1.5, 3)) # comment this out if there are three models_to_run
-        jnk <- subset(a2, 2)
-        try(plot(c2, 2, col = col5(255), useRaster=useRasterDef, axes = TRUE,  interpolate = interpolateDef, legend = T, yaxt = 'n', add = F, bg = "transparent"),silent=T)  #addfun=F,
-        plot(jnk, col = gc, useRaster=useRasterDef, axes = F, interpolate = interpolateDef,  legend = F, add = T)#plot(jnk, col = gc, useRaster=useRasterDef, axes = F, addfun=F, interpolate = interpolateDef, yaxt = 'n', legend = F, add = T)
+        par(mar = c(2, 0, 1.5, 3)) #change graphical parameters *comment this out if 3 models to run
+        jnk <- subset(binnedEMStack, 2) #junk variable assigned to second layer of binned raster stack
+        try(plot(scaledBinEMStack, 2, col = col5(255), 
+                 useRaster = useRasterDef, axes = TRUE,  
+                 interpolate = interpolateDef, legend = T, yaxt = 'n', 
+                 add = F, bg = "transparent"), 
+            silent = T)  #plot second layer of scaled binned raster stack
+        plot(jnk, col = gc, useRaster = useRasterDef, axes = F, 
+             interpolate = interpolateDef,  legend = F, add = T)# "yaxt = 'n'" - plot second layer of binned raster stack
         
-        #         par(mar=c(2, 0, 1.5, 3))
-        #         jnk <- subset(a2, 3)
-        #         plot(c2, 3, col = col5(255), useRaster=useRasterDef, axes = T, interpolate = interpolateDef, legend = T, yaxt = 'n', add = F, bg = "transparent")
-        #         plot(jnk, col = gc, useRaster=useRasterDef, axes = F, interpolate = interpolateDef, legend = F, add = T)
+        #         par(mar = c(2, 0, 1.5, 3)) #change graphical parameters
+        #         jnk <- subset(binnedEMStack, 3) #assign junk variable to 
+        #         plot(scaledBinEMStack, 3, col = col5(255), useRaster = useRasterDef, axes = T, interpolate = interpolateDef, legend = T, yaxt = 'n', add = F, bg = "transparent") #plot third layer of binned raster stack
+        #         plot(jnk, col = gc, useRaster = useRasterDef, axes = F, interpolate = interpolateDef, legend = F, add = T) #plot third layer of scaled and binned raster stack
         #         
         legend("bottomright",legend = c("Absent"), fill = gc[1], cex = 0.8)
         dev.off()
       }
     }
-    setwd(working_dir)
-    cat('/n',sp_nm,'done with individual model plots...')
-    
-    # subsetting the S4 class object 'myBiomodProj_baseline'  such that it only uses the two main modelling approaches (GBM and Maxent) 
-    # that do not overfit
-    
+    setwd(working_dir) #return working directory to default
+    cat('\n',sp_nm,'done with individual model plots...') #sign-posting
+        
     if (apply_biomod2_fixes){
       myBiomodProjection <- LoadProjectionManually(myBiomodProj_baseline)
     }else{
@@ -263,55 +273,60 @@ for (sp_nm in spp_nm){
     cat('\n',sp_nm,'projection graphs done...')
     
     ###################################################
-    ### code chunk number 18: EnsembleForecasting_future
+    ### code chunk number 19: EnsembleForecasting
     ###################################################
-    myBiomodEF <- BIOMOD_EnsembleForecasting(
+    myBiomodEF <- BIOMOD_EnsembleForecasting( #Ensemble projections of species
       projection.output = myBiomodProjection,
-      total.consensus = T,
-      EM.output = myBiomodEM, 
-      binary.meth=eval_stats, 
-      keep.in.memory=memory)
+      total.consensus = T, #setting em.by to all to combine all models
+      EM.output = myBiomodEM, #from module 2 BIOMOD_EnsembleModeling output
+      binary.meth = eval_stats, #names of evaluation metrics - defined in config module
+      keep.in.memory = memory)
     cat('\n',sp_nm,'ensemble projection done...')
-    #cat('point 1 mem', memory.size(), memory.size(max=TRUE), 'nn')
+    cat('point 1 mem', memory.size(), memory.size(max=TRUE), 'nn')
     
     ###################################################
-    ### code chunk number 19: EnsembleForecasting_loading_res
+    ### code chunk number 20: EnsembleForecasting_loading_res
     ###################################################
-    #eval_stats=c("TSS") ###DEBUG###
-    #plotting the ensmeble projections per species per projection
-    if (plot_graphs==1){
-      for (i in 1:length(eval_stats)){
-        #setwd(working_dir,)
-        jnk=stack(paste(working_dir, sp_nm, "/proj_", proj_nm, "/proj_", proj_nm, "_", sp_nm, "_TotalConsensus_EMby", 
-                        eval_stats[i], ".grd", sep = ""))
-        a<-subset(jnk, length(names(jnk)))
-        nm<-names(a)
+    
+    #plotting the ensemble projections per species per projection
+    if (plot_graphs == T){
+      for (i in 1:length(eval_stats)){ #for each evaluation statistic
+        totalConsDir1 <- paste0(working_dir, sp_nm, "/proj_", proj_nm, 
+                                  "/proj_", proj_nm, "_", sp_nm, 
+                                  "_TotalConsensus_EMby", eval_stats[i], 
+                                  ".grd")
+        totalConsStack1 = stack(totalConsDir1)
+        totalConsSub1 <- subset(totalConsStack1, length(names(totalConsStack1)))
         
-        jnk=stack(paste(working_dir,sp_nm, "/proj_", proj_nm, "/proj_", proj_nm, "_", sp_nm, "_TotalConsensus_EMby", 
-                        eval_stats[i], "_", eval_stats[i], "bin.grd" , sep = ""))
-        b<-subset(jnk, length(names(jnk)))
+        #WHAT IS THE DIFFERENCE BETWEEN THIS STACK AND PREVIOUS?
+        totalConsDir2 <- paste0(working_dir, sp_nm, "/proj_", proj_nm, 
+                                "/proj_", proj_nm, "_", sp_nm, 
+                                "_TotalConsensus_EMby", eval_stats[i], "_", 
+                                eval_stats[i], "bin.grd")
+        totalConsStack2 = stack(totalConsDir2)
+        totalConsSub2 <- subset(totalConsStack2, length(names(totalConsStack2)))
         
-        c<-a*b
-        rcl <- c(0, NA)
-        rcl <- matrix(rcl, ncol=2, byrow=TRUE)
-        c<-reclassify(c, rcl)
-        names(c)<-nm
-        assign(paste("TotalConsensus_EMScaledandBinnedby_", eval_stats[i], sep=""), c)
-        assign(paste("TotalConsensus_EMBinnedby_", eval_stats[i], sep=""), b)
+        totalConsComb <- totalConsSub1 * totalConsSub2
+        totalConsCombReclass <- reclassify(totalConsComb, reclassMatrix2)
+        
+        names(totalConsCombReclass) <- names(totalConsSub1)
+        totalConsScaledBinNm <- paste0("TotalConsensus_EMScaledandBinnedby_", eval_stats[i])
+        assign(totalConsScaledBinNm, totalConsComb)
+        totalConsBinNm <- paste0("TotalConsensus_EMBinnedby_", eval_stats[i])
+        assign(totalConsBinNm, totalConsDir2)
       }
       
-      ems_a<-stack(get(paste("TotalConsensus_EMScaledandBinnedby_", eval_stats[1], sep="")))
-      if (length(eval_stats)>1){ 
+      emsScaledBinStack <- stack(get(paste0("TotalConsensus_EMScaledandBinnedby_", eval_stats[1])))
+      emsBinStack <- stack(get(paste0("TotalConsensus_EMBinnedby_", eval_stats[1])))
+      if(length(eval_stats)>1){
         for (i in 2:length(eval_stats)){
-          ems_a<-addLayer(ems_a, get(paste("TotalConsensus_EMScaledandBinnedby_", eval_stats[i], sep="")))
-        }}
-      
-      ems_b<-stack(get(paste("TotalConsensus_EMBinnedby_", eval_stats[1], sep="")))
-      if (length(eval_stats)>1){ 
-        for (i in 2:length(eval_stats)){
-          ems_b<-addLayer(ems_b, get(paste("TotalConsensus_EMBinnedby_", eval_stats[i], sep="")))
-        }}
-      
+          emsScaledBinStack <- addLayer(emsScaledBinStack, get(totalConsScaledBinNm))
+          emsBinStack <- addLayer(emsBinStack, get(totalConsBinNm)))
+      }
+
+      ###STOPPED HERE###
+
+   
       setwd(plots)
       
       jpeg_name=paste(proj_nm,"_", sp_nm,"_TOTALCONSENSUS_Binandscaled_runs_.jpg", sep = "")

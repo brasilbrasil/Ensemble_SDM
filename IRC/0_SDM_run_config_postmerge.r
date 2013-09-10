@@ -30,7 +30,7 @@ if (machine == 1){
 ###################################
 
 #setting file locations 
-project_name = "FB_test20130905pm10" #assign project name to the current run
+project_name = "FB_test20130909am1" #assign project name to the current run
 working_dir = paste(resultsDir, project_name, sep = "/") #assign working directory
 crop_raster_dir = paste0(working_dir, "/map_crop") #assign directory for cropped raster files
 csv_dir = paste0(working_dir,"/single_sp_CSVs") #assign directory for single species CSV's
@@ -54,7 +54,7 @@ models_to_run = c('GBM','MAXENT') #choose biomod2 models to run - possibilities 
 eval_stats = c('ROC') #choose evaluation methods - possibilties are: 'KAPPA','TSS','ROC'
 env_var_files = c("bio1.grd", "bio7.grd", "bio12.grd", "bio15.grd") #choose bioclimatic variables of interest
 plot_graphs = T #plot graphs of results (T) or not (F)
-EM_fit = F #if you want to run the model fitting = T
+EM_fit = T #if you want to run the model fitting = T
 EM_ensemble = T #if you want to run the ensemble modelling = T
 EM_project = F #if you want to project the model results = T
 apply_biomod2_fixes = F #if running large models use this option - solves memory problems
