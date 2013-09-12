@@ -321,7 +321,7 @@ for (sp_nm in spp_nm){
       if(length(eval_stats)>1){
         for (i in 2:length(eval_stats)){
           emsScaledBinStack <- addLayer(emsScaledBinStack, get(totalConsScaledBinNm))
-          emsBinStack <- addLayer(emsBinStack, get(totalConsBinNm)))
+          emsBinStack <- addLayer(emsBinStack, get(totalConsBinNm))
       }
 
       ###STOPPED HERE###
