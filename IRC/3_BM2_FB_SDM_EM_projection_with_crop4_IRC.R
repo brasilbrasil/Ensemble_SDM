@@ -9,6 +9,7 @@ library(stringr)
 library(colorRamps)
 library(rasterVis)
 library(tools)
+library(ncdf)
 
 ####START UNDERHOOD
 #assigning which projected climate data set to use depending on scenario
@@ -291,7 +292,7 @@ for (sp_nm in spp_nm){
     #plotting the ensemble projections per species per projection
     if (plot_graphs == T){
       for (i in 1:length(eval_stats)){ #for each evaluation statistic
-        totalConsDir1 <- paste0(working_dir, sp_nm, "/proj_", proj_nm, 
+        totalConsDir1 <- paste0(working_dir, "/", sp_nm, "/proj_", proj_nm, 
                                   "/proj_", proj_nm, "_", sp_nm, 
                                   "_TotalConsensus_EMby", eval_stats[i], 
                                   ".grd")
@@ -299,7 +300,7 @@ for (sp_nm in spp_nm){
         totalConsSub1 <- subset(totalConsStack1, length(names(totalConsStack1)))
         
         #WHAT IS THE DIFFERENCE BETWEEN THIS STACK AND PREVIOUS?
-        totalConsDir2 <- paste0(working_dir, sp_nm, "/proj_", proj_nm, 
+        totalConsDir2 <- paste0(working_dir, "/", sp_nm, "/proj_", proj_nm, 
                                 "/proj_", proj_nm, "_", sp_nm, 
                                 "_TotalConsensus_EMby", eval_stats[i], "_", 
                                 eval_stats[i], "bin.grd")
