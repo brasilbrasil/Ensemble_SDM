@@ -258,20 +258,21 @@ for (sp_nm in spp_nm){
         #         plot(scaledBinEMStack, 3, col = col5(255), useRaster = useRasterDef, axes = T, interpolate = interpolateDef, legend = T, yaxt = 'n', add = F, bg = "transparent") #plot third layer of binned raster stack
         #         plot(jnk, col = gc, useRaster = useRasterDef, axes = F, interpolate = interpolateDef, legend = F, add = T) #plot third layer of scaled and binned raster stack
         #         
-        legend("bottomright",legend = c("Absent"), fill = gc[1], cex = 0.8)
-        dev.off()
+        legend("bottomright",legend = c("Absent"), fill = gc[1], cex = 0.8) #creating legend for saved plot
+        dev.off() #save plot to file
       }
     }
     setwd(working_dir) #return working directory to default
     cat('\n',sp_nm,'done with individual model plots...') #sign-posting
         
-    if (apply_biomod2_fixes){
-      myBiomodProjection <- LoadProjectionManually(myBiomodProj_baseline)
+    #SHOULD WE KEEP THIS?
+    if (apply_biomod2_fixes){ #parameter set in config file
+      myBiomodProjection <- LoadProjectionManually(myBiomodProj_baseline) #function set in another module?
     }else{
       myBiomodProjection <- myBiomodProj_baseline
     }
     
-    cat('\n',sp_nm,'projection graphs done...')
+    cat('\n',sp_nm,'projection graphs done...') #sign-posting
     
     ###################################################
     ### code chunk number 19: EnsembleForecasting
@@ -282,39 +283,37 @@ for (sp_nm in spp_nm){
       EM.output = myBiomodEM, #from module 2 BIOMOD_EnsembleModeling output
       binary.meth = eval_stats, #names of evaluation metrics - defined in config module
       keep.in.memory = memory)
-    cat('\n',sp_nm,'ensemble projection done...')
-    cat('point 1 mem', memory.size(), memory.size(max=TRUE), 'nn')
+    cat('\n',sp_nm,'ensemble projection done...') #sign-posting
+    cat('point 1 mem', memory.size(), memory.size(max=TRUE), 'nn') #returns memory used
     
     ###################################################
     ### code chunk number 20: EnsembleForecasting_loading_res
     ###################################################
     
     #plotting the ensemble projections per species per projection
-    if (plot_graphs == T){
+    if (plot_graphs == T){ #set in config file
       for (i in 1:length(eval_stats)){ #for each evaluation statistic
         totalConsDir1 <- paste0(working_dir, "/", sp_nm, "/proj_", proj_nm, 
                                   "/proj_", proj_nm, "_", sp_nm, 
                                   "_TotalConsensus_EMby", eval_stats[i], 
-                                  ".grd")
-        totalConsStack1 = stack(totalConsDir1)
-        totalConsSub1 <- subset(totalConsStack1, length(names(totalConsStack1)))
+                                  ".grd") #sets location of total consensus ensemble model .grd file
+        totalConsStack1 = stack(totalConsDir1) #creates a raster stack from the .grd file
+        totalConsSub1 <- subset(totalConsStack1, length(names(totalConsStack1))) #creates a raster layer from the .pmw in the raster stack
         
         #WHAT IS THE DIFFERENCE BETWEEN THIS STACK AND PREVIOUS?
         totalConsDir2 <- paste0(working_dir, "/", sp_nm, "/proj_", proj_nm, 
                                 "/proj_", proj_nm, "_", sp_nm, 
                                 "_TotalConsensus_EMby", eval_stats[i], "_", 
-                                eval_stats[i], "bin.grd")
-        totalConsStack2 = stack(totalConsDir2)
-        totalConsSub2 <- subset(totalConsStack2, length(names(totalConsStack2)))
+                                eval_stats[i], "bin.grd") #sets location of total consensus .grd file
+        totalConsStack2 = stack(totalConsDir2) #creates raster stack from .grd file
+        totalConsSub2 <- subset(totalConsStack2, length(names(totalConsStack2))) #creates raster layer from .pmw file
         
-        totalConsComb <- totalConsSub1 * totalConsSub2
-        totalConsCombReclass <- reclassify(totalConsComb, reclassMatrix2)
+        totalConsComb <- totalConsSub1 * totalConsSub2 #combines the two raster layers from the .pmw files
+        totalConsCombReclass <- reclassify(totalConsComb, reclassMatrix2) #reclassifies any values of 0 into NA to get rid of island outline
         
-        names(totalConsCombReclass) <- names(totalConsSub1)
-        totalConsScaledBinNm <- paste0("TotalConsensus_EMScaledandBinnedby_", eval_stats[i])
-        assign(totalConsScaledBinNm, totalConsComb)
-        totalConsBinNm <- paste0("TotalConsensus_EMBinnedby_", eval_stats[i])
-        assign(totalConsBinNm, totalConsDir2)
+        names(totalConsCombReclass) <- names(totalConsSub1) #assigns layer name from the original .pmw file to new reclassified layer
+        assign(paste0("TotalConsensus_EMScaledandBinnedby_", eval_stats[i]), totalConsComb) #assigns the combined raster layers to a character string
+        assign(paste0("TotalConsensus_EMBinnedby_", eval_stats[i]), totalConsSub2) #assigns the raster layer from the 2nd .pmw file to a character string
       }
       
       emsScaledBinStack <- stack(get(paste0("TotalConsensus_EMScaledandBinnedby_", eval_stats[1])))
