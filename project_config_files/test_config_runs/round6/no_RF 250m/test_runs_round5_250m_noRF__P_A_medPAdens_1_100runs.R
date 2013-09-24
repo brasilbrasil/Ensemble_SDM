@@ -7,8 +7,8 @@ source(paste0("D:/PICCC_analysis/code/","directory_registry.r"))
 ###################################
 local_config_dir=DR_FB_SDM_results_S
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
-spp_nm=c("Akekee", "Puaiohi", "Kauai_Amakihi", "Oahu_Elepaio", "Hawaii_Akepa", "Palila", "Oahu_Amakihi", "Maui_Parrotbill")
-project_name='test_runs_round6_100m_noRF__P_A_medPAdens_1_100runs'
+spp_nm=c("Iiwi", "Omao", "Apapane", "Akekee", "Puaiohi", "Kauai_Amakihi", "Oahu_Elepaio", "Hawaii_Akepa", "Palila", "Oahu_Amakihi", "Maui_Parrotbill")
+project_name='test_runs_round6_250m_noRF__P_A_medPAdens_1_100runs'
 server=1
 overwrite=0; paralelize=F
 models_to_run=c('GBM','MAXENT')
@@ -23,7 +23,7 @@ apply_biomod2_fixes=T #if running large models use this option
 
 if (server==1){
   working_dir=paste0(DR_FB_SDM_results_S,project_name,'/')
-  fitting_clim_data_dir=paste0(DR_FB_clim_data,"all_grd/all_baseline/100m/") 
+  fitting_clim_data_dir=paste0(DR_FB_clim_data,"all_grd/all_baseline/250m/") 
   necessary_run_data=paste0(DR_FB_SDM_results_S,'necessary_run_data/') #where all needed files are stored (maxent.jar, species csvs, crop rasters, etc.)
 }else{
   working_dir='C:/Users/lfortini/Data/biomod2/test/'
@@ -54,7 +54,7 @@ do.full.models=T
 eval.metric.threshold = rep(0.5,length(eval_stats))
 
 ####projection config (script#3)
-baseline_or_future=4 #1 for baseline, 4 for future
+baseline_or_future=1 #1 for baseline, 4 for future
 memory = T #keep.in.memory=memory
 dir_for_temp_files<-paste(Drive,'/temp/', project_name,'/', baseline_or_future, '/', sep='') #dir for temp run data (to avoid memory errors)
 

@@ -54,7 +54,7 @@ do.full.models=T
 eval.metric.threshold = rep(0.5,length(eval_stats))
 
 ####projection config (script#3)
-baseline_or_future=4 #1 for baseline, 4 for future
+baseline_or_future=1 #1 for baseline, 4 for future
 memory = T #keep.in.memory=memory
 dir_for_temp_files<-paste(Drive,'/temp/', project_name,'/', baseline_or_future, '/', sep='') #dir for temp run data (to avoid memory errors)
 
@@ -109,3 +109,6 @@ if (EM_project){
 }
 
 ##add bit here at the end to save config file copy (renamed) in folder
+
+#write("prints to stderr", stderr())
+#write("prints to stdout", stdout())
