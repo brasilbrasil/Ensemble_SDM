@@ -26,9 +26,9 @@ for (dir in dirs){
       out_lyr_nm = str_replace(layer_full_nm, necessary_run_data, working_dir)
       if (file.exists(out_lyr_nm)==FALSE){
         cat('\n','found ', layer, 'in ', dir)
-        file.copy(layer_full_nm, out_lyr_nm, overwrite = TRUE, recursive = TRUE,
+        file.copy(layer_full_nm, out_lyr_nm, overwrite = TRUE, recursive = FALSE,
                   copy.mode = TRUE)
-        #42 warnings - 'recursive' will be ignored as 'to' is a single existing directory
+        #42 warnings - 'recursive' will be ignored as 'to' is a single existing directory *** changed to recursive = FALSE
         cat('\n','saved as ', out_lyr_nm)
       }
     }

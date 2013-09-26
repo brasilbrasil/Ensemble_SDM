@@ -122,8 +122,8 @@ for (sp_nm in spp_nm){
     ###################################################
     
     if (plot_graphs == T){ #set in the config file
-      jnk = length(myBiomodProj_baseline@models.projected) #assigns number of projection models from output
-      jnk = jnk/(length(models_to_run)+1) #calculates the number of projections per model type +1
+      jnk = length(myBiomodProj_baseline@models.projected) #gets number of projection models from output
+      jnk = jnk/(length(models_to_run)+1) #calculates the number of projections per model type - +1 because there is a combined model type as well
       if (jnk<26){ 
         jpeg_nam = paste0(sp_nm,"_", proj_nm, "_", "runs.jpg") #assigns location for map jpeg
         jpeg(jpeg_name, #settings for the jpeg map
@@ -184,7 +184,6 @@ for (sp_nm in spp_nm){
           sp_nm = str_replace_all(sp_nm,"_",".") #replaces all "_" with "." to account for biomod2 naming
           spEvalGrdDir <- paste0(working_dir, "/", sp_nm,"/proj_", proj_nm, "/proj_", proj_nm, '_', sp_nm, "_", eval_stats[ii], "bin.grd") #points to location of bin.grd file
           spEvalGrdStack <- stack(spEvalGrdDir) #creates a raster stack from the bin.grd file
-          #not sure what next line is attempting
           spEvalGrdSub <- subset(spEvalGrdStack, (length(names(spEvalGrdStack)) - (length(models_to_run)))-1+i) #selects a layer of the rasterStack
           spEvalGrdNames <- names(spEvalGrdSub) #assigns names of the rasterStack Layer to a new vector
           rclassVect <- c(NA, 0) #creates relassification vector to change 'NA' to '0'
@@ -194,9 +193,7 @@ for (sp_nm in spp_nm){
           spGrdDir <- paste0(working_dir, "/", sp_nm,"/proj_", proj_nm, "/proj_", proj_nm,"_", sp_nm, ".grd") #assigns file location for species grd file
           spGrdStack <- stack(spGrdDir) #loads species grd file as a raster stack
           spGrdSub <- subset(spGrdStack, (length(names(spGrdStack)) - (length(models_to_run)))-1+i) #selects a layer of the raster stack
-          #NOT SURE IF NEXT LINE NEEDED
           spGrdSub2 <- subset(spGrdSub, length(names(spGrdSub))) #selects a layer of the previous raster layer???
-          
           spGrdComb <- spEvalGrdReclass * spGrdSub2 #combines the species raster layer and the species evaluation raster layer
           reclassVect2 <- c(0, NA) #creates reclassification vector to turn "0" into "NA"
           reclassMatrix2 <- matrix(reclassVect2, ncol=2, byrow=TRUE) #creates reclassification matrix from vector
