@@ -1,22 +1,23 @@
 rm(list = ls()) #remove all past worksheet variables
-source(paste0("D:/Dropbox/code/","directory_registry.r"))
+source(paste0("C:/Users/lfortini/","directory_registry.r"))
 #options(error=stop) #this keeps the code from running after errors 
 
 ###################################
 ####GENERAL MODEL CONFIGURATION####
 ###################################
-local_config_dir=DR_FB_SDM_results_S
+#local_config_dir=DR_FB_SDM_results_S
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
-spp_nm=c("Akekee", "Hawaii_Akepa")#, "Kauai_Amakihi", "Maui_Parrotbill", "Oahu_Elepaio", "Palila")
-project_name='testrun__newclim_100m_noRF__P_medPAdens_100'
+spp_nm=c('Akekee', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'Anianiau', 'Apapane', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Hawaii_Elepaio', 'Iiwi', 'Kauai_Amakihi', 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Oahu_Amakihi', 'Oahu_Elepaio', 'Omao', 'Palila', 'Puaiohi', 'Hawaii_Amakihi', 'Amakihi', 'Elepaio')
+#spp_nm=c("Akekee", "Hawaii_Akepa")#, "Kauai_Amakihi", "Maui_Parrotbill", "Oahu_Elepaio", "Palila")
+project_name='full500run__newclim_100m_noRF__P_medPAdens_100'
 server=1
 overwrite=0; paralelize=F
 models_to_run=c('GBM','MAXENT')
-eval_stats=c("ROC")
+eval_stats=c("ROC", "KAPPA", "TSS")
 plot_graphs=1
 EM_fit=T
 EM_ensemble=T
-EM_project=T
+EM_project=F
 create_response_curves=T
 memory.limit(size=24000000)
 apply_biomod2_fixes=T #if running large models use this option
@@ -39,11 +40,11 @@ csv_dir=paste(working_dir,"single_sp_CSVs/", sep="")
 ####CONFIG FOR SPECIFIC STEPS####
 #################################
 ####fit config (script#1)
-NbRunEval=5
+NbRunEval=10
 include_Abs=F #in test phase
 PAs_outside_CE=F #if T, will only consider PAs outside climate envelope of all points collected
 dens_PAs_outside_CE=3 #if 1 will create PA density that is equal to point density within surveyed areas
-PA.nb.rep=5
+PA.nb.rep=50
 PA.nb.absences = 10000 #if PAs_outside_CE=T, this will be overridden! (n of PAs will be determined by P/A point density within CE 
 candidatePA.per.PA=100 #only used if if PAs_outside_CE=F, if value ==0, will use PA.nb.absences   
 PA.strategy = "random"

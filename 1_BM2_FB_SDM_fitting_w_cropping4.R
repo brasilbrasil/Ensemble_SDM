@@ -132,7 +132,7 @@ for (sp_nm in spp_nm){
       mySREresp <- reclassify(subset(predictors,1,drop=TRUE), c(-Inf,Inf,0))
       mySREresp[cellFromXY(mySREresp,Ps)] <- 1
       mySREresp=mySREresp==0
-      plot(mySREresp)
+      #plot(mySREresp) #must fix- margins too large
       PA_candidate_points=rasterToPoints(mySREresp, fun=function(x){x==1})
       if (candidatePA.per.PA==0){
         n_PA_points=PA.nb.absences
