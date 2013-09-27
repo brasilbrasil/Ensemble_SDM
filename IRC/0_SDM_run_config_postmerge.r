@@ -5,15 +5,16 @@ rm(list = ls()) #remove all past worksheet variables
 ####SET SOURCE LOCATION############
 ###################################
 
-machine = 3 #use 1 for PICCC server, 2 for LF local drive, 3 for IRC local drive
+machine = 1 #use 1 for LF laptop, 2 for LF hard drive, 3 for IRC local drive
 
+source(paste0("C:/Users/lfortini/","directory_registry.r"))
 #Assigns source file (directory_registry file) to appropriate hardware (according to machine number)
 if (machine == 1){
-  source("Y:/PICCC_analysis/code/","directory_registry.r")
-  server = T
+  source("C:/Users/lfortini/","directory_registry.r")
+  server = F
 } else {
   if (machine == 2) {
-    source("C:/Users/lfortini/directory_registry.r") #not sure if this is the right location for Lucas's local file
+    source("C:/Users/lfortini/","directory_registry.r") #actually same as above
     server = F
   } else {
     if (machine == 3) {
@@ -60,6 +61,7 @@ EM_project = F #if you want to project the model results = T
 apply_biomod2_fixes = F #if running large models use this option - solves memory problems
 memory.limit(size = 4000) #increases memory allocation
 overwriteData = F #T if want to overwrite and F if not
+create_response_curves = F
 
 #Assigns the species names either according to csv file (all) or list
 if (run_all_spp){
@@ -87,6 +89,7 @@ PseudoAbs_outside_CE = T #if T, will only consider Pseudo Absences outside clima
 dens_PAs_outside_CE=1 #if 1 will create PA density that is equal to point density within surveyed areas
 PA.nb.rep = 2
 PA.nb.absences = 1000 #asssign number of Pseudo absence points (if PseudoAbs_outside_CE = T, this will be overridden! (n of PAs will be determined by P/A point density within CE)) 
+candidatePAperPA=50 #only used if if PAs_outside_CE = F, if value == 0, will use PA.nb.absences   
 PA.strategy = "random" #strategy for selecting pseudo absences ('random', 'sre', 'disk' or 'user.defined')
 equiv_100m = 0.0009430131
 PA.dist.min = 5*equiv_100m #500m min distance from actual data points - only for 'disk' absences selection
@@ -118,7 +121,7 @@ n_instances=length(system('tasklist /FI "IMAGENAME eq Rscript.exe" ',
 rsession_instances=length(system('tasklist /FI "IMAGENAME eq rsession.exe" ', 
                                  intern = TRUE))-3
 cpucores=as.integer(Sys.getenv('NUMBER_OF_PROCESSORS'))
-if (n_instances>0 & cpucores>1 & rsession_instances<1){
+if (n_instances>0 & cpucores>1 & rsession_instances<1 & paralelize){
   n_instances=1
   jnkn=length(spp_nm)
   x=c(1:jnkn)
@@ -134,13 +137,16 @@ if (n_instances>0 & cpucores>1 & rsession_instances<1){
 ptmOverallStart <- proc.time()
 
 if (EM_fit){ #runs fitting code
-  source(paste0(codeDir,"/IRC/1_BM2_FB_SDM_fitting_w_cropping4_postmerge.r")) 
+  source(paste0(codeDir,"/1_BM2_FB_SDM_fitting_w_cropping4_postmerge.r")) 
+}
+if (create_response_curves){
+  source(paste0(codeDir,"/2opt_BM2_FB_SDM_response_curves3.r"))
 }
 if (EM_ensemble){ #runs ensemble code
-  source(paste0(codeDir,"/IRC/2_BM2_FB_SDM_EM_fitting2_IRC.r")) 
+  source(paste0(codeDir,"/2_BM2_FB_SDM_EM_fitting2_IRC.r")) 
 }
 if (EM_project){ #runs projection code
-  source(paste0(codeDir,"/IRC/3_BM2_FB_SDM_EM_projection_with_crop4_IRC.r")) 
+  source(paste0(codeDir,"/3_BM2_FB_SDM_EM_projection_with_crop4_IRC.r")) 
 }
 
 ##stop the clock

@@ -45,7 +45,7 @@ PAs_outside_CE=T #if T, will only consider PAs outside climate envelope of all p
 dens_PAs_outside_CE=1 #if 1 will create PA density that is equal to point density within surveyed areas
 PA.nb.rep=5
 PA.nb.absences = 10000 #only used if if PAs_outside_CE=F, this will be overridden! (n of PAs will be determined by P/A point density within CE 
-candidatePA.per.PA=50 #only used if if PAs_outside_CE=F, if value ==0, will use PA.nb.absences   
+candidatePAperPA=50 #only used if if PAs_outside_CE=F, if value ==0, will use PA.nb.absences   
 PA.strategy = "random"
 equiv_100m=0.0009430131
 PA.dist.min = 5*equiv_100m #500 min distance from actual data points 

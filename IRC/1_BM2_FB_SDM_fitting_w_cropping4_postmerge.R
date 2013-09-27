@@ -28,7 +28,7 @@ for (dir in dirs){
         cat('\n','found ', layer, 'in ', dir)
         file.copy(layer_full_nm, out_lyr_nm, overwrite = TRUE, recursive = FALSE,
                   copy.mode = TRUE)
-        #42 warnings - 'recursive' will be ignored as 'to' is a single existing directory *** changed to recursive = FALSE
+        #if'recursive' = T will result in warnings *** changed to recursive = FALSE
         cat('\n','saved as ', out_lyr_nm)
       }
     }
@@ -116,19 +116,19 @@ for (sp_nm in spp_nm){
       n_PseudoAbs_pts = round(neg_CE_cells * dens_PAs_outside_CE * CE_point_density) + Act_abs #accounts for the actual absences for calculating pseudo absences      
       PseudoAbs_cand_pts = rasterToPoints(neg_sp_CE, fun = function(x){x == 1}) #Creates matrix of candidate points (x,y,layer)
       
-      plot(mySREresp) #plots all cells with data
-      plot(sp_CE) #plots climate envelope
-      plot(neg_sp_CE) #plots areas outside climate envelope
+      #plot(mySREresp) #plots all cells with data - must fix - margins too large
+      #plot(sp_CE) #plots climate envelope
+      #plot(neg_sp_CE) #plots areas outside climate envelope
 
       # next section assigns pseudo absences anywhere (not limited to CE)       
     }else{
       neg_mySREresp = mySREresp == 0 #creates raster of areas outside those with known data (presence and absence)
-      plot(neg_mySREresp) #plots raster outside known data (presence and absence)
+      #plot(neg_mySREresp) #plots raster outside known data (presence and absence) - must fix - margins too large
       PseudoAbs_cand_pts = rasterToPoints(neg_mySREresp, fun=function(x){x==1}) # Creates matrix of candidate pseudo absence points (x,y,layer)
-      if (candidatePA.per.PA==0){
+      if (candidatePAperPA==0){
         n_PseudoAbs_pts = PA.nb.absences  #assigns number of pseudo absence points as indicated in config code - SHOULD WE ACCOUNT FOR ACTUAL ABSENCES?
       }else{
-        n_PseudoAbs_pts = round(dim(PseudoAbs_cand_pts)[1]/candidatePA.per.PA)        
+        n_PseudoAbs_pts = round(dim(PseudoAbs_cand_pts)[1]/candidatePAperPA)        
       }
     }  
     PseudoAbs_cand_pts = as.data.frame(PseudoAbs_cand_pts[,1:2]) #extracts only the geographic information for the candidate pseudo absence points

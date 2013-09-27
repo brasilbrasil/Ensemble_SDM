@@ -134,10 +134,10 @@ for (sp_nm in spp_nm){
       mySREresp=mySREresp==0
       #plot(mySREresp) #must fix- margins too large
       PA_candidate_points=rasterToPoints(mySREresp, fun=function(x){x==1})
-      if (candidatePA.per.PA==0){
+      if (candidatePAperPA==0){
         n_PA_points=PA.nb.absences
       }else{
-        n_PA_points=round(dim(PA_candidate_points)[1]/candidatePA.per.PA)        
+        n_PA_points=round(dim(PA_candidate_points)[1]/candidatePAperPA)        
       }
     }  
     PA_candidate_points=as.data.frame(PA_candidate_points[,1:2])
