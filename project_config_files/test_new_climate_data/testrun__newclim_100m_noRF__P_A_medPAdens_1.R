@@ -7,10 +7,10 @@ source(paste0("D:/Dropbox/code/","directory_registry.r"))
 ###################################
 local_config_dir=DR_FB_SDM_results_S
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
-spp_nm=c("Akekee", "Hawaii_Akepa")#, "Kauai_Amakihi", "Maui_Parrotbill", "Oahu_Elepaio", "Palila")
-project_name='testrun__newclim_100m_noRF__P_A_medPAdens_1'
+spp_nm=c('Akekee', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'Anianiau', 'Apapane', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Hawaii_Elepaio', 'Iiwi', 'Kauai_Amakihi', 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Oahu_Amakihi', 'Oahu_Elepaio', 'Omao', 'Palila', 'Puaiohi', 'Hawaii_Amakihi', 'Amakihi', 'Elepaio')
+project_name='multi_instance_testrun__newclim_100m_noRF__P_A_medPAdens_1'
 server=1
-overwrite=0; paralelize=F
+overwrite=0; paralelize=T
 models_to_run=c('GBM','MAXENT')
 eval_stats=c("ROC")
 plot_graphs=1
@@ -79,20 +79,29 @@ dir.create(dir_for_temp_files, showWarnings=F, recursive=T)
 }#dir.create(paste('Y:/temp/', project_name,'/', sep=''), showWarnings=F)
 dir.create(working_dir, showWarnings=F)
 
-###not in FWS code (multi instance automation)
 #this code below will subset species into the right number of instances started with the bat file                        
 Sys.sleep(6) #time for script process to show up on tasklist
-n_instances=length(system('tasklist /FI "IMAGENAME eq Rscript.exe" ', intern = TRUE))-3
-rsession_instances=length(system('tasklist /FI "IMAGENAME eq rsession.exe" ', intern = TRUE))-3
+n_instances=length(list.files(working_dir, pattern="^00instance"))
 cpucores=as.integer(Sys.getenv('NUMBER_OF_PROCESSORS'))
-if (n_instances>0 & cpucores>1 & rsession_instances<1 & paralelize){
-  #n_instances=1
+#n_instances=length(system('tasklist /FI "IMAGENAME eq Rscript.exe" ', intern = TRUE))-3
+#rsession_instances=length(system('tasklist /FI "IMAGENAME eq rsession.exe" ', intern = TRUE))-3
+#if (n_instances>0 & cpucores>1 & rsession_instances<1 & paralelize){
+if (paralelize){
+  if (cpucores>length(spp_nm)){cpucores=length(spp_nm)}
   jnkn=length(spp_nm)
   x=c(1:jnkn)
   chunk <- function(x,n) split(x, factor(sort(rank(x)%%n)))
   groups=chunk(x,cpucores)
-  jnk=groups[n_instances][[1]]
+  jnk=groups[n_instances+1][[1]]
   spp_nm=spp_nm[jnk]
+  spp_str=""
+  for (sp_nm in spp_nm){
+    spp_str=paste(spp_str,sp_nm,sep="__")
+  }
+  time=Sys.time()
+  time=str_replace_all(time,":", ".")
+  instance_file=paste0("00instance",spp_str,"_",time)
+  file.create(paste0(working_dir,instance_file),showWarnings=F)  
 }
 
 if (EM_fit){
@@ -108,4 +117,6 @@ if (EM_project){
   source(paste0(DR_code_S,"Ensemble_SDM/3_BM2_FB_SDM_EM_projection_with_crop4.r")) #this is where all configurations are at
 }
 
-##add bit here at the end to save config file copy (renamed) in folder
+if (paralelize){
+  file.remove(paste0(working_dir,instance_file))
+}
