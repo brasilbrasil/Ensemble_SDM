@@ -4,10 +4,10 @@
 
 rootDir = "D:" #for server rootDir = "Y:/"
 dataDir = paste0(rootDir, "/PICCC_data") #where the original data exists for SDM (PA species and environmental data) - same for server
-codeDir = paste0(rootDir, "/Dropbox/code/Ensemble_SDM")  
+codeDir = paste0(rootDir, "/Dropbox/code/Ensemble_SDM/IRC")  
 analysisDir = paste0(rootDir, "/PICCC_analysis") #same for server - assigns location for analysis directory (results)
 
-resultsDir = paste0(analysisDir,"FB_analysis/model_results/biomod2")
+resultsDir = paste0(analysisDir,"/FB_analysis/model_results/biomod2")
 
 #checks if results directory exists and creates it if not
 if (file.exists(resultsDir) == FALSE){
@@ -19,7 +19,7 @@ allSppNames = paste0(analysisDir, "/spp_to_run_all.csv")
 
 #Location for bioclim data
 bioclimDataDir = paste0(dataDir,"/climate_data/full extent bioclim data") #points to location of bioclimate data
-bioclimData2013Dir = paste0(dataDir,"climate_data/bioclim_data_Aug2013/complete_rasters/bioclims_abs/")
+bioclimData2013Dir = paste0(dataDir,"/climate_data/bioclim_data_Aug2013/complete_rasters/bioclims_abs/")
 
 fitting_clim_data_dir = paste0(bioclimData2013Dir,"all_baseline/125m/") 
 necessary_run_data = paste0(resultsDir,"/necessary_run_data") #where all needed files are stored (maxent.jar, species csvs, crop rasters, etc.)
