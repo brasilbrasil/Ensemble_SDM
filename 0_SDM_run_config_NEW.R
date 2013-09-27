@@ -5,10 +5,7 @@ source(paste0("C:/Users/lfortini/","directory_registry.r"))
 ###################################
 ####GENERAL MODEL CONFIGURATION####
 ###################################
-#local_config_dir=DR_FB_SDM_results_S
-#spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
 spp_nm=c('Akekee', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'Anianiau', 'Apapane', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Hawaii_Elepaio', 'Iiwi', 'Kauai_Amakihi', 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Oahu_Amakihi', 'Oahu_Elepaio', 'Omao', 'Palila', 'Puaiohi', 'Hawaii_Amakihi', 'Amakihi', 'Elepaio')
-#spp_nm=c("Akekee", "Hawaii_Akepa")#, "Kauai_Amakihi", "Maui_Parrotbill", "Oahu_Elepaio", "Palila")
 project_name='full500run__newclim_100m_noRF__P_A_medPAdens_1'
 server=1
 overwrite=0; paralelize=F
@@ -19,7 +16,6 @@ EM_fit=T
 EM_ensemble=T
 EM_project=F
 create_response_curves=T
-memory.limit(size=24000000)
 apply_biomod2_fixes=T #if running large models use this option
 
 if (server==1){

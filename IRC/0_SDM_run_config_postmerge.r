@@ -1,24 +1,19 @@
 rm(list = ls()) #remove all past worksheet variables
-#options(error = stop) #this keeps the code from running after errors 
-
 ###################################
 ####SET SOURCE LOCATION############
 ###################################
-
 machine = 1 #use 1 for LF laptop, 2 for LF hard drive, 3 for IRC local drive
-
-source(paste0("C:/Users/lfortini/","directory_registry.r"))
 #Assigns source file (directory_registry file) to appropriate hardware (according to machine number)
 if (machine == 1){
-  source("C:/Users/lfortini/","directory_registry.r")
+  source(paste0("C:/Users/lfortini/","directory_registry.r"))
   server = F
 } else {
   if (machine == 2) {
-    source("C:/Users/lfortini/","directory_registry.r") #actually same as above
+    source(paste0("C:/Users/lfortini/","directory_registry.r")) #actually same as above
     server = F
   } else {
     if (machine == 3) {
-      source("C:/USGS_Honolulu/PICCC_code/Ensemble_SDM/IRC/directory_registryIRC.r")
+      source(paste0("C:/USGS_Honolulu/PICCC_code/Ensemble_SDM/IRC/directory_registryIRC.r"))
       server = F
     } else {
       cat('\n','Error - invalid machine number')
@@ -29,26 +24,12 @@ if (machine == 1){
 ###################################
 ####GENERAL MODEL CONFIGURATION####
 ###################################
-
 #setting file locations 
 project_name = "FB_test20130926am2" #assign project name to the current run
-working_dir = paste(resultsDir, project_name, sep = "/") #assign working directory
-crop_raster_dir = paste0(working_dir, "/map_crop") #assign directory for cropped raster files
-csv_dir = paste0(working_dir,"/single_sp_CSVs") #assign directory for single species CSV's
-
-#fitting_clim_data_dir=paste0(DR_FB_clim_data,"all_grd/all_baseline/100m/") #MOVED TO REGISTRY 
-#necessary_run_data=paste0(DR_FB_SDM_results_S,'necessary_run_data/') #MOVED TO REGISTRY
-
-if (file.exists(working_dir) == F){ 
-  dir.create(working_dir, showWarnings = F) #creates working directory if missing
-}
 
 #choose species of interest - all (from CSV file) or subset listed
 run_all_spp = F #if running all species enter "T" and if only subset enter "F"
 spp_subset = c("Kauai_Amakihi","Akekee") # "Oahu_Amakihi","Hawaii_Akepa", "Palila") #if only subset, enter spp names here 
-
-#spp_nm=(read.csv(paste0(resultsDir,'spp_to_run_all.csv'),header=F, stringsAsFactors=F)) #alternative way of running all species
-
 
 #Biomod2 modelling options for species of interest
 models_to_run = c('GBM','MAXENT') #choose biomod2 models to run - possibilities are: 'GLM','GBM','GAM','CTA','ANN','SRE','FDA','MARS','RF','MAXENT' 
@@ -58,26 +39,10 @@ plot_graphs = T #plot graphs of results (T) or not (F)
 EM_fit = T #if you want to run the model fitting = T
 EM_ensemble = T #if you want to run the ensemble modelling = T
 EM_project = F #if you want to project the model results = T
-apply_biomod2_fixes = F #if running large models use this option - solves memory problems
-memory.limit(size = 4000) #increases memory allocation
-overwriteData = F #T if want to overwrite and F if not
 create_response_curves = F
-
-#Assigns the species names either according to csv file (all) or list
-if (run_all_spp){
-  spp_nm = read.csv(allSppNames, header = F, stringsAsFactors = F)
-} else {
-  spp_nm = spp_subset
-}
-
-##Plotting options depending on if server or not
-if (server == TRUE){
-  useRasterDef = FALSE
-  interpolateDef = TRUE
-} else {
-  useRasterDef = TRUE
-  interpolateDef = FALSE
-}
+apply_biomod2_fixes = F #if running large models use this option - solves memory problems
+overwriteData = F #T if want to overwrite and F if not
+paralelize=F #turn on multi instance auto start
 
 #################################
 ####CONFIG FOR SPECIFIC STEPS####
@@ -102,33 +67,59 @@ eval.metric.threshold = rep(0.5,length(eval_stats)) #sets the minimum scores bel
 baseline_or_future = 1 #1 for baseline, 4 for future
 clampingMask = F #if T clamping mask will be saved
 memory = T #keep.in.memory = memory; if T and clamping Mask = T, clamping mask will be saved to hard drive 
-dir_for_temp_files <- paste(rootDir,'temp', project_name, baseline_or_future, 
-                            sep = "/") #dir for temp run data (to avoid memory errors)
+
 
 ##########################
 ####RUNNING SCRIPTS!!!####
 ##########################
+working_dir = paste(resultsDir, project_name, sep = "/") #assign working directory
+crop_raster_dir = paste0(working_dir, "/map_crop") #assign directory for cropped raster files
+csv_dir = paste0(working_dir,"/single_sp_CSVs") #assign directory for single species CSV's
+dir.create(working_dir, showWarnings = F) #creates working directory if missing
+
+#Assigns the species names either according to csv file (all) or list
+if (run_all_spp){
+  spp_nm = read.csv(allSppNames, header = F, stringsAsFactors = F)
+} else {
+  spp_nm = spp_subset
+}
+
+##Plotting options depending on if server or not
+if (server == TRUE){
+  useRasterDef = FALSE
+  interpolateDef = TRUE
+} else {
+  useRasterDef = TRUE
+  interpolateDef = FALSE
+}
+
+dir_for_temp_files <- paste(rootDir,'temp', project_name, baseline_or_future, 
+                            sep = "/") #dir for temp run data (to avoid memory errors)
+
 if (apply_biomod2_fixes){
 maxentWDtmp = paste0("maxentWDtmp_", baseline_or_future)
 dir.create(dir_for_temp_files, showWarnings=F, recursive=T)
 }
 
-###not in FWS code (multi instance automation)
 #this code below will subset species into the right number of instances started with the bat file                        
-Sys.sleep(6) #time for script process to show up on tasklist
-n_instances=length(system('tasklist /FI "IMAGENAME eq Rscript.exe" ', 
-                          intern = TRUE))-3
-rsession_instances=length(system('tasklist /FI "IMAGENAME eq rsession.exe" ', 
-                                 intern = TRUE))-3
+n_instances=length(list.files(working_dir, pattern="^00instance"))
 cpucores=as.integer(Sys.getenv('NUMBER_OF_PROCESSORS'))
-if (n_instances>0 & cpucores>1 & rsession_instances<1 & paralelize){
-  n_instances=1
+if (paralelize){
+  if (cpucores>length(spp_nm)){cpucores=length(spp_nm)}
   jnkn=length(spp_nm)
   x=c(1:jnkn)
   chunk <- function(x,n) split(x, factor(sort(rank(x)%%n)))
   groups=chunk(x,cpucores)
-  jnk=groups[n_instances][[1]]
+  jnk=groups[n_instances+1][[1]]
   spp_nm=spp_nm[jnk]
+  spp_str=""
+  for (sp_nm in spp_nm){
+    spp_str=paste(spp_str,sp_nm,sep="__")
+  }
+  time=Sys.time()
+  time=str_replace_all(time,":", ".")
+  instance_file=paste0("00instance",spp_str,"_",time)
+  file.create(paste0(working_dir,instance_file),showWarnings=F)  
 }
 
 
@@ -156,4 +147,6 @@ jnk = jnk/60 #converts elapsed time into minutes
 cat('\n','It took ', jnk, "minutes (on average) to model each species with",
     length(models_to_run), " model types") #sign-posting
 
-##add bit here at the end to save config file copy (renamed) in folder
+if (paralelize){
+  file.remove(paste0(working_dir,instance_file))
+}
