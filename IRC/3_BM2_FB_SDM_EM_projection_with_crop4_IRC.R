@@ -35,7 +35,7 @@ if (baseline_or_future == 6){
 #sets options for biomod2 fixes in code (if assigned TRUE in config file)
 if (apply_biomod2_fixes){
   rasterOptions(tmpdir = dir_for_temp_files, timer = T, progress = "text", todisk  = T) #set options for raster package
-  source(paste(codeDir,"Ensemble_SDM/3b_modifications_of_projection_code.r", sep = "/")) #all of fixes to biomod2 code created by AV
+  source(paste(codeDir,"3b_modifications_of_projection_code.r", sep = "/")) #all of fixes to biomod2 code created by AV
 }
 
 spp_info = read.csv(paste(csv_dir,'FB_spp_data.csv', sep = "/")) #creates data frame from species info csv file

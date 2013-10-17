@@ -29,7 +29,7 @@ project_name='full500run__newclim_100m_noRF__P_medPAdens_100' #assign project na
 
 #choose species of interest - all (from CSV file) or subset listed
 run_all_spp = F #if running all species enter "T" and if only subset enter "F"
-spp_subset = c('Akekee', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'Anianiau', 'Apapane', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Hawaii_Elepaio', 'Iiwi', 'Kauai_Amakihi', 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Oahu_Amakihi', 'Oahu_Elepaio', 'Omao', 'Palila', 'Puaiohi', 'Hawaii_Amakihi', 'Amakihi', 'Elepaio')
+spp_subset = c('Hawaii_Akepa', 'Hawaii_Creeper', 'Hawaii_Elepaio', 'Iiwi', 'Kauai_Amakihi')#, 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Oahu_Amakihi', 'Oahu_Elepaio', 'Omao', 'Palila', 'Puaiohi', 'Hawaii_Amakihi', 'Amakihi', 'Elepaio')
 
 #Biomod2 modelling options for species of interest
 models_to_run = c('GBM','MAXENT') #choose biomod2 models to run - possibilities are: 'GLM','GBM','GAM','CTA','ANN','SRE','FDA','MARS','RF','MAXENT' 
@@ -38,11 +38,11 @@ env_var_files = c("bio1.tif", "bio7.tif", "bio12.tif", "bio15.tif") #choose bioc
 plot_graphs = T #plot graphs of results (T) or not (F)
 EM_fit = T #if you want to run the model fitting = T
 EM_ensemble = T #if you want to run the ensemble modelling = T
-EM_project = T #if you want to project the model results = T
+EM_project = F #if you want to project the model results = T
 create_response_curves = F
 apply_biomod2_fixes = T #if running large models use this option - solves memory problems
 overwriteData = F #T if want to overwrite and F if not
-paralelize=F #turn on multi instance auto start
+paralelize=T #turn on multi instance auto start
 
 #################################
 ####CONFIG FOR SPECIFIC STEPS####
@@ -106,7 +106,6 @@ dir.create(dir_for_temp_files, showWarnings=F, recursive=T)
 n_instances=length(list.files(working_dir, pattern="^00instance"))
 cpucores=as.integer(Sys.getenv('NUMBER_OF_PROCESSORS'))
 if (paralelize){
-  Sys.sleep(6) 
   if (cpucores>length(spp_nm)){cpucores=length(spp_nm)}
   jnkn=length(spp_nm)
   x=c(1:jnkn)
@@ -120,7 +119,7 @@ if (paralelize){
   }
   time=Sys.time()
   time=str_replace_all(time,":", ".")
-  instance_file=paste0("00instance_",n_instances+1,spp_str,"_",time)
+  instance_file=paste0("00instance",spp_str,"_",time)
   file.create(paste0(working_dir,"/",instance_file),showWarnings=F)  
 }
 

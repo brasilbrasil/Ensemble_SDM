@@ -25,7 +25,7 @@ if (machine == 1){
 ####GENERAL MODEL CONFIGURATION####
 ###################################
 #setting file locations 
-project_name='full500run__newclim_100m_noRF__P_A_medPAdens_1' #assign project name to the current run
+project_name='full100run__newclim_100m_noRF__P_A_medPAdens_1' #assign project name to the current run
 
 #choose species of interest - all (from CSV file) or subset listed
 run_all_spp = F #if running all species enter "T" and if only subset enter "F"
@@ -48,11 +48,11 @@ paralelize=T #turn on multi instance auto start
 ####CONFIG FOR SPECIFIC STEPS####
 #################################
 ####fit config (script#1)
-NbRunEval = 10 #number of evaluation runs for ensemble modeling
+NbRunEval = 5 #number of evaluation runs for ensemble modeling
 include_Abs = T #in test phase
 PseudoAbs_outside_CE = T #if T, will only consider Pseudo Absences outside climate envelope of all points collected
 dens_PAs_outside_CE=1 #if 1 will create PA density that is equal to point density within surveyed areas
-PA.nb.rep = 50
+PA.nb.rep = 20
 PA.nb.absences = 10000 #asssign number of Pseudo absence points (if PseudoAbs_outside_CE = T, this will be overridden! (n of PAs will be determined by P/A point density within CE)) 
 candidatePAperPA=50 #only used if if PAs_outside_CE = F, if value == 0, will use PA.nb.absences   
 PA.strategy = "random" #strategy for selecting pseudo absences ('random', 'sre', 'disk' or 'user.defined')
