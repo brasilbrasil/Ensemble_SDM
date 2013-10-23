@@ -25,11 +25,11 @@ if (machine == 1){
 ####GENERAL MODEL CONFIGURATION####
 ###################################
 #setting file locations 
-project_name='full100run__newclim_100m_noRF__P_medPAdens_100' #assign project name to the current run
+project_name='finaltest_newdata_newcode' #assign project name to the current run
 
 #choose species of interest - all (from CSV file) or subset listed
 run_all_spp = F #if running all species enter "T" and if only subset enter "F"
-spp_subset = c('Akekee', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'Anianiau', 'Apapane', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Hawaii_Elepaio', 'Iiwi', 'Kauai_Amakihi', 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Oahu_Amakihi', 'Oahu_Elepaio', 'Omao', 'Palila', 'Puaiohi', 'Hawaii_Amakihi', 'Amakihi', 'Elepaio')
+spp_subset = c('Palila', 'Hawaii_Akepa', 'Maui_Parrotbill', 'Puaiohi')
 
 #Biomod2 modelling options for species of interest
 models_to_run = c('GBM','MAXENT') #choose biomod2 models to run - possibilities are: 'GLM','GBM','GAM','CTA','ANN','SRE','FDA','MARS','RF','MAXENT' 
@@ -42,19 +42,19 @@ EM_project = T #if you want to project the model results = T
 create_response_curves = F
 apply_biomod2_fixes = T #if running large models use this option - solves memory problems
 overwriteData = F #T if want to overwrite and F if not
-paralelize=T #turn on multi instance auto start
+paralelize=F #turn on multi instance auto start
 
 #################################
 ####CONFIG FOR SPECIFIC STEPS####
 #################################
 ####fit config (script#1)
-NbRunEval = 10 #number of evaluation runs for ensemble modeling
-include_Abs = F #in test phase
-PseudoAbs_outside_CE = F #if T, will only consider Pseudo Absences outside climate envelope of all points collected
+NbRunEval = 4 #number of evaluation runs for ensemble modeling
+include_Abs = T #in test phase
+PseudoAbs_outside_CE = T #if T, will only consider Pseudo Absences outside climate envelope of all points collected
 dens_PAs_outside_CE=1 #if 1 will create PA density that is equal to point density within surveyed areas
-PA.nb.rep = 50
+PA.nb.rep = 5
 PA.nb.absences = 10000 #asssign number of Pseudo absence points (if PseudoAbs_outside_CE = T, this will be overridden! (n of PAs will be determined by P/A point density within CE)) 
-candidatePAperPA=100 #only used if if PAs_outside_CE = F, if value == 0, will use PA.nb.absences   
+candidatePAperPA=50 #only used if if PAs_outside_CE = F, if value == 0, will use PA.nb.absences   
 PA.strategy = "random" #strategy for selecting pseudo absences ('random', 'sre', 'disk' or 'user.defined')
 equiv_100m = 0.0009430131
 PA.dist.min = 5*equiv_100m #500m min distance from actual data points - only for 'disk' absences selection
@@ -104,8 +104,10 @@ dir.create(dir_for_temp_files, showWarnings=F, recursive=T)
 
 #this code below will subset species into the right number of instances started with the bat file                        
 n_instances=length(list.files(working_dir, pattern="^00instance"))
-cpucores=as.integer(Sys.getenv('NUMBER_OF_PROCESSORS'))
+#cpucores=as.integer(Sys.getenv('NUMBER_OF_PROCESSORS'))
+cpucores=12
 if (paralelize){
+  Sys.sleep(6) 
   if (cpucores>length(spp_nm)){cpucores=length(spp_nm)}
   jnkn=length(spp_nm)
   x=c(1:jnkn)
@@ -119,7 +121,7 @@ if (paralelize){
   }
   time=Sys.time()
   time=str_replace_all(time,":", ".")
-  instance_file=paste0("00instance",spp_str,"_",time)
+  instance_file=paste0("00instance_",n_instances+1,spp_str,"_",time)
   file.create(paste0(working_dir,"/",instance_file),showWarnings=F)  
 }
 

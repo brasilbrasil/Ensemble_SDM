@@ -317,9 +317,9 @@ for (sp_nm in spp_nm){
       emsBinStack <- stack(get(paste0("TotalConsensus_EMBinnedby_", eval_stats[1])))
       if(length(eval_stats)>1){
         for (i in 2:length(eval_stats)){
-          emsScaledBinStack <- addLayer(emsScaledBinStack, get(totalConsScaledBinNm))
-          emsBinStack <- addLayer(emsBinStack, get(totalConsBinNm))
-      }
+          emsScaledBinStack <- addLayer(emsScaledBinStack, get(paste("TotalConsensus_EMScaledandBinnedby_", eval_stats[i], sep="")))
+          emsBinStack <- addLayer(emsBinStack, get(paste("TotalConsensus_EMBinnedby_", eval_stats[i], sep="")))
+      }}
 
       ###STOPPED HERE###
 
@@ -334,21 +334,21 @@ for (sp_nm in spp_nm){
       
       gc = c('antiquewhite1', 'transparent')
       col5 <- colorRampPalette(c('blue', 'sandybrown', 'darkgreen'))
-      jnk <- subset(ems_b, 1)
-      try(plot(ems_a[[1]],  col = col5(255), useRaster=useRasterDef, axes = TRUE, addfun=F, interpolate = interpolateDef, legend = F, add = F, bg = "transparent"),silent=T)
+      jnk <- subset(emsBinStack, 1)
+      try(plot(emsScaledBinStack[[1]],  col = col5(255), useRaster=useRasterDef, axes = TRUE, addfun=F, interpolate = interpolateDef, legend = F, add = F, bg = "transparent"),silent=T)
       plot(jnk, col = gc, useRaster=useRasterDef, axes = F, addfun=F, interpolate = interpolateDef, legend = F, add = T)
       
       if (length(eval_stats)>1){ 
         par(mar=c(2, 0, 1.5, 0))
-        jnk <- subset(ems_b, 2)
-        try(plot(ems_a[[2]], col = col5(255), useRaster=useRasterDef, axes = TRUE,interpolate = interpolateDef, legend = F, yaxt = 'n', add = F, bg = "transparent"),silent=T)  # addfun=F, 
+        jnk <- subset(emsBinStack, 2)
+        try(plot(emsScaledBinStack[[2]], col = col5(255), useRaster=useRasterDef, axes = TRUE,interpolate = interpolateDef, legend = F, yaxt = 'n', add = F, bg = "transparent"),silent=T)  # addfun=F, 
         plot(jnk, col = gc, useRaster=useRasterDef, axes = F, addfun=F, interpolate = interpolateDef, yaxt = 'n', legend = F, add = T)
       }
       
       if (length(eval_stats)>2){ 
         par(mar=c(2, 0, 1.5, 3.5))
-        jnk <- subset(ems_b, 3)
-        try(plot(ems_a[[3]], col = col5(255), useRaster=useRasterDef, axes = T, interpolate = interpolateDef, legend = T, yaxt = 'n', add = F, bg = "transparent"),silent=T)
+        jnk <- subset(emsBinStack, 3)
+        try(plot(emsScaledBinStack[[3]], col = col5(255), useRaster=useRasterDef, axes = T, interpolate = interpolateDef, legend = T, yaxt = 'n', add = F, bg = "transparent"),silent=T)
         plot(jnk, col = gc, useRaster=useRasterDef, axes = F, interpolate = interpolateDef, legend = F, add = T)
       }
       

@@ -25,7 +25,7 @@ if (machine == 1){
 ####GENERAL MODEL CONFIGURATION####
 ###################################
 #setting file locations 
-project_name='full100run__newclim_100m_noRF__P_medPAdens_100' #assign project name to the current run
+project_name='multi_instance_testrun__newclim_100m_noRF__P_A_medPAdens_1' #assign project name to the current run
 
 #choose species of interest - all (from CSV file) or subset listed
 run_all_spp = F #if running all species enter "T" and if only subset enter "F"
@@ -33,12 +33,12 @@ spp_subset = c('Akekee', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'Anianiau', 'Apap
 
 #Biomod2 modelling options for species of interest
 models_to_run = c('GBM','MAXENT') #choose biomod2 models to run - possibilities are: 'GLM','GBM','GAM','CTA','ANN','SRE','FDA','MARS','RF','MAXENT' 
-eval_stats=c("ROC", "KAPPA", "TSS") #choose evaluation methods - possibilties are: 'KAPPA','TSS','ROC'
+eval_stats = c('ROC') #choose evaluation methods - possibilties are: 'KAPPA','TSS','ROC'
 env_var_files = c("bio1.tif", "bio7.tif", "bio12.tif", "bio15.tif") #choose bioclimatic variables of interest
 plot_graphs = T #plot graphs of results (T) or not (F)
 EM_fit = T #if you want to run the model fitting = T
 EM_ensemble = T #if you want to run the ensemble modelling = T
-EM_project = T #if you want to project the model results = T
+EM_project = F #if you want to project the model results = T
 create_response_curves = F
 apply_biomod2_fixes = T #if running large models use this option - solves memory problems
 overwriteData = F #T if want to overwrite and F if not
@@ -48,13 +48,13 @@ paralelize=T #turn on multi instance auto start
 ####CONFIG FOR SPECIFIC STEPS####
 #################################
 ####fit config (script#1)
-NbRunEval = 10 #number of evaluation runs for ensemble modeling
-include_Abs = F #in test phase
-PseudoAbs_outside_CE = F #if T, will only consider Pseudo Absences outside climate envelope of all points collected
+NbRunEval = 5 #number of evaluation runs for ensemble modeling
+include_Abs = T #in test phase
+PseudoAbs_outside_CE = T #if T, will only consider Pseudo Absences outside climate envelope of all points collected
 dens_PAs_outside_CE=1 #if 1 will create PA density that is equal to point density within surveyed areas
-PA.nb.rep = 50
+PA.nb.rep = 5
 PA.nb.absences = 10000 #asssign number of Pseudo absence points (if PseudoAbs_outside_CE = T, this will be overridden! (n of PAs will be determined by P/A point density within CE)) 
-candidatePAperPA=100 #only used if if PAs_outside_CE = F, if value == 0, will use PA.nb.absences   
+candidatePAperPA=50 #only used if if PAs_outside_CE = F, if value == 0, will use PA.nb.absences   
 PA.strategy = "random" #strategy for selecting pseudo absences ('random', 'sre', 'disk' or 'user.defined')
 equiv_100m = 0.0009430131
 PA.dist.min = 5*equiv_100m #500m min distance from actual data points - only for 'disk' absences selection
