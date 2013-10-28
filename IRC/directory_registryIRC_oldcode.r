@@ -2,9 +2,9 @@
 ####Setting data directories#######
 ###################################
 
-rootDir = "C:/USGS_Honolulu" #for server rootDir = "Y:/"
+rootDir = "C:/USGS_Honolulu"
 dataDir = paste0(rootDir, "/PICCC_data") #where the original data exists for SDM (PA species and environmental data) - same for server
-codeDir = paste0(rootDir, "/PICCC_code/Ensemble_SDM/IRC")  
+codeDir = paste0(rootDir, "/PICCC_code/Ensemble_SDM")  
 
 analysisDir = paste0(rootDir, "/PICCC_analysis/biomod2") #same for server - assigns location for analysis directory (results)
 resultsDir = paste0(analysisDir,"/results")
