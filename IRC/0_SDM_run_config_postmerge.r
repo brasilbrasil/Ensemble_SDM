@@ -42,7 +42,7 @@ EM_project = F #if you want to project the model results = T
 create_response_curves = F
 apply_biomod2_fixes = F #if running large models use this option - solves memory problems
 overwriteData = F #T if want to overwrite and F if not
-paralelize=F #turn on multi instance auto start
+paralelize = F #turn on multi instance auto start
 
 #################################
 ####CONFIG FOR SPECIFIC STEPS####
