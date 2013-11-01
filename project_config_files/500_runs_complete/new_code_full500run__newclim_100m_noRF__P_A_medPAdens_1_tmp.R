@@ -29,7 +29,7 @@ project_name='full100run__newclim_100m_noRF__P_A_medPAdens_1' #assign project na
 
 #choose species of interest - all (from CSV file) or subset listed
 run_all_spp = F #if running all species enter "T" and if only subset enter "F"
-spp_subset = c('Akekee', 'Hawaii_Amakihi', 'Akiapolauu', 'Apapane', 'Akikiki', 'Akohekohe', 'Anianiau', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Hawaii_Elepaio', 'Iiwi', 'Kauai_Amakihi', 'Kauai_Elepaio', 'Maui_Alauahio', 'Amakihi', 'Maui_Parrotbill', 'Oahu_Amakihi', 'Omao', 'Oahu_Elepaio', 'Palila', 'Puaiohi', 'Elepaio')
+spp_subset = c('Akekee', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'Anianiau', 'Apapane', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Hawaii_Elepaio', 'Iiwi', 'Kauai_Amakihi', 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Oahu_Amakihi', 'Oahu_Elepaio', 'Omao', 'Palila', 'Puaiohi', 'Hawaii_Amakihi', 'Amakihi', 'Elepaio')
 
 #Biomod2 modelling options for species of interest
 models_to_run = c('GBM','MAXENT') #choose biomod2 models to run - possibilities are: 'GLM','GBM','GAM','CTA','ANN','SRE','FDA','MARS','RF','MAXENT' 
@@ -64,7 +64,7 @@ do.full.models = T
 eval.metric.threshold = rep(0.5,length(eval_stats)) #sets the minimum scores below which models will be excluding when building ensembles
 
 ####projection config (script#3)
-baseline_or_future = 1 #1 for baseline, 4 for future
+baseline_or_future = 4 #1 for baseline, 4 for future
 clampingMask = F #if T clamping mask will be saved
 memory = T #keep.in.memory = memory; if T and clamping Mask = T, clamping mask will be saved to hard drive 
 

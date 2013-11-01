@@ -1,11 +1,13 @@
 rm(list = ls()) #remove all past worksheet variables
-
+source(paste0("C:/Users/lfortini/","directory_registry.r"))
 ###USER CONFIGURATION
-source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
-local_config_dir=paste0(DR_FB_SDM_results_S,'test_runs_500m/') #'C:/Users/lfortini/'
+#source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
+#local_config_dir=paste0(DR_FB_SDM_results_S,'test_runs_500m/') #'C:/Users/lfortini/'
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
 #spp_nm=c("Anianiau", "Kauai_Amakihi", "Hawaii_Elepaio", "Palila")
-spp_nm=c("Akekee", "Anianiau", "Kauai_Amakihi", "Oahu_Amakihi","Hawaii_Akepa", "Hawaii_Elepaio", "Palila")
+spp_nm=c('Akekee', 'Apapane', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'Hawaii_Akepa', 'Anianiau', 'Hawaii_Creeper', 'Kauai_Amakihi', 'Hawaii_Elepaio', 'Kauai_Elepaio', 'Amakihi', 'Maui_Alauahio', 'Hawaii_Amakihi', 'Maui_Parrotbill', 'Oahu_Elepaio', 'Palila','Elepaio')
+#'Iiwi',  'Puaiohi',  'Oahu_Amakihi',  'Omao', 
+project_name='finalmodel_P_A_PA_oldcode'
 
 
 
@@ -22,12 +24,12 @@ if (server==1){
   working_dir='Y:/FB_analysis/FB_Base_And_Future/all_DD_merged/'
   clim_data_dir="Y:/SDM_env_data/bioclim_variables/full extent bioclim data/all_grd/all_baseline/250m/" 
 }else{
-  working_dir='C:/Users/lfortini/Data/biomod2/test/'
-  clim_data_dir="C:/Users/lfortini/Data/SDM_env_data/all_grd/all_baseline/100m/"
+  working_dir=paste0(resultsDir,project_name,'/')
+  clim_data_dir=paste0(bioclimData2013Dir,"all_baseline/500m/")
 }
 overwrite=0 #if 1, will overwrite past results
-current_biome_distribution_dir="Y:/FB_analysis/veg_overlay/current_veg_mask/"
-projected_biome_distribution_dir="Y:/FB_analysis/veg_overlay/projected_veg_mask/"
+current_biome_distribution_dir="Y:/PICCC_analysis/FB_analysis/habitat analysis/veg_overlay/current_veg_mask/"
+projected_biome_distribution_dir="Y:/PICCC_analysis/FB_analysis/habitat analysis/veg_overlay/projected_veg_mask/"
 
 
 ####START UNDERHOOD
@@ -55,7 +57,7 @@ for (sp_nm in spp_nm){
       raster_name=raster_names[i]
       raster_name_bin=raster_names_bin[i]
       file_name1=paste(sp_nm,"/proj_", proj_nm, "/",sp_nm,"_AllData_Full_AllAlgos_EM.",eval_stat, sep = "")
-      file_name2=paste(sp_nm,"/proj_", proj_nm, "/proj_", proj_nm, "_",sp_nm,"_AllData_Full_AllAlgos_EMby",eval_stat, ".grd", sep = "")
+      file_name2=paste(sp_nm,"/proj_", proj_nm, "/proj_", proj_nm, "_",sp_nm,"_TotalConsensus_EMby",eval_stat,".grd", sep = "")
       if (file.exists(file_name1)){ 
         load(file_name1)
         assign("temp_raster", get(paste(sp_nm,"_AllData_Full_AllAlgos_EM.",eval_stat, sep = "")))  
@@ -69,7 +71,7 @@ for (sp_nm in spp_nm){
       }
       
       file_name1_bin=paste(sp_nm,"/proj_", proj_nm, "/",sp_nm,"_AllData_Full_AllAlgos_EM.",eval_stat,".bin.",eval_stat, sep = "")
-      file_name2_bin=paste(sp_nm,"/proj_", proj_nm, "/proj_", proj_nm, "_",sp_nm,"_AllData_Full_AllAlgos_EMby",eval_stat, "_", eval_stat, "bin.grd", sep = "")
+      file_name2_bin=paste(sp_nm,"/proj_", proj_nm, "/proj_", proj_nm, "_",sp_nm,"_TotalConsensus_EMby",eval_stat,"_",eval_stat,"bin.grd", sep = "")
       if (file.exists(file_name1_bin)){       
         load(file_name1_bin)
         assign("temp_raster_bin", get(paste(sp_nm,"_AllData_Full_AllAlgos_EM.",eval_stat,".bin.",eval_stat, sep = "")))      
