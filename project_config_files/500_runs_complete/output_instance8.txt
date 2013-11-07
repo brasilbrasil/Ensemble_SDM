@@ -44,7 +44,7 @@ Type 'q()' to quit R.
 > ####GENERAL MODEL CONFIGURATION####
 > ###################################
 > #setting file locations 
-> project_name='full500run__newclim_100m_noRF__P_A_medPAdens_1' #assign project name to the current run
+> project_name='full100run__newclim_100m_noRF__P_A_medPAdens_1' #assign project name to the current run
 > 
 > #choose species of interest - all (from CSV file) or subset listed
 > run_all_spp = F #if running all species enter "T" and if only subset enter "F"
@@ -67,11 +67,11 @@ Type 'q()' to quit R.
 > ####CONFIG FOR SPECIFIC STEPS####
 > #################################
 > ####fit config (script#1)
-> NbRunEval = 10 #number of evaluation runs for ensemble modeling
+> NbRunEval = 5 #number of evaluation runs for ensemble modeling
 > include_Abs = T #in test phase
 > PseudoAbs_outside_CE = T #if T, will only consider Pseudo Absences outside climate envelope of all points collected
 > dens_PAs_outside_CE=1 #if 1 will create PA density that is equal to point density within surveyed areas
-> PA.nb.rep = 50
+> PA.nb.rep = 20
 > PA.nb.absences = 10000 #asssign number of Pseudo absence points (if PseudoAbs_outside_CE = T, this will be overridden! (n of PAs will be determined by P/A point density within CE)) 
 > candidatePAperPA=50 #only used if if PAs_outside_CE = F, if value == 0, will use PA.nb.absences   
 > PA.strategy = "random" #strategy for selecting pseudo absences ('random', 'sre', 'disk' or 'user.defined')
@@ -83,7 +83,7 @@ Type 'q()' to quit R.
 > eval.metric.threshold = rep(0.5,length(eval_stats)) #sets the minimum scores below which models will be excluding when building ensembles
 > 
 > ####projection config (script#3)
-> baseline_or_future = 1 #1 for baseline, 4 for future
+> baseline_or_future = 4 #1 for baseline, 4 for future
 > clampingMask = F #if T clamping mask will be saved
 > memory = T #keep.in.memory = memory; if T and clamping Mask = T, clamping mask will be saved to hard drive 
 > 
@@ -143,3 +143,91 @@ Type 'q()' to quit R.
 +   instance_file=paste0("00instance_",n_instances+1,spp_str,"_",time)
 +   file.create(paste0(working_dir,"/",instance_file),showWarnings=F)  
 + }
+[1] TRUE
+> 
+> 
+> ####Runs script for model fitting, creating ensemble models, and projecting models according to settings above.
+> ##start the clock
+> ptmOverallStart <- proc.time()
+> 
+> if (EM_fit){ #runs fitting code
++   source(paste0(codeDir,"/1_BM2_FB_SDM_fitting_w_cropping4_postmerge.r")) 
++ }
+Loading required package: abind
+Loading required package: sp
+Loading required package: raster
+Loading required package: rasterVis
+Loading required package: lattice
+Loading required package: latticeExtra
+Loading required package: RColorBrewer
+Loading required package: hexbin
+Loading required package: grid
+Loading required package: nnet
+Loading required package: gbm
+Loading required package: survival
+Loading required package: splines
+Loading required package: parallel
+Loaded gbm 2.1
+Loading required package: mda
+Loading required package: class
+Loaded mda 0.4-4
+
+Loading required package: randomForest
+randomForest 4.6-7
+Type rfNews() to see new features/changes/bug fixes.
+Loading required package: rpart
+Loading required package: pROC
+Loading required package: plyr
+Type 'citation("pROC")' for a citation.
+
+Attaching package: 'pROC'
+
+The following object is masked from 'package:stats':
+
+    cov, smooth, var
+
+biomod2 2.1.15 loaded.
+
+ Copying of necessary files is complete
+ Maui_Parrotbill model fitting...
+ fitting for  Maui_Parrotbill already done...
+ Oahu_Amakihi model fitting...
+ fitting for  Oahu_Amakihi already done...> if (create_response_curves){
++   source(paste0(codeDir,"/2opt_BM2_FB_SDM_response_curves3.r"))
++ }
+> if (EM_ensemble){ #runs ensemble code
++   source(paste0(codeDir,"/2_BM2_FB_SDM_EM_fitting2_IRC.r")) 
++ }
+
+ Maui_Parrotbill ensemble creation...
+ Maui_Parrotbill ensemble previously done...
+ Oahu_Amakihi ensemble creation...
+ Oahu_Amakihi ensemble previously done...Warning message:
+In memory.limit(size = 4095) : cannot decrease memory limit: ignored
+> if (EM_project){ #runs projection code
++   source(paste0(codeDir,"/3_BM2_FB_SDM_EM_projection_with_crop4_IRC.r")) 
++ }
+
+ Maui_Parrotbill model projection...
+ Maui_Parrotbill previously calculated...
+ Oahu_Amakihi model projection...
+ Oahu_Amakihi previously calculated...> 
+> ##stop the clock
+> ptmOverallElaps = proc.time() - ptmOverallStart #calculates time it took to run all code
+> jnk = as.numeric(ptmOverallElaps[3])/length(spp_nm) #assigns temporary variable to the numeric value of the time elapsed per species
+> jnk = jnk/60 #converts elapsed time into minutes
+> cat('\n','It took ', jnk, "minutes (on average) to model each species with",
++     length(models_to_run), " model types") #sign-posting
+
+ It took  0.03233333 minutes (on average) to model each species with 2  model types> 
+> if (paralelize){
++   file.remove(paste0(working_dir,instance_file))
++ }
+[1] FALSE
+Warning message:
+In file.remove(paste0(working_dir, instance_file)) :
+  cannot remove file 'D:/PICCC_analysis/FB_analysis/model_results/biomod2/full100run__newclim_100m_noRF__P_A_medPAdens_100instance_8__Maui_Parrotbill__Oahu_Amakihi_2013-10-22 15.14.39', reason 'No such file or directory'
+> 
+> proc.time()
+   user  system elapsed 
+   4.10    0.26   10.35 

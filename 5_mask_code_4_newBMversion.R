@@ -1,13 +1,11 @@
 rm(list = ls()) #remove all past worksheet variables
 source(paste0("C:/Users/lfortini/","directory_registry.r"))
 ###USER CONFIGURATION
-#source(paste0("Y:/PICCC_analysis/code/","directory_registry.r"))
-#local_config_dir=paste0(DR_FB_SDM_results_S,'test_runs_500m/') #'C:/Users/lfortini/'
-#spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
-#spp_nm=c("Anianiau", "Kauai_Amakihi", "Hawaii_Elepaio", "Palila")
-spp_nm=c('Akekee', 'Apapane', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'Hawaii_Akepa', 'Anianiau', 'Hawaii_Creeper', 'Kauai_Amakihi', 'Hawaii_Elepaio', 'Kauai_Elepaio', 'Amakihi', 'Maui_Alauahio', 'Hawaii_Amakihi', 'Maui_Parrotbill', 'Oahu_Elepaio', 'Palila','Elepaio')
-#'Iiwi',  'Puaiohi',  'Oahu_Amakihi',  'Omao', 
-project_name='finalmodel_P_A_PA_oldcode'
+spp_nm=c('Akekee', 'Apapane', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'Hawaii_Akepa', 'Anianiau', 'Hawaii_Creeper', 'Kauai_Amakihi', 'Hawaii_Elepaio', 'Kauai_Elepaio', 'Amakihi', 'Maui_Alauahio', 'Hawaii_Amakihi', 'Maui_Parrotbill', 'Oahu_Elepaio', 'Palila','Puaiohi', 'Elepaio', 'Omao','Iiwi', 'Oahu_Amakihi')
+#'Iiwi', 'Elepaio', 'Puaiohi', 'Oahu_Amakihi',  'Omao'      
+#project_name='finalmodel_P_PA_oldcode'
+#project_name='finalmodel_P_A_PA_oldcode'
+project_name='finalmodel_P_A_PA_oldcode_Tmin_Tmax_ppt'
 
 
 
@@ -37,6 +35,17 @@ setwd(working_dir)
 library(biomod2)
 library(stringr)
 
+save_raster_fx=function(raster_img,out_nm){
+  jpeg_name=paste(out_nm, ".jpg", sep = "")
+  out_raster_name=paste(out_nm, ".jpg", sep = "")
+  jpeg(jpeg_name,
+       width = 10, height = 8, units = "in",
+       pointsize = 12, quality = 90, bg = "white", res = 300)
+  plot(raster_img)
+  dev.off()    
+  writeRaster(raster_img, out_raster_name, format="GTiff", overwrite=TRUE)        
+}
+dir.create('output_rasters/main/',showWarnings=F)
 sp_nm=spp_nm[1]
 for (sp_nm in spp_nm){
   sp_nm=as.character(sp_nm)  
@@ -49,6 +58,7 @@ for (sp_nm in spp_nm){
   out_raster_name00=paste(out_nm,".tif", sep = "")
   if (file.exists(out_raster_name00)==F | overwrite==1){
     
+    ##binary maps
     raster_names=c("EM_suitability1", "EM_suitability2")
     raster_names_bin=c("EM_BIN1", "EM_BIN2")
     i=1
@@ -80,35 +90,32 @@ for (sp_nm in spp_nm){
         assign(raster_name_bin, raster(temp_raster_bin, layer=band_n))    
         }else{
         temp_raster_bin=raster(file_name2_bin)  
-        assign(raster_name_bin, temp_raster_bin)    
-        
+        assign(raster_name_bin, temp_raster_bin)            
       }
             
       #output suitability rasters for each image
       out_nm=paste('output_rasters/', sp_nm0,"_", "suitability_",proj_nm,"_",eval_stat,"_",ensemble_type,".jpg", sep = "")
-      jpeg_name=paste(out_nm, ".jpg", sep = "")
-      out_raster_name=paste(out_nm, ".jpg", sep = "")
-      jpeg(jpeg_name,
-           width = 10, height = 8, units = "in",
-           pointsize = 12, quality = 90, bg = "white", res = 300)
-      plot(get(raster_name))
-      dev.off()    
-      writeRaster(get(raster_name), out_raster_name, format="GTiff", overwrite=TRUE)
+      save_raster_fx(get(raster_name),out_nm)
       
       #output bin rasters for each image    
       out_nm=paste('output_rasters/', sp_nm0,"_", "BIN_",proj_nm,"_",eval_stat,"_",ensemble_type,".jpg", sep = "")
-      jpeg_name=paste(out_nm, ".jpg", sep = "")
-      out_raster_name=paste(out_nm, ".jpg", sep = "")
+      save_raster_fx(get(raster_name_bin),out_nm)
+
       
-      jpeg(jpeg_name,
-           width = 10, height = 8, units = "in",
-           pointsize = 12, quality = 90, bg = "white", res = 300)
-      plot(get(raster_name_bin))
-      dev.off()
-      writeRaster(get(raster_name_bin), out_raster_name, format="GTiff", overwrite=TRUE)
-      
-    }  
+    }
     cat('\n','done with loading baseline and future rasters for ', sp_nm)
+    
+    #masked suitability
+    masked_suitability1=EM_BIN1*EM_suitability1
+    out_nm=paste('output_rasters/', sp_nm0,"_", "clipped_suitability_",comp_projects[1],"_",eval_stat,"_",ensemble_type, sep = "")
+    save_raster_fx(masked_suitability1,out_nm)
+    masked_suitability2=EM_BIN2*EM_suitability2
+    out_nm=paste('output_rasters/', sp_nm0,"_", "clipped_suitability_",comp_projects[2],"_",eval_stat,"_",ensemble_type, sep = "")
+    save_raster_fx(masked_suitability2,out_nm)
+    suitability_change=EM_suitability2-EM_suitability1
+    out_nm=paste('output_rasters/', sp_nm0,"_", "suitability_change_",eval_stat,"_",ensemble_type, sep = "")
+    save_raster_fx(suitability_change,out_nm)
+    
     jnk=EM_BIN2*10
     BIN_dif=EM_BIN1+jnk
     m  =  c(9.9,  10.1,  3, 10.9, 11.1, 2)
