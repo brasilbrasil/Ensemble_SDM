@@ -21,5 +21,5 @@ allSppNames = paste0(analysisDir, "/spp_to_run_all.csv")
 bioclimDataDir = paste0(dataDir,"/bioclimData") #points to location of bioclimate data
 clim_data_2000 = paste(bioclimDataDir,"all_grd/all_baseline/250m", sep = "/")
 clim_data_2100 = paste(bioclimDataDir,"all_grd/all_future/500m", sep = "/")
-fitting_clim_data_dir = paste0(bioclimDataDir,"/all_grd/all_baseline/100m") 
+fitting_clim_data_dir = paste0(bioclimDataDir,"/all_grd/all_baseline/100m/") 
 necessary_run_data = paste0(analysisDir,"/necessary_run_data") #where all needed files are stored (maxent.jar, species csvs, crop rasters, etc.)

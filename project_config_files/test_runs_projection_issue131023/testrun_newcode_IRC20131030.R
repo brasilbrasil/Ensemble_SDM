@@ -8,7 +8,7 @@ options(error=stop) #this keeps the code from running after errors
 ###################################
 #local_config_dir=resultsDir
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
-spp_nm = c('Palila', 'Hawaii_Akepa', 'Maui_Parrotbill', 'Puaiohi')
+spp_nm =  c('Maui_Parrotbill')  #c('Palila', 'Hawaii_Akepa', 'Maui_Parrotbill', 'Puaiohi')
 project_name ='test20131030_newcode'
 server = 1
 overwrite = 0
@@ -34,7 +34,7 @@ if (server == 1){
   
 }
 
-env_var_files = c("bio1.tif", "bio7.tif", "bio12.tif", "bio15.tif") 
+env_var_files = c("bio1.grd", "bio7.grd", "bio12.grd", "bio15.grd") 
 crop_raster_dir = paste0(working_dir, 'map_crop/')
 csv_dir=paste0(working_dir,"single_sp_CSVs/")
 

@@ -1,15 +1,15 @@
 rm(list = ls()) #remove all past worksheet variables
 set.seed(123)
-source(paste0("C:/USGS_Honolulu/PICCC_code/Ensemble_SDM/IRC/directory_registryIRC_newcode.r"))
-options(error=stop) #this keeps the code from running after errors 
+source(paste0("C:/USGS_Honolulu/PICCC_code/Ensemble_SDM/IRC/directory_registryIRC_oldcode.r"))
+options(error = stop) #this keeps the code from running after errors 
 
 ###################################
 ####GENERAL MODEL CONFIGURATION####
 ###################################
 #local_config_dir=resultsDir
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
-spp_nm = c('Palila', 'Hawaii_Akepa', 'Maui_Parrotbill', 'Puaiohi')
-project_name ='test20131030_newcode'
+spp_nm =  c('Maui_Parrotbill')  #c('Palila', 'Hawaii_Akepa', 'Maui_Parrotbill', 'Puaiohi')
+project_name ='test20131030_oldcode_d'
 server = 1
 overwrite = 0
 paralelize = F
@@ -23,20 +23,19 @@ create_response_curves = F
 apply_biomod2_fixes = F #if running large models use this option
 
 if (server == 1){
-  working_dir = paste0(resultsDir, '/', project_name,'/')
+  working_dir=paste0(resultsDir, '/', project_name,'/')
   #fitting_clim_data_dir=paste0(DR_FB_clim_data_2013,"all_baseline/125m/") 
   #necessary_run_data=paste0(resultsDir,'necessary_run_data/') #where all needed files are stored (maxent.jar, species csvs, crop rasters, etc.)
 }else{
-  working_dir='C:/Users/lfortini/Data/biomod2/test/'
-  necessary_run_data='C:/Users/lfortini/Data/biomod2/necessary_run_data/' #where all needed files are stored (maxent.jar, species csvs, crop rasters, etc.    
-  fitting_clim_data_dir="C:/Users/lfortini/Data/SDM_env_data/all_grd/all_baseline/100m/"
-  DR_code_S=paste0(rootDir, "/Dropbox/code/") #HAD TO ADD THIS TO READ THIS FROM OLD DIRECTORY FILE 
-  
+  working_dir ='C:/Users/lfortini/Data/biomod2/test/'
+  necessary_run_data = 'C:/Users/lfortini/Data/biomod2/necessary_run_data/' #where all needed files are stored (maxent.jar, species csvs, crop rasters, etc.    
+  fitting_clim_data_dir = "C:/Users/lfortini/Data/SDM_env_data/all_grd/all_baseline/100m/"
+  #DR_code_S=paste0(rootDir, "/Dropbox/code/") #HAD TO ADD THIS TO READ THIS FROM OLD DIRECTORY FILE   
 }
 
-env_var_files = c("bio1.tif", "bio7.tif", "bio12.tif", "bio15.tif") 
+env_var_files = c("bio1.grd", "bio7.grd", "bio12.grd", "bio15.grd") 
 crop_raster_dir = paste0(working_dir, 'map_crop/')
-csv_dir=paste0(working_dir,"single_sp_CSVs/")
+csv_dir = paste0(working_dir,"single_sp_CSVs/")
 
 #################################
 ####CONFIG FOR SPECIFIC STEPS####
@@ -63,8 +62,8 @@ memory = T #keep.in.memory=memory
 dir_for_temp_files <- paste(rootDir,'/temp/', project_name,'/', baseline_or_future, '/', sep='') #dir for temp run data (to avoid memory errors)
 
 if (server==1){
-  #clim_data_2000=paste0(DR_FB_clim_data_2013,"all_baseline/500m/")
-  #clim_data_2100=paste0(DR_FB_clim_data_2013,"all_future/500m/")
+  #clim_data_2000=paste0(DR_FB_clim_data_2013,"all_baseline/500m/") #moved to directory file
+  #clim_data_2100=paste0(DR_FB_clim_data_2013,"all_future/500m/") #moved to directory file
   #clim_data_2000wettest="D:/GIS_Data/REnviroLayers/mixed_data_2000_250mwettest/"
   #clim_data_2000driest= "D:/GIS_Data/REnviroLayers/mixed_data_2000_250mdriest/"
   #clim_data_2100wettest="D:/GIS_Data/REnviroLayers/mixed_data_2100_250mwettest/"
@@ -110,16 +109,16 @@ if (paralelize){
 }
 
 if (EM_fit){
-  source(paste0(codeDir,"/1_BM2_FB_SDM_fitting_w_cropping4_postmerge.r")) #this is where all configurations are at
+  source(paste0(codeDir,"/1_BM2_FB_SDM_fitting_w_cropping4.r")) #this is where all configurations are at
 }
 if (create_response_curves){
   source(paste0(codeDir,"/2opt_BM2_FB_SDM_response_curves3.r"))
 }
 if (EM_ensemble){
-  source(paste0(codeDir,"/2_BM2_FB_SDM_EM_fitting2_IRC.r")) #this is where all configurations are at
+  source(paste0(codeDir,"/2_BM2_FB_SDM_EM_fitting2.r")) #this is where all configurations are at
 }
 if (EM_project){
-  source(paste0(codeDir,"/3_BM2_FB_SDM_EM_projection_with_crop4_IRC.r")) #this is where all configurations are at
+  source(paste0(codeDir,"/3_BM2_FB_SDM_EM_projection_with_crop4.r")) #this is where all configurations are at
 }
 
 if (paralelize){
