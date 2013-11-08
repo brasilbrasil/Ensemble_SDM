@@ -1,18 +1,20 @@
 rm(list = ls()) #remove all past worksheet variables
 source(paste0("C:/Users/lfortini/","directory_registry.r"))
 ###USER CONFIGURATION
-spp_nm=c('Akekee', 'Apapane', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'Hawaii_Akepa', 'Anianiau', 'Hawaii_Creeper', 'Kauai_Amakihi', 'Hawaii_Elepaio', 'Kauai_Elepaio', 'Amakihi', 'Maui_Alauahio', 'Hawaii_Amakihi', 'Maui_Parrotbill', 'Oahu_Elepaio', 'Palila','Puaiohi', 'Elepaio', 'Omao','Iiwi', 'Oahu_Amakihi')
-#'Iiwi', 'Elepaio', 'Puaiohi', 'Oahu_Amakihi',  'Omao'      
+spp_nm=c('Apapane', 'Akikiki', 'Akohekohe', 'Hawaii_Akepa', 'Anianiau', 'Hawaii_Creeper', 'Kauai_Amakihi', 'Hawaii_Elepaio', 'Kauai_Elepaio', 'Amakihi', 'Maui_Alauahio', 'Hawaii_Amakihi', 'Maui_Parrotbill', 'Oahu_Elepaio', 'Palila','Puaiohi', 'Elepaio', 'Omao','Iiwi', 'Oahu_Amakihi')
+#     'Akekee', 'Akiapolauu', 
 #project_name='finalmodel_P_PA_oldcode'
 #project_name='finalmodel_P_A_PA_oldcode'
-project_name='finalmodel_P_A_PA_oldcode_Tmin_Tmax_ppt'
+project_name='finalmodel_P_A_PA_oldcode_multi_eval2'
 
 
 
 comp_projects=c('baseline', 'future') #put future second!
 ensemble_type="ef.pmw"
 #working_dir='Y:/FB analysis/FB SDM/biomod2/'
-eval_stat="ROC"
+#eval_stat="ROC"
+eval_stats=c('ACCURACY', 'BIAS', 'CSI', 'ETS', 'FAR', 'POD', 'ROC','SR') 
+
 masked=FALSE
 veg_overlay=FALSE #this code is not complete!
 projected_veg_overlay=FALSE #this code is not complete!
@@ -47,6 +49,7 @@ save_raster_fx=function(raster_img,out_nm){
 }
 dir.create('output_rasters/main/',showWarnings=F)
 sp_nm=spp_nm[1]
+for (eval_stat in eval_stats){
 for (sp_nm in spp_nm){
   sp_nm=as.character(sp_nm)  
   cat('\n',sp_nm,'modeling...')
@@ -283,6 +286,7 @@ for (sp_nm in spp_nm){
   }else{
     cat('\n', sp_nm, " already calculated")
   }
+}
 }
 
 

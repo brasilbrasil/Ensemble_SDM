@@ -7,12 +7,14 @@ source(paste0("C:/Users/lfortini/","directory_registry.r"))
 ###################################
 #local_config_dir=resultsDir
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
-spp_nm=c('Akekee','Akiapolauu','Apapane','Akohekohe', 'Hawaii_Akepa', 'Iiwi', 'Hawaii_Creeper', 'Hawaii_Elepaio', 'Kauai_Elepaio', 'Amakihi', 'Maui_Alauahio', 'Hawaii_Amakihi', 'Maui_Parrotbill', 'Oahu_Amakihi',  'Omao', 'Oahu_Elepaio', 'Palila', 'Elepaio', 'Puaiohi', 'Kauai_Amakihi', 'Anianiau', 'Akikiki')
-project_name='finalmodel_P_A_PA_oldcode_multi_eval'
+spp_nm=c('Maui_Parrotbill', 'Puaiohi','Apapane', 'Akohekohe', 'Hawaii_Akepa', 'Iiwi', 'Hawaii_Creeper', 'Hawaii_Elepaio', 'Kauai_Elepaio', 'Amakihi', 'Maui_Alauahio', 'Hawaii_Amakihi', 'Oahu_Amakihi',  'Omao', 'Oahu_Elepaio', 'Palila', 'Elepaio', 'Kauai_Amakihi', 'Anianiau', 'Akikiki')
+#'Akekee','Akiapolauu',
+
+project_name='finalmodel_P_A_PA_oldcode_multi_eval2'
 server=1
 overwrite=0; paralelize=F
 models_to_run=c('GBM','MAXENT')
-eval_stats=c('KAPPA', 'TSS', 'ROC', 'FAR', 'SR', 'ACCURACY', 'BIAS', 'POD', 'CSI', 'ETS')
+eval_stats=c('ROC', 'FAR', 'SR', 'ACCURACY', 'BIAS', 'POD', 'CSI', 'ETS')
 plot_graphs=1
 EM_fit=T
 EM_ensemble=T
@@ -32,7 +34,7 @@ if (server==1){
   
 }
 
-env_var_files=c("bio5.tif", "bio6.tif", "bio12.tif") 
+env_var_files=c("bio1.tif", "bio7.tif", "bio12.tif", "bio15.tif") 
 crop_raster_dir=paste(working_dir, 'map_crop/',sep="")
 csv_dir=paste(working_dir,"single_sp_CSVs/", sep="")
 
