@@ -39,12 +39,33 @@ for (sp_nm in spp_nm){
     # print variable importances
     getModelsVarImport(myBiomodModelOut)
     
+    
+    ###################################################
+    ###new code- remove models with bad cutoffs
+    jnk=myBiomodModelEval[,2,,,]
+    NAs=which(is.na(jnk))
+    all_models=list()
+    for (d in dimnames(jnk)[[4]]){
+      for (c in dimnames(jnk)[[3]]){
+        for (b in dimnames(jnk)[[2]]){
+          for (a in dimnames(jnk)[[1]]){
+            jnk_str=paste(sp_nm,d,c,b,a,sep="_")
+            jnk_str2=paste(sp_nm,d,c,b,sep="_")
+            all_models[length(all_models)+1]=jnk_str2
+          }}}}
+    bad_models_short=all_models[NAs]
+    bad_models_short=unique(bad_models_short)
+    jnk_good=!(all_models %in% bad_models_short)
+    remaining_models=all_models[jnk_good]
+    remaining_models=unlist(unique(remaining_models))
+    
+    
     ###################################################
     ### code chunk number 11: ensemble_modeling
     ###################################################
     myBiomodEM <- BIOMOD_EnsembleModeling(
       modeling.output = myBiomodModelOut,
-      chosen.models = 'all', #these are not model types (e.g., GBM), but model runs (e.g., PA1_RF)
+      chosen.models = remaining_models, #these are not model types (e.g., GBM), but model runs (e.g., PA1_RF)
       em.by='all',
       eval.metric = eval_stats, #c('TSS', 'ROC', 'KAPPA'); 'all', #c('TSS', 'ROC'),
       eval.metric.quality.threshold = eval.metric.threshold,
@@ -65,7 +86,7 @@ for (sp_nm in spp_nm){
     myBiomodEM
     # get evaluation scores
     getEMeval(myBiomodEM)    
-    save("myBiomodEM", "myBiomodModelOut", file=workspace_name_out)   #save workspace
+    save("myBiomodEM", "myBiomodModelOut","remaining_models", file=workspace_name_out)   #save workspace
     
     }else{
     cat('\n',sp_nm,'ensemble previously done...')
