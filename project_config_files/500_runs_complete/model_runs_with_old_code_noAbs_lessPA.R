@@ -7,10 +7,11 @@ source(paste0("C:/Users/lfortini/","directory_registry.r"))
 ###################################
 #local_config_dir=resultsDir
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
-spp_nm = c('Akekee', 'Hawaii_Amakihi', 'Akiapolauu', 'Apapane', 'Akikiki', 'Akohekohe', 'Anianiau', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Oahu_Amakihi','Hawaii_Elepaio', 'Iiwi', 'Kauai_Elepaio', 'Maui_Alauahio', 'Amakihi', 'Maui_Parrotbill', 'Omao', 'Oahu_Elepaio', 'Palila', 'Puaiohi', 'Elepaio', 'Kauai_Amakihi')
-project_name='finalmodel_P_PA_oldcode_220runs'
+spp_nm = c('Akekee', 'Hawaii_Amakihi', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'Anianiau', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Oahu_Amakihi','Hawaii_Elepaio', 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Omao', 'Oahu_Elepaio', 'Palila', 'Puaiohi', 'Kauai_Amakihi')
+#'Apapane', 'Iiwi', 'Amakihi', 'Elepaio', 
+project_name='finalmodel_P_PA_oldcode_less_PAs'
 server=1
-overwrite=0; paralelize=T
+overwrite=0; paralelize=F
 models_to_run=c('GBM','MAXENT')
 eval_stats=c("ROC","KAPPA", "TSS")
 plot_graphs=1
@@ -46,7 +47,7 @@ PAs_outside_CE=F #if T, will only consider PAs outside climate envelope of all p
 dens_PAs_outside_CE=1 #if 1 will create PA density that is equal to point density within surveyed areas
 PA.nb.rep=40
 PA.nb.absences = 10000 #only used if if PAs_outside_CE=F, this will be overridden! (n of PAs will be determined by P/A point density within CE 
-candidatePAperPA=100 #only used if if PAs_outside_CE=F, if value ==0, will use PA.nb.absences   
+candidatePAperPA=200 #only used if if PAs_outside_CE=F, if value ==0, will use PA.nb.absences   
 PA.strategy = "random"
 equiv_100m=0.0009430131
 PA.dist.min = 5*equiv_100m #500 min distance from actual data points 
@@ -55,7 +56,7 @@ do.full.models=T
 eval.metric.threshold = rep(0.5,length(eval_stats))
 
 ####projection config (script#3)
-baseline_or_future=4 #1 for baseline, 4 for future
+baseline_or_future=1 #1 for baseline, 4 for future
 memory = T #keep.in.memory=memory
 dir_for_temp_files<-paste(rootDir,'/temp/', project_name,'/', baseline_or_future, '/', sep='') #dir for temp run data (to avoid memory errors)
 

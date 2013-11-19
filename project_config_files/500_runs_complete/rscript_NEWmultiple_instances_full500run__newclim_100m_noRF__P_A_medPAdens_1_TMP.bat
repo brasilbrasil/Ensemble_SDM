@@ -25,7 +25,7 @@ START "" "C:\Program Files\R\R-3.0.1\bin\x64\R.exe" CMD BATCH "new_code_full500r
 timeout 10
 START "" "C:\Program Files\R\R-3.0.1\bin\x64\R.exe" CMD BATCH "new_code_full500run__newclim_100m_noRF__P_A_medPAdens_1_tmp.r" output_instance10.txt /b
 timeout 10
-START "" "C:\Program Files\R\R-3.0.1\bin\x64\R.exe" CMD BATCH "new_code_full500run__newclim_100m_noRF__P_A_medPAdens_1_tmp.r" output_instance11_new.txt /b
+START "" "C:\Program Files\R\R-3.0.1\bin\x64\R.exe" CMD BATCH "new_code_full500run__newclim_100m_noRF__P_A_medPAdens_1_tmp.r" output_instance11.txt /b
 timeout 10
 START "" "C:\Program Files\R\R-3.0.1\bin\x64\R.exe" CMD BATCH "new_code_full500run__newclim_100m_noRF__P_A_medPAdens_1_tmp.r" output_instance12.txt /b
 

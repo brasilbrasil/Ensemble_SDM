@@ -82,7 +82,7 @@ dir.create(working_dir, showWarnings=F)
 #this code below will subset species into the right number of instances started with the bat file                        
 Sys.sleep(6) #time for script process to show up on tasklist
 n_instances=length(list.files(working_dir, pattern="^00instance"))
-cpucores=6#as.integer(Sys.getenv('NUMBER_OF_PROCESSORS'))
+cpucores=8#as.integer(Sys.getenv('NUMBER_OF_PROCESSORS'))
 if (paralelize){
   if (cpucores>length(spp_nm)){cpucores=length(spp_nm)}
   jnkn=length(spp_nm)
