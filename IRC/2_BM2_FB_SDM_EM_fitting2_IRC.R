@@ -41,12 +41,34 @@ for (sp_nm in spp_nm){
     getModelsVarImport(myBiomodModelOut) #returns an array with model variable importances (i.e bio1, bio7, etc)
     
     ###################################################
+    ###new code- remove models with bad cutoffs
+    jnk = myBiomodModelEval[,2,,,]
+    NAs = which(is.na(jnk))
+    all_models = list()
+    for (d in dimnames(jnk)[[4]]){
+      for (c in dimnames(jnk)[[3]]){
+        for (b in dimnames(jnk)[[2]]){
+          for (a in dimnames(jnk)[[1]]){
+            jnk_str = paste(sp_nm,d,c,b,a,sep="_")
+            jnk_str2 = paste(sp_nm,d,c,b,sep="_")
+            all_models[length(all_models)+1] = jnk_str2
+          }
+        }
+      }
+    }
+    bad_models_short=all_models[NAs]
+    bad_models_short=unique(bad_models_short)
+    jnk_good=!(all_models %in% bad_models_short)
+    remaining_models=all_models[jnk_good]
+    remaining_models=unlist(unique(remaining_models))    
+    
+    ###################################################
     ### code chunk number 11: ensemble_modeling
     ###################################################
     #combines models and make ensemble predictions built with BIOMOD_Modeling in module 1
     myBiomodEM <- BIOMOD_EnsembleModeling( 
       modeling.output = myBiomodModelOut, #the output from BIOMO_Modeling in previous step
-      chosen.models = 'all', #these are not model types (e.g., GBM), but model runs (e.g., PA1_RF)
+      chosen.models = remaining_models, #these are not model types (e.g., GBM), but model runs (e.g., PA1_RF)
       em.by='all', #Available values are 'PA_dataset+repet' (default), 'PA_dataset+algo', 'PA_dataset', 'algo' and 'all'
       eval.metric = eval_stats, #c('TSS', 'ROC', 'KAPPA'); 'all', #c('TSS', 'ROC'),
       eval.metric.quality.threshold = eval.metric.threshold,
@@ -68,7 +90,7 @@ for (sp_nm in spp_nm){
     
     # get evaluation scores
     getEMeval(myBiomodEM) #returns evaluation stats (testing.data, cutoff, sensitivity, and specificity) for mean, cv, etc.    
-    save("myBiomodEM", "myBiomodModelOut", file=workspace_name_out)   #save workspace with ensemble model results to file set above.
+    save("myBiomodEM", "myBiomodModelOut","remaining_models", file = workspace_name_out)   #save workspace
     
     #Stop the clock
     ptmModule2Elaps = proc.time() - ptmModule2Start #calculates time it took to run all code

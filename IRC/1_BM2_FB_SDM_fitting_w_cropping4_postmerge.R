@@ -262,7 +262,7 @@ for (sp_nm in spp_nm){
       FileName<-paste0(sp_nm, "_ROC.csv")
       write.table(Spp_ROC, file = FileName, sep=",", col.names=NA)
     }
-    if ("KAPAA" %in% eval_stats){
+    if ("KAPPA" %in% eval_stats){
       myBiomodModelEval["KAPPA","Testing.data",,,]
       Spp_KAP<- data.frame(myBiomodModelEval["KAPPA","Testing.data",,,])
       FileName<-paste0(sp_nm, "_KAP.csv")
