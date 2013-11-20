@@ -1,8 +1,7 @@
 rm(list = ls()) #remove all past worksheet variables
 source(paste0("C:/Users/lfortini/","directory_registry.r"))
 ###USER CONFIGURATION
-spp_nm=c('Akekee', 'Apapane', 'Anianiau', 'Kauai_Elepaio', 'Amakihi', 'Maui_Alauahio', 'Hawaii_Amakihi', 'Oahu_Elepaio', 'Omao','Iiwi', 'Oahu_Amakihi')
-#project_name='finalmodel_P_PA_oldcode'
+spp_nm = c('Akekee', 'Hawaii_Amakihi', 'Akiapolauu', 'Akohekohe', 'Anianiau', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Oahu_Amakihi','Hawaii_Elepaio', 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Omao', 'Oahu_Elepaio', 'Palila', 'Puaiohi', 'Kauai_Amakihi','Apapane', 'Iiwi', 'Amakihi', 'Elepaio') 
 project_name='finalmodel_P_A_PA_oldcode_Tmin_Tmax_ppt'
 
 comp_projects=c('baseline', 'future') #put future second!
@@ -21,7 +20,7 @@ if (server==1){
   working_dir=paste0(resultsDir,project_name,'/')
   clim_data_dir=paste0(bioclimData2013Dir,"all_baseline/500m/")
 }
-overwrite=1 #if 1, will overwrite past results
+overwrite=0 #if 1, will overwrite past results
 current_biome_distribution_dir="Y:/PICCC_analysis/FB_analysis/habitat analysis/veg_overlay/current_veg_mask/"
 projected_biome_distribution_dir="Y:/PICCC_analysis/FB_analysis/habitat analysis/veg_overlay/projected_veg_mask/"
 
@@ -42,7 +41,7 @@ save_raster_fx=function(raster_img,out_nm){
   writeRaster(raster_img, out_raster_name, format="GTiff", overwrite=TRUE)        
 }
 
-Process_raster_data_BadtoGood=function(raster_var,plot_var,min_lim=NULL, max_lim=NULL, mask_data=NULL){
+Process_raster_data_BadtoGood=function(raster_var,out_nm,min_lim=NULL, max_lim=NULL, mask_data=NULL){
   jpeg_name=paste(out_nm, ".jpg", sep = "")
   out_raster_name=paste(out_nm, ".tif", sep = "")
   jpeg(jpeg_name,
@@ -69,7 +68,7 @@ Process_raster_data_BadtoGood=function(raster_var,plot_var,min_lim=NULL, max_lim
   writeRaster(raster_var, out_raster_name, format="GTiff", overwrite=TRUE)
 }
 
-Process_raster_data_NeutraltoGood=function(raster_var,plot_var,min_lim=NULL, max_lim=NULL, mask_data=NULL){
+Process_raster_data_NeutraltoGood=function(raster_var,out_nm,min_lim=NULL, max_lim=NULL, mask_data=NULL){
   jpeg_name=paste(out_nm, ".jpg", sep = "")
   out_raster_name=paste(out_nm, ".tif", sep = "")
   jpeg(jpeg_name,
