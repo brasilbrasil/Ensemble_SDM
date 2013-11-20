@@ -121,19 +121,19 @@ for (sp_nm in spp_nm){
     ### code chunk number 17: projection_current_plot
     ###################################################
     
-    if (plot_graphs == T){ #set in the config file
-      jnk = length(myBiomodProj_baseline@models.projected) #gets number of projection models from output
-      jnk = jnk/(length(models_to_run)+1) #calculates the number of projections per model type - +1 because there is a combined model type as well
-      if (jnk<26){ 
-        jpeg_nam = paste0(sp_nm,"_", proj_nm, "_", "runs.jpg") #assigns location for map jpeg
-        jpeg(jpeg_name, #settings for the jpeg map
-             width = 10, height = 10, units = "in",
-             pointsize = 12, quality = 90, bg = "white", res = 300)
-        par(mfrow = c(1,2)) #subsequent figures are drawn in an array of 1 by 2
-        try(plot(myBiomodProj_baseline, str.grep = "Full"), TRUE) #attempts to plot results of full models but saves error if not
-        dev.off() #turns device off - saves plot as jpeg
-      }
-    }
+#     if (plot_graphs == T){ #set in the config file
+#       jnk = length(myBiomodProj_baseline@models.projected) #gets number of projection models from output
+#       jnk = jnk/(length(models_to_run)+1) #calculates the number of projections per model type - +1 because there is a combined model type as well
+#       if (jnk<26){ 
+#         jpeg_nam = paste0(sp_nm,"_", proj_nm, "_", "runs.jpg") #assigns location for map jpeg
+#         jpeg(jpeg_name, #settings for the jpeg map
+#              width = 10, height = 10, units = "in",
+#              pointsize = 12, quality = 90, bg = "white", res = 300)
+#         par(mfrow = c(1,2)) #subsequent figures are drawn in an array of 1 by 2
+#         try(plot(myBiomodProj_baseline, str.grep = "Full"), TRUE) #attempts to plot results of full models but saves error if not
+#         dev.off() #turns device off - saves plot as jpeg
+#       }
+#     }
   
 #     if (plot_graphs == T){ ###this has to be fixed- in situations where there is only enough data for a single pseudo absence, no others are run
 #       for (model in models_to_run){ #runs for each model
