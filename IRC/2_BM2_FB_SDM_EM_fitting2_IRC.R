@@ -21,7 +21,8 @@ for (sp_nm in spp_nm){
     
     load(workspace_name) #loads the model results from the species of interest
     sp_nm = str_replace_all(sp_nm,"_", ".") #replaces any "_" with "." in the species name
-    spp_info=read.csv(paste(csv_dir,'FB_spp_data.csv', sep = "/")) #creates data frame from species info csv file
+    spp_info = read.csv(paste0(csv_dir, "FB_spp_data.csv")) #creates data frame from species info csv file
+    
     ###################################################
     ### code chunk number 8: modeling_summary
     ###################################################
@@ -42,21 +43,31 @@ for (sp_nm in spp_nm){
     
     ###################################################
     ###new code- remove models with bad cutoffs
+    
+    ####STILL NEEDS WORK ON THIS - look at "http://stackoverflow.com/questions/19866188/finding-the-dim-names-of-item-in-multidimensional-array"
     jnk = myBiomodModelEval[,2,,,]
-    NAs = which(is.na(jnk))
+    NAs = which(is.na(jnk), arr.ind = TRUE)
     all_models = list()
+    
+    numRows = nrow(NAs)
+    
+    for (row in 1:numRows) {
+      print(mapply("[", dimnames(my.array), NAs[row,]))
+    }
+
+    
     for (d in dimnames(jnk)[[4]]){
       for (c in dimnames(jnk)[[3]]){
         for (b in dimnames(jnk)[[2]]){
           for (a in dimnames(jnk)[[1]]){
-            jnk_str = paste(sp_nm,d,c,b,a,sep="_")
-            jnk_str2 = paste(sp_nm,d,c,b,sep="_")
+            jnk_str = paste(sp_nm,c,b,a,sep="_")
+            jnk_str2 = paste(sp_nm,c,b,sep="_")
             all_models[length(all_models)+1] = jnk_str2
           }
         }
       }
     }
-    bad_models_short=all_models[NAs]
+    bad_models_short = all_models[NAs]
     bad_models_short=unique(bad_models_short)
     jnk_good=!(all_models %in% bad_models_short)
     remaining_models=all_models[jnk_good]
