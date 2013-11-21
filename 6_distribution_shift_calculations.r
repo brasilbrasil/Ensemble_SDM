@@ -1,8 +1,8 @@
 rm(list = ls()) #remove all past worksheet variables
 source(paste0("C:/Users/lfortini/","directory_registry.r"))
 ###USER CONFIGURATION
-spp_nm = c('Akikiki', 'Akekee', 'Hawaii_Amakihi', 'Akiapolauu', 'Akohekohe', 'Anianiau', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Oahu_Amakihi','Hawaii_Elepaio', 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Omao', 'Oahu_Elepaio', 'Palila', 'Puaiohi', 'Kauai_Amakihi','Apapane', 'Iiwi', 'Amakihi', 'Elepaio') 
-project_name='finalmodel_P_A_PA_oldcode_Tmin_Tmax_ppt'
+spp_nm = c('Akikiki','Akekee', 'Hawaii_Amakihi', 'Akiapolauu', 'Akohekohe', 'Anianiau', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Oahu_Amakihi','Hawaii_Elepaio', 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Omao', 'Oahu_Elepaio', 'Palila', 'Puaiohi', 'Kauai_Amakihi','Apapane', 'Iiwi', 'Amakihi', 'Elepaio') 
+project_name='finalmodel_P_PA_oldcode'
 
 model_resolution=0.5 #inkm
 comp_projects=c('baseline', 'future') #put future second!
@@ -12,7 +12,7 @@ eval_stats=c('ROC')
 
 working_dir=paste0(resultsDir,project_name,'/')
 clim_data_dir=paste0(bioclimData2013Dir,"all_baseline/500m/")
-overwrite=0 #if 1, will overwrite past results
+overwrite=1 #if 1, will overwrite past results
 current_biome_distribution_dir="Y:/PICCC_analysis/FB_analysis/habitat analysis/veg_overlay/current_veg_mask/"
 projected_biome_distribution_dir="Y:/PICCC_analysis/FB_analysis/habitat analysis/veg_overlay/projected_veg_mask/"
 
