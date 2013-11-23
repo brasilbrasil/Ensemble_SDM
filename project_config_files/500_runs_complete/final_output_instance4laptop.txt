@@ -310,13 +310,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 20, 2013 1:31:38 PM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 1:42:41 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 20, 2013 1:32:07 PM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 1:43:33 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -334,13 +334,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 20, 2013 1:47:07 PM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 1:52:38 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 20, 2013 1:47:37 PM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 1:53:04 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -358,13 +358,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 20, 2013 2:04:34 PM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 2:19:38 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 20, 2013 2:05:05 PM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 2:20:54 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -382,13 +382,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 20, 2013 2:19:21 PM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 3:13:41 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 20, 2013 2:19:47 PM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 3:14:31 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -406,13 +406,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 20, 2013 2:31:48 PM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 3:33:07 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 20, 2013 2:32:13 PM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 3:33:50 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -430,13 +430,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 20, 2013 2:46:46 PM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 3:58:20 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 20, 2013 2:47:13 PM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 3:59:26 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -457,13 +457,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 20, 2013 3:01:27 PM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 4:13:20 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 20, 2013 3:01:52 PM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 4:14:37 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -481,13 +481,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 20, 2013 3:15:53 PM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 4:31:35 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 20, 2013 3:16:16 PM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 4:31:58 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -505,13 +505,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 20, 2013 3:46:46 PM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 4:41:29 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 20, 2013 3:47:09 PM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 4:43:03 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -529,13 +529,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 20, 2013 7:20:42 PM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 4:57:24 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 20, 2013 7:21:08 PM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 4:59:17 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -553,13 +553,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 20, 2013 7:33:16 PM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 5:16:38 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 20, 2013 7:33:42 PM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 5:17:43 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -577,13 +577,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 20, 2013 7:47:31 PM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 5:42:04 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 20, 2013 7:48:00 PM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 5:44:12 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -604,13 +604,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 20, 2013 7:58:02 PM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 6:07:43 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 20, 2013 7:58:29 PM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 6:09:19 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -628,13 +628,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 20, 2013 8:11:03 PM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 6:23:46 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 20, 2013 8:11:28 PM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 6:24:14 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -652,13 +652,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 20, 2013 8:25:45 PM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 6:37:52 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 20, 2013 8:26:12 PM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 6:38:24 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -676,13 +676,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 20, 2013 8:38:36 PM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 6:50:36 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 20, 2013 8:39:03 PM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 6:51:00 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -700,13 +700,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 20, 2013 8:53:24 PM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 7:02:56 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 20, 2013 8:53:48 PM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 7:03:25 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -724,13 +724,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 20, 2013 9:05:44 PM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 7:21:35 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 20, 2013 9:06:12 PM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 7:22:01 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -751,13 +751,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 20, 2013 9:19:45 PM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 7:31:46 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 20, 2013 9:20:09 PM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 7:33:04 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -775,13 +775,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 20, 2013 9:34:05 PM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 7:46:42 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 20, 2013 9:34:30 PM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 7:47:08 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -799,13 +799,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 20, 2013 9:47:27 PM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 7:55:15 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 20, 2013 9:47:52 PM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 7:55:42 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -823,13 +823,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 20, 2013 10:02:12 PM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 8:06:19 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 20, 2013 10:02:38 PM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 8:06:43 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -847,13 +847,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 20, 2013 10:18:02 PM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 8:19:43 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 20, 2013 10:18:29 PM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 8:20:10 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -871,13 +871,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 20, 2013 10:30:29 PM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 8:32:07 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 20, 2013 10:30:59 PM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 8:33:03 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -898,13 +898,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 20, 2013 10:42:22 PM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 8:48:55 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 20, 2013 10:42:48 PM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 8:49:28 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -922,13 +922,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 20, 2013 10:56:59 PM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 9:05:52 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 20, 2013 10:57:24 PM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 9:06:22 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -946,13 +946,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 20, 2013 11:09:07 PM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 9:19:41 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 20, 2013 11:09:33 PM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 9:20:09 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -970,13 +970,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 20, 2013 11:22:30 PM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 9:32:53 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 20, 2013 11:22:55 PM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 9:33:20 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -994,13 +994,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 20, 2013 11:34:28 PM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 9:46:37 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 20, 2013 11:34:56 PM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 9:47:23 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1018,13 +1018,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 20, 2013 11:46:48 PM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 10:00:24 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 20, 2013 11:47:18 PM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 10:01:03 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1045,13 +1045,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 12:00:40 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 10:13:36 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 12:01:06 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 10:14:03 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1069,13 +1069,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 12:14:36 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 10:27:16 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 12:15:14 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 10:27:42 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1093,13 +1093,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 12:28:44 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 10:40:15 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 12:29:09 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 10:40:38 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1117,13 +1117,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 12:41:07 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 10:49:48 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 12:41:57 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 10:50:13 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1141,13 +1141,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 1:00:50 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 11:00:31 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 1:01:13 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 11:01:28 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1165,13 +1165,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 1:15:10 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 11:16:11 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 1:15:38 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 11:17:01 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1192,13 +1192,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 1:36:23 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 11:30:38 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 1:37:21 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 11:31:02 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1216,13 +1216,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 1:47:29 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 11:44:00 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 1:48:01 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 11:44:26 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1240,13 +1240,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 2:00:03 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 21, 2013 11:56:06 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 2:00:28 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 21, 2013 11:56:35 PM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1264,13 +1264,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 2:13:10 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 22, 2013 12:11:48 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 2:14:16 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 22, 2013 12:12:13 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1288,13 +1288,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 2:28:08 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 22, 2013 12:22:53 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 2:28:32 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 22, 2013 12:23:19 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1312,13 +1312,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 2:39:40 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 22, 2013 12:37:44 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 2:40:09 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 22, 2013 12:39:02 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1339,13 +1339,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 2:56:03 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 22, 2013 12:52:02 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 2:56:28 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 22, 2013 12:52:53 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1363,13 +1363,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 3:10:40 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 22, 2013 1:04:37 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 3:12:07 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 22, 2013 1:05:33 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1387,13 +1387,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 3:27:32 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 22, 2013 1:20:13 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 3:27:57 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 22, 2013 1:20:39 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1411,13 +1411,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 3:43:44 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 22, 2013 1:33:35 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 3:44:38 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 22, 2013 1:34:04 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1435,13 +1435,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 4:00:37 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 22, 2013 1:49:04 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 4:01:01 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 22, 2013 1:49:28 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1459,13 +1459,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 4:13:27 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 22, 2013 2:02:47 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 4:15:33 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 22, 2013 2:03:31 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1486,13 +1486,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 4:34:33 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 22, 2013 2:21:24 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 4:34:58 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 22, 2013 2:22:14 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1510,13 +1510,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 4:51:36 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 22, 2013 2:35:14 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 4:52:01 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 22, 2013 2:35:54 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1534,13 +1534,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 5:02:33 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 22, 2013 2:50:40 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 5:03:10 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 22, 2013 2:52:03 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1558,13 +1558,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 5:21:01 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 22, 2013 3:09:19 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 5:21:56 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 22, 2013 3:09:45 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1582,13 +1582,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 5:36:22 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 22, 2013 3:22:27 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 5:36:47 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 22, 2013 3:22:54 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1606,13 +1606,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 5:54:51 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 22, 2013 3:35:16 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 5:55:20 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 22, 2013 3:35:46 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1633,13 +1633,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 6:22:10 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 22, 2013 3:49:46 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 6:22:34 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 22, 2013 3:50:12 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1657,13 +1657,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 6:38:17 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 22, 2013 4:07:49 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 6:41:08 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 22, 2013 4:08:15 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1681,13 +1681,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 7:08:35 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 22, 2013 4:19:26 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 7:09:01 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 22, 2013 4:19:51 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1705,13 +1705,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 7:33:53 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 22, 2013 4:33:18 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 7:34:17 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 22, 2013 4:34:46 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1729,13 +1729,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 7:51:03 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 22, 2013 4:49:02 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 7:51:57 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 22, 2013 4:49:28 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1753,13 +1753,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 8:12:13 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 22, 2013 5:02:52 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 8:15:51 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 22, 2013 5:03:29 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1780,13 +1780,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 8:38:52 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 22, 2013 5:24:54 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 8:39:16 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 22, 2013 5:26:13 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1804,13 +1804,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 8:56:45 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 22, 2013 5:36:37 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 8:57:11 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 22, 2013 5:37:19 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1828,13 +1828,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 9:13:33 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 22, 2013 5:54:05 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 9:14:29 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 22, 2013 5:55:02 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1852,13 +1852,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 9:33:36 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 22, 2013 6:10:06 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 9:34:02 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 22, 2013 6:10:29 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1876,13 +1876,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 9:48:08 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 22, 2013 6:20:57 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 9:48:35 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 22, 2013 6:21:22 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1900,13 +1900,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 10:02:14 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 22, 2013 6:31:32 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 10:03:50 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 22, 2013 6:31:57 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1927,13 +1927,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 10:20:57 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 22, 2013 6:40:04 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 10:22:31 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 22, 2013 6:40:27 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1951,13 +1951,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 10:38:37 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 22, 2013 6:54:49 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 10:39:08 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 22, 2013 6:55:10 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1975,13 +1975,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 10:54:06 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 22, 2013 7:08:26 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 10:55:16 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 22, 2013 7:08:59 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -1999,13 +1999,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 11:11:15 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 22, 2013 7:22:36 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 11:11:40 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 22, 2013 7:22:58 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -2023,13 +2023,13 @@ Model=Generalised Boosting Regression
 
 Model=MAXENT
 	Creating Maxent Temp Proj Data..
- Running Maxent...Nov 21, 2013 11:27:09 AM java.util.prefs.WindowsPreferences <init>
+ Running Maxent...Nov 22, 2013 7:37:28 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
  Getting predictions...
 	Model scaling...
 		Creating Maxent Temp Proj Data...
-		Running Maxent...Nov 21, 2013 11:27:35 AM java.util.prefs.WindowsPreferences <init>
+		Running Maxent...Nov 22, 2013 7:38:15 AM java.util.prefs.WindowsPreferences <init>
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
 
 		Reading Maxent outputs...
@@ -2044,3 +2044,789 @@ Model=Generalised Boosting Regression
 	Model scaling...
 	Evaluating Model stuff...
 	Evaluating Predictor Contributions... 
+
+Model=MAXENT
+	Creating Maxent Temp Proj Data..
+ Running Maxent...Nov 22, 2013 7:49:05 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+ Getting predictions...
+	Model scaling...
+		Creating Maxent Temp Proj Data...
+		Running Maxent...Nov 22, 2013 7:49:31 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+		Reading Maxent outputs...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+
+-=-=-=- Run :  Iiwi_PA13 
+
+
+-=-=-=--=-=-=- Iiwi_PA13_RUN1 
+
+Model=Generalised Boosting Regression 
+	 100 maximum different trees and  10  Fold Cross-Validation
+	Model scaling...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+Model=MAXENT
+	Creating Maxent Temp Proj Data..
+ Running Maxent...Nov 22, 2013 8:01:31 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+ Getting predictions...
+	Model scaling...
+		Creating Maxent Temp Proj Data...
+		Running Maxent...Nov 22, 2013 8:01:54 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+		Reading Maxent outputs...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+
+-=-=-=--=-=-=- Iiwi_PA13_RUN2 
+
+Model=Generalised Boosting Regression 
+	 100 maximum different trees and  10  Fold Cross-Validation
+	Model scaling...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+Model=MAXENT
+	Creating Maxent Temp Proj Data..
+ Running Maxent...Nov 22, 2013 8:10:31 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+ Getting predictions...
+	Model scaling...
+		Creating Maxent Temp Proj Data...
+		Running Maxent...Nov 22, 2013 8:11:55 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+		Reading Maxent outputs...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+
+-=-=-=--=-=-=- Iiwi_PA13_RUN3 
+
+Model=Generalised Boosting Regression 
+	 100 maximum different trees and  10  Fold Cross-Validation
+	Model scaling...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+Model=MAXENT
+	Creating Maxent Temp Proj Data..
+ Running Maxent...Nov 22, 2013 8:25:20 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+ Getting predictions...
+	Model scaling...
+		Creating Maxent Temp Proj Data...
+		Running Maxent...Nov 22, 2013 8:25:45 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+		Reading Maxent outputs...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+
+-=-=-=--=-=-=- Iiwi_PA13_RUN4 
+
+Model=Generalised Boosting Regression 
+	 100 maximum different trees and  10  Fold Cross-Validation
+	Model scaling...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+Model=MAXENT
+	Creating Maxent Temp Proj Data..
+ Running Maxent...Nov 22, 2013 8:35:53 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+ Getting predictions...
+	Model scaling...
+		Creating Maxent Temp Proj Data...
+		Running Maxent...Nov 22, 2013 8:37:37 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+		Reading Maxent outputs...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+
+-=-=-=--=-=-=- Iiwi_PA13_RUN5 
+
+Model=Generalised Boosting Regression 
+	 100 maximum different trees and  10  Fold Cross-Validation
+	Model scaling...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+Model=MAXENT
+	Creating Maxent Temp Proj Data..
+ Running Maxent...Nov 22, 2013 8:49:18 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+ Getting predictions...
+	Model scaling...
+		Creating Maxent Temp Proj Data...
+		Running Maxent...Nov 22, 2013 8:49:42 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+		Reading Maxent outputs...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+
+-=-=-=--=-=-=- Iiwi_PA13_Full 
+
+Model=Generalised Boosting Regression 
+	 100 maximum different trees and  10  Fold Cross-Validation
+	Model scaling...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+Model=MAXENT
+	Creating Maxent Temp Proj Data..
+ Running Maxent...Nov 22, 2013 8:58:20 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+ Getting predictions...
+	Model scaling...
+		Creating Maxent Temp Proj Data...
+		Running Maxent...Nov 22, 2013 8:58:43 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+		Reading Maxent outputs...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+
+-=-=-=- Run :  Iiwi_PA14 
+
+
+-=-=-=--=-=-=- Iiwi_PA14_RUN1 
+
+Model=Generalised Boosting Regression 
+	 100 maximum different trees and  10  Fold Cross-Validation
+	Model scaling...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+Model=MAXENT
+	Creating Maxent Temp Proj Data..
+ Running Maxent...Nov 22, 2013 9:09:09 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+ Getting predictions...
+	Model scaling...
+		Creating Maxent Temp Proj Data...
+		Running Maxent...Nov 22, 2013 9:09:30 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+		Reading Maxent outputs...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+
+-=-=-=--=-=-=- Iiwi_PA14_RUN2 
+
+Model=Generalised Boosting Regression 
+	 100 maximum different trees and  10  Fold Cross-Validation
+	Model scaling...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+Model=MAXENT
+	Creating Maxent Temp Proj Data..
+ Running Maxent...Nov 22, 2013 9:24:12 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+ Getting predictions...
+	Model scaling...
+		Creating Maxent Temp Proj Data...
+		Running Maxent...Nov 22, 2013 9:24:38 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+		Reading Maxent outputs...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+
+-=-=-=--=-=-=- Iiwi_PA14_RUN3 
+
+Model=Generalised Boosting Regression 
+	 100 maximum different trees and  10  Fold Cross-Validation
+	Model scaling...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+Model=MAXENT
+	Creating Maxent Temp Proj Data..
+ Running Maxent...Nov 22, 2013 9:37:43 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+ Getting predictions...
+	Model scaling...
+		Creating Maxent Temp Proj Data...
+		Running Maxent...Nov 22, 2013 9:38:10 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+		Reading Maxent outputs...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+
+-=-=-=--=-=-=- Iiwi_PA14_RUN4 
+
+Model=Generalised Boosting Regression 
+	 100 maximum different trees and  10  Fold Cross-Validation
+	Model scaling...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+Model=MAXENT
+	Creating Maxent Temp Proj Data..
+ Running Maxent...Nov 22, 2013 9:51:42 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+ Getting predictions...
+	Model scaling...
+		Creating Maxent Temp Proj Data...
+		Running Maxent...Nov 22, 2013 9:52:04 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+		Reading Maxent outputs...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+
+-=-=-=--=-=-=- Iiwi_PA14_RUN5 
+
+Model=Generalised Boosting Regression 
+	 100 maximum different trees and  10  Fold Cross-Validation
+	Model scaling...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+Model=MAXENT
+	Creating Maxent Temp Proj Data..
+ Running Maxent...Nov 22, 2013 10:04:36 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+ Getting predictions...
+	Model scaling...
+		Creating Maxent Temp Proj Data...
+		Running Maxent...Nov 22, 2013 10:05:01 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+		Reading Maxent outputs...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+
+-=-=-=--=-=-=- Iiwi_PA14_Full 
+
+Model=Generalised Boosting Regression 
+	 100 maximum different trees and  10  Fold Cross-Validation
+	Model scaling...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+Model=MAXENT
+	Creating Maxent Temp Proj Data..
+ Running Maxent...Nov 22, 2013 10:17:41 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+ Getting predictions...
+	Model scaling...
+		Creating Maxent Temp Proj Data...
+		Running Maxent...Nov 22, 2013 10:18:20 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+		Reading Maxent outputs...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+
+-=-=-=- Run :  Iiwi_PA15 
+
+
+-=-=-=--=-=-=- Iiwi_PA15_RUN1 
+
+Model=Generalised Boosting Regression 
+	 100 maximum different trees and  10  Fold Cross-Validation
+	Model scaling...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+Model=MAXENT
+	Creating Maxent Temp Proj Data..
+ Running Maxent...Nov 22, 2013 10:33:34 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+ Getting predictions...
+	Model scaling...
+		Creating Maxent Temp Proj Data...
+		Running Maxent...Nov 22, 2013 10:34:18 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+		Reading Maxent outputs...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+
+-=-=-=--=-=-=- Iiwi_PA15_RUN2 
+
+Model=Generalised Boosting Regression 
+	 100 maximum different trees and  10  Fold Cross-Validation
+	Model scaling...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+Model=MAXENT
+	Creating Maxent Temp Proj Data..
+ Running Maxent...Nov 22, 2013 10:46:43 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+ Getting predictions...
+	Model scaling...
+		Creating Maxent Temp Proj Data...
+		Running Maxent...Nov 22, 2013 10:47:08 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+		Reading Maxent outputs...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+
+-=-=-=--=-=-=- Iiwi_PA15_RUN3 
+
+Model=Generalised Boosting Regression 
+	 100 maximum different trees and  10  Fold Cross-Validation
+	Model scaling...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+Model=MAXENT
+	Creating Maxent Temp Proj Data..
+ Running Maxent...Nov 22, 2013 10:59:35 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+ Getting predictions...
+	Model scaling...
+		Creating Maxent Temp Proj Data...
+		Running Maxent...Nov 22, 2013 11:00:21 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+		Reading Maxent outputs...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+
+-=-=-=--=-=-=- Iiwi_PA15_RUN4 
+
+Model=Generalised Boosting Regression 
+	 100 maximum different trees and  10  Fold Cross-Validation
+	Model scaling...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+Model=MAXENT
+	Creating Maxent Temp Proj Data..
+ Running Maxent...Nov 22, 2013 11:15:07 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+ Getting predictions...
+	Model scaling...
+		Creating Maxent Temp Proj Data...
+		Running Maxent...Nov 22, 2013 11:16:29 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+		Reading Maxent outputs...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+
+-=-=-=--=-=-=- Iiwi_PA15_RUN5 
+
+Model=Generalised Boosting Regression 
+	 100 maximum different trees and  10  Fold Cross-Validation
+	Model scaling...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+Model=MAXENT
+	Creating Maxent Temp Proj Data..
+ Running Maxent...Nov 22, 2013 11:33:01 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+ Getting predictions...
+	Model scaling...
+		Creating Maxent Temp Proj Data...
+		Running Maxent...Nov 22, 2013 11:33:40 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+		Reading Maxent outputs...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+
+-=-=-=--=-=-=- Iiwi_PA15_Full 
+
+Model=Generalised Boosting Regression 
+	 100 maximum different trees and  10  Fold Cross-Validation
+	Model scaling...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+Model=MAXENT
+	Creating Maxent Temp Proj Data..
+ Running Maxent...Nov 22, 2013 11:45:04 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+ Getting predictions...
+	Model scaling...
+		Creating Maxent Temp Proj Data...
+		Running Maxent...Nov 22, 2013 11:45:30 AM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+		Reading Maxent outputs...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+
+-=-=-=- Run :  Iiwi_PA16 
+
+
+-=-=-=--=-=-=- Iiwi_PA16_RUN1 
+
+Model=Generalised Boosting Regression 
+	 100 maximum different trees and  10  Fold Cross-Validation
+	Model scaling...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+Model=MAXENT
+	Creating Maxent Temp Proj Data..
+ Running Maxent...Nov 22, 2013 12:01:09 PM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+ Getting predictions...
+	Model scaling...
+		Creating Maxent Temp Proj Data...
+		Running Maxent...Nov 22, 2013 12:01:35 PM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+		Reading Maxent outputs...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+
+-=-=-=--=-=-=- Iiwi_PA16_RUN2 
+
+Model=Generalised Boosting Regression 
+	 100 maximum different trees and  10  Fold Cross-Validation
+	Model scaling...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+Model=MAXENT
+	Creating Maxent Temp Proj Data..
+ Running Maxent...Nov 22, 2013 12:17:49 PM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+ Getting predictions...
+	Model scaling...
+		Creating Maxent Temp Proj Data...
+		Running Maxent...Nov 22, 2013 12:18:29 PM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+		Reading Maxent outputs...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+
+-=-=-=--=-=-=- Iiwi_PA16_RUN3 
+
+Model=Generalised Boosting Regression 
+	 100 maximum different trees and  10  Fold Cross-Validation
+	Model scaling...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+Model=MAXENT
+	Creating Maxent Temp Proj Data..
+ Running Maxent...Nov 22, 2013 12:37:24 PM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+ Getting predictions...
+	Model scaling...
+		Creating Maxent Temp Proj Data...
+		Running Maxent...Nov 22, 2013 12:37:47 PM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+		Reading Maxent outputs...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+
+-=-=-=--=-=-=- Iiwi_PA16_RUN4 
+
+Model=Generalised Boosting Regression 
+	 100 maximum different trees and  10  Fold Cross-ValidationError in serialize(data, node$con) : error writing to connection
+In addition: There were 50 or more warnings (use warnings() to see the first 50)
+Error in predict(model.bm, Data[, expl_var_names, drop = FALSE], on_0_1000 = TRUE) : 
+  error in evaluating the argument 'object' in selecting a method for function 'predict': Error: object 'model.bm' not found
+
+
+   ! Note :  Iiwi_PA16_RUN4_GBM failed!
+
+Model=MAXENT
+	Creating Maxent Temp Proj Data..
+ Running Maxent...Nov 22, 2013 12:51:36 PM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+ Getting predictions...
+	Model scaling...
+		Creating Maxent Temp Proj Data...
+		Running Maxent...Nov 22, 2013 12:52:02 PM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+		Reading Maxent outputs...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+
+-=-=-=--=-=-=- Iiwi_PA16_RUN5 
+
+Model=Generalised Boosting Regression 
+	 100 maximum different trees and  10  Fold Cross-Validation
+	Model scaling...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+Model=MAXENT
+	Creating Maxent Temp Proj Data..
+ Running Maxent...Nov 22, 2013 1:08:20 PM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+ Getting predictions...
+	Model scaling...
+		Creating Maxent Temp Proj Data...
+		Running Maxent...Nov 22, 2013 1:09:51 PM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+		Reading Maxent outputs...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+
+-=-=-=--=-=-=- Iiwi_PA16_Full 
+
+Model=Generalised Boosting Regression 
+	 100 maximum different trees and  10  Fold Cross-Validation
+	Model scaling...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+Model=MAXENT
+	Creating Maxent Temp Proj Data..
+ Running Maxent...Nov 22, 2013 1:25:20 PM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+ Getting predictions...
+	Model scaling...
+		Creating Maxent Temp Proj Data...
+		Running Maxent...Nov 22, 2013 1:26:47 PM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+		Reading Maxent outputs...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+
+-=-=-=- Run :  Iiwi_PA17 
+
+
+-=-=-=--=-=-=- Iiwi_PA17_RUN1 
+
+Model=Generalised Boosting Regression 
+	 100 maximum different trees and  10  Fold Cross-Validation
+	Model scaling...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+Model=MAXENT
+	Creating Maxent Temp Proj Data..
+ Running Maxent...Nov 22, 2013 1:42:09 PM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+ Getting predictions...
+	Model scaling...
+		Creating Maxent Temp Proj Data...
+		Running Maxent...Nov 22, 2013 1:42:37 PM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+		Reading Maxent outputs...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+
+-=-=-=--=-=-=- Iiwi_PA17_RUN2 
+
+Model=Generalised Boosting Regression 
+	 100 maximum different trees and  10  Fold Cross-Validation
+	Model scaling...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+Model=MAXENT
+	Creating Maxent Temp Proj Data..
+ Running Maxent...Nov 22, 2013 1:56:38 PM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+ Getting predictions...
+	Model scaling...
+		Creating Maxent Temp Proj Data...
+		Running Maxent...Nov 22, 2013 1:57:04 PM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+		Reading Maxent outputs...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+
+-=-=-=--=-=-=- Iiwi_PA17_RUN3 
+
+Model=Generalised Boosting Regression 
+	 100 maximum different trees and  10  Fold Cross-Validation
+	Model scaling...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+Model=MAXENT
+	Creating Maxent Temp Proj Data..
+ Running Maxent...Nov 22, 2013 2:08:40 PM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+ Getting predictions...
+	Model scaling...
+		Creating Maxent Temp Proj Data...
+		Running Maxent...Nov 22, 2013 2:09:36 PM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+		Reading Maxent outputs...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+
+-=-=-=--=-=-=- Iiwi_PA17_RUN4 
+
+Model=Generalised Boosting Regression 
+	 100 maximum different trees and  10  Fold Cross-Validation
+	Model scaling...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+Model=MAXENT
+	Creating Maxent Temp Proj Data..
+ Running Maxent...Nov 22, 2013 2:24:04 PM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+ Getting predictions...
+	Model scaling...
+		Creating Maxent Temp Proj Data...
+		Running Maxent...Nov 22, 2013 2:24:29 PM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+		Reading Maxent outputs...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+
+-=-=-=--=-=-=- Iiwi_PA17_RUN5 
+
+Model=Generalised Boosting Regression 
+	 100 maximum different trees and  10  Fold Cross-Validation
+	Model scaling...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+Model=MAXENT
+	Creating Maxent Temp Proj Data..
+ Running Maxent...Nov 22, 2013 2:39:56 PM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+ Getting predictions...
+	Model scaling...
+		Creating Maxent Temp Proj Data...
+		Running Maxent...Nov 22, 2013 2:40:44 PM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+		Reading Maxent outputs...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+
+-=-=-=--=-=-=- Iiwi_PA17_Full 
+
+Model=Generalised Boosting Regression 
+	 100 maximum different trees and  10  Fold Cross-Validation
+	Model scaling...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+Model=MAXENT
+	Creating Maxent Temp Proj Data..
+ Running Maxent...Nov 22, 2013 2:56:44 PM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+ Getting predictions...
+	Model scaling...
+		Creating Maxent Temp Proj Data...
+		Running Maxent...Nov 22, 2013 2:57:08 PM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+		Reading Maxent outputs...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+
+-=-=-=- Run :  Iiwi_PA18 
+
+
+-=-=-=--=-=-=- Iiwi_PA18_RUN1 
+
+Model=Generalised Boosting Regression 
+	 100 maximum different trees and  10  Fold Cross-Validation
+	Model scaling...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+Model=MAXENT
+	Creating Maxent Temp Proj Data..
+ Running Maxent...Nov 22, 2013 3:09:15 PM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+ Getting predictions...
+	Model scaling...
+		Creating Maxent Temp Proj Data...
+		Running Maxent...Nov 22, 2013 3:09:38 PM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+
+		Reading Maxent outputs...
+	Evaluating Model stuff...
+	Evaluating Predictor Contributions... 
+
+
+-=-=-=--=-=-=- Iiwi_PA18_RUN2 
+
+Model=Generalised Boosting Regression 
+	 100 maximum different trees and  10  Fold Cross-Validation

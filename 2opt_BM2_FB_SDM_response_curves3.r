@@ -3,7 +3,7 @@
 ###USER CONFIGURATION
 ####START UNDERHOOD
 setwd(working_dir)
-last_model=models_to_run[length(models_to_run)]
+#last_model=models_to_run[length(models_to_run)]
 
 library(biomod2)
 library(stringr)
@@ -16,18 +16,9 @@ for (sp_nm in spp_nm){
   sp_nm=as.character(sp_nm)  
   cat('\n',sp_nm,'modeling...')
   sp_nm0=sp_nm
-  
   workspace_name=paste(sp_nm,"_FB_modelfitting.RData", sep = "") #set name of file to save all workspace data after model run
-  if (file.exists(workspace_name)){
-    load(workspace_name)    
-  }else{
-    workspace_name=paste(sp_nm0,"_FB_run.RData", sep = "") #set name of file to load workspace data from model run    
-    load(workspace_name)    
-  }
-  
+  load(workspace_name)    
   sp_nm=str_replace_all(sp_nm,"_", ".")
-  
-  
   
   model = models_to_run[1]
   for (model in models_to_run){

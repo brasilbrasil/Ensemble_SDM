@@ -10,21 +10,13 @@ eval_stats=c('ROC')
 plot_CV=T
 #eval_stats=c('ROC', 'FAR', 'SR', 'ACCURACY', 'BIAS', 'POD', 'CSI', 'ETS') 
 masked=FALSE
-veg_overlay=FALSE #this code is not complete!
-projected_veg_overlay=FALSE #this code is not complete!
-server=0
 
-if (server==1){
-  working_dir='Y:/FB_analysis/FB_Base_And_Future/all_DD_merged/'
-  clim_data_dir="Y:/SDM_env_data/bioclim_variables/full extent bioclim data/all_grd/all_baseline/250m/" 
-}else{
-  working_dir=paste0(resultsDir,project_name,'/')
-  clim_data_dir=paste0(bioclimData2013Dir,"all_baseline/500m/")
-}
-overwrite=1 #if 1, will overwrite past results
+working_dir=paste0(resultsDir,project_name,'/')
+clim_data_dir=paste0(bioclimData2013Dir,"all_baseline/500m/")
+overwrite=0 #if 1, will overwrite past results
 current_biome_distribution_dir="Y:/PICCC_analysis/FB_analysis/habitat analysis/veg_overlay/current_veg_mask/"
 projected_biome_distribution_dir="Y:/PICCC_analysis/FB_analysis/habitat analysis/veg_overlay/projected_veg_mask/"
-
+veg_areas_loc=paste0(clim_data_dir, "veg_areas.grd")
 
 ####START UNDERHOOD
 setwd(working_dir)
@@ -205,34 +197,12 @@ for (eval_stat in eval_stats){
       mypalette_numbers=c(0, 1, 2, 3)
       mypalette=c("Grey", "Red", "Green", "Yellow")
       resp_zone_names0=c("Lost", "Overlap", "Gained")
-      
-      #   jnk=unique(resp_zone)
-      #   zones_present=jnk[jnk>0]
-      #   zones_present=zones_present[zones_present<=3]
-      #   resp_zone_colors=mypalette[zones_present+1]
-      #   mypalette_numbers_selected=mypalette[jnk+1] #CHANGED
-      #   zones_present=resp_zone_names0[zones_present]
-      
-      #   jnk=match(mypalette_numbers, jnk, nomatch = 0)
-      #   jnk=which(jnk>0)
-      #   mypalette1=mypalette[jnk]
-      #   jnk=jnk[jnk>0]
-      #   jnk=jnk[jnk<=3]
-      #   resp_zone_names=resp_zone_names0[jnk]
-      
-      
-      #   mypalette_numbers=c(0, 1, 2, 3)
-      #   mypalette=c("Grey", "Red", "Green", "Yellow")
-      #   resp_zone_names0=c("Micro refugia", "Tolerate", "Migrate")  
-      
-      
-      
+            
       if (masked){
         current_mask=EM_suitability1>minValue(EM_suitability1)  
-        raster_name=paste(sp_nm0,"_analog_climates2100", sep="")
-        tif_name=paste(raster_name,".tif", sep="")
-        analog_cc = raster( tif_name)
-        habitat = raster( paste(clim_data_dir, "veg_areas.grd", sep=""))
+        analog_cc_loc=paste0(sp_nm0,"_analog_climates2100.tif")
+        analog_cc = raster(analog_cc_loc)
+        habitat = raster(veg_areas_loc)
         habitat=crop(habitat, analog_cc)
         
         all_mask=habitat+analog_cc*2+current_mask*4 #1 cur, 2 ang, 4 hab, 3 cur/ang, 6 ang/hab, 7 cur/ang/hab
@@ -299,44 +269,6 @@ for (eval_stat in eval_stats){
         writeRaster(future_bin_with_mask, out_raster_name, format="GTiff", overwrite=TRUE)
       }
       
-      if (veg_overlay){
-        zone_raster_vals0=unique(resp_zone)
-        #legend
-        zones_present=zone_raster_vals0[zone_raster_vals0>0]
-        resp_zone_names=resp_zone_names0[zones_present]
-        jnk0=match(zones_present,mypalette_numbers, nomatch = 0)
-        resp_zone_colors=mypalette[jnk0]
-        
-        #with current veg overlay
-        Response_var=paste(current_biome_distribution_dir, sp_nm0,"_current_veg_mask.tif", sep="")
-        Response_var=raster(Response_var)
-        temp_resp_zone=(Response_var*4)+resp_zone
-        
-        #three lines below are to fix a bug in the plot (it was not considering raster values that had very low freq, hence incorrectly applying the color pallete)
-        jnk=freq(temp_resp_zone)
-        todel=jnk[jnk[,'count']<=1,'value']
-        temp_resp_zone[temp_resp_zone %in% todel]=0
-        
-        zone_raster_vals=unique(temp_resp_zone)    
-        #raster color
-        jnk0=match(zone_raster_vals,mypalette_numbers, nomatch = 0)
-        mypalette1=mypalette[jnk0]
-        
-        jpeg_name=paste('jpg_outputs/', community,"_response_zones_w_current_", proj_name,".jpg", sep = "")
-        
-        jpeg(jpeg_name,
-             width = 10, height = 8, units = "in",
-             pointsize = 12, quality = 90, bg = "white", res = 300)
-        plot(temp_resp_zone,  col=mypalette1, legend=F)
-        #legend("bottomleft",legend = c("Micro refugia", "Tolerate", "Migrate"), col = mypalette[2:4],pch = 16)
-        legend("bottomleft",legend = resp_zone_names, col = resp_zone_colors,pch = 16)
-        title(paste(community_nm, " climate envelope shift", sep=""))
-        dev.off()
-        
-        out_raster_name0=paste(working_dir, "tifs/", community, "_resp_envelopes_with_current_veg", proj_name,".tif", sep="")
-        writeRaster(temp_resp_zone, out_raster_name0, format="GTiff", overwrite=TRUE) 
-        
-      }
       
       ##bin comparison rasters
       out_nm=paste('output_rasters/main/', sp_nm0,"_response_zones_",eval_stat, "_", ensemble_type, sep = "")
