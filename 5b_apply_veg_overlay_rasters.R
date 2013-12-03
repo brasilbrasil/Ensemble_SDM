@@ -8,9 +8,9 @@ ensemble_type="ef.pmw"
 eval_stat="ROC"
 veg_overlay=T #this code is not complete!
 projected_veg_overlay=T #this code is not complete!
-project_name='finalmodel_P_PA_oldcode'
+project_name='finalmodel_P_PA_oldcode_less_PAs'
 working_dir=paste0(resultsDir,project_name,'/')
-overwrite=0 #if 1, will overwrite past results
+overwrite=1 #if 1, will overwrite past results
 current_biome_distribution_dir="Y:/PICCC_analysis/FB_analysis/habitat analysis/veg_overlay/current_veg_mask/"
 projected_biome_distribution_dir="Y:/PICCC_analysis/FB_analysis/habitat analysis/veg_overlay/projected_veg_mask/"
 
@@ -49,7 +49,10 @@ for (sp_nm in spp_nm){
       #with current veg overlay
       Response_var=paste(current_biome_distribution_dir, sp_nm0,"_current_veg_mask.tif", sep="")
       Response_var=raster(Response_var)
-      Response_var=aggregate(Response_var,  fact=2,  fun=max)
+      res_ratio=round(res(resp_zone)[1]/res(Response_var)[1])
+      if (res_ratio>1){
+        Response_var=aggregate(Response_var,  fact=res_ratio,  fun=max)          
+      }
       Response_var=crop(Response_var,resp_zone)
       Response_var1=resample(Response_var,resp_zone,  method="ngb")
       #Response_var1=alignExtent(resp_zone,Response_var)
@@ -73,8 +76,9 @@ for (sp_nm in spp_nm){
       title(paste(sp_nm0," distribution shifts with current biome distribution", sep=""))
       dev.off()
       
-      #out_raster_name0=paste(working_dir, "tifs/", community, "_resp_envelopes_with_current_veg", proj_name,".tif", sep="")
-      #writeRaster(temp_resp_zone, out_raster_name0, format="GTiff", overwrite=TRUE)     
+      resp_zone_in_habitat=Response_var1*resp_zone
+      out_raster_name0=paste('output_rasters/veg_overlays/', sp_nm0,"_response_zones_w_current_habitat.tif", sep = "")
+      writeRaster(resp_zone_in_habitat, out_raster_name0, format="GTiff", overwrite=TRUE)     
     }  
   }
   
@@ -97,7 +101,10 @@ for (sp_nm in spp_nm){
       Response_var=paste(projected_biome_distribution_dir, sp_nm0,"_projected_veg_mask.tif", sep="")
       Response_var=raster(Response_var)
       Response_var=Response_var>0 #future envelope
-      Response_var=aggregate(Response_var,  fact=2,  fun=max)
+      res_ratio=round(res(resp_zone)[1]/res(Response_var)[1])
+      if (res_ratio>1){
+        Response_var=aggregate(Response_var,  fact=res_ratio,  fun=max)          
+      }
       Response_var=crop(Response_var,resp_zone)
       Response_var1=resample(Response_var,resp_zone,  method="ngb")
       #Response_var1=alignExtent(resp_zone,Response_var)
@@ -124,8 +131,9 @@ for (sp_nm in spp_nm){
       title(paste(sp_nm0," distribution shifts with future climate envelope of primary habitat", sep=""))
       dev.off()
       
-      #out_raster_name0=paste(working_dir, "tifs/", community, "_resp_envelopes_with_current_veg", proj_name,".tif", sep="")
-      #writeRaster(temp_resp_zone, out_raster_name0, format="GTiff", overwrite=TRUE)     
+      resp_zone_in_habitat=Response_var1*resp_zone
+      out_raster_name0=paste('output_rasters/veg_overlays/', sp_nm0,"_response_zones_w_future_clim_env_of_primary_habitat.tif", sep = "")
+      writeRaster(resp_zone_in_habitat, out_raster_name0, format="GTiff", overwrite=TRUE)     
     }  
   }
   

@@ -1,8 +1,8 @@
 rm(list = ls()) #remove all past worksheet variables
 source(paste0("C:/Users/lfortini/","directory_registry.r"))
 ###USER CONFIGURATION
-spp_nm = c('Akikiki','Akekee', 'Hawaii_Amakihi', 'Akiapolauu', 'Akohekohe', 'Anianiau', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Oahu_Amakihi','Hawaii_Elepaio', 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Omao', 'Oahu_Elepaio', 'Palila', 'Puaiohi', 'Kauai_Amakihi','Apapane', 'Iiwi', 'Amakihi', 'Elepaio') 
-project_name='finalmodel_P_PA_oldcode'
+spp_nm = c('Akekee', 'Hawaii_Amakihi', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'Anianiau', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Oahu_Amakihi','Hawaii_Elepaio', 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Omao', 'Oahu_Elepaio', 'Palila', 'Puaiohi','Kauai_Amakihi', 'Iiwi', 'Amakihi', 'Elepaio', 'Apapane')
+project_name='finalmodel_P_PA_oldcode_less_PAs'
 
 comp_projects=c('baseline', 'future') #put future second!
 ensemble_type="ef.pmw"

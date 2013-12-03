@@ -8,9 +8,17 @@ source(paste0("C:/Users/lfortini/","directory_registry.r"))
 #local_config_dir=resultsDir
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
 spp_nm = c('Akekee', 'Hawaii_Amakihi', 'Akiapolauu', 'Apapane', 'Akikiki', 'Akohekohe', 'Anianiau', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Oahu_Amakihi','Hawaii_Elepaio', 'Iiwi', 'Kauai_Elepaio', 'Maui_Alauahio', 'Amakihi', 'Maui_Parrotbill', 'Omao', 'Oahu_Elepaio', 'Palila', 'Puaiohi', 'Elepaio', 'Kauai_Amakihi')
+
+jnkn=length(spp_nm)
+x=c(1:jnkn)
+chunk <- function(x,n) split(x, factor(sort(rank(x)%%n)))
+groups=chunk(x,5)
+jnk=groups[5][[1]]
+spp_nm=spp_nm[jnk]
+#spp_nm=spp_nm[c(1,4)]
 project_name='finalmodel_P_PA_oldcode_220runs'
 server=1
-overwrite=0; paralelize=T
+overwrite=0; paralelize=F
 models_to_run=c('GBM','MAXENT')
 eval_stats=c("ROC","KAPPA", "TSS")
 plot_graphs=1
@@ -18,7 +26,7 @@ EM_fit=T
 EM_ensemble=T
 EM_project=T
 create_response_curves=F
-apply_biomod2_fixes=F #if running large models use this option
+apply_biomod2_fixes=T #if running large models use this option
 
 if (server==1){
   working_dir=paste0(resultsDir,project_name,'/')
@@ -55,7 +63,7 @@ do.full.models=T
 eval.metric.threshold = rep(0.5,length(eval_stats))
 
 ####projection config (script#3)
-baseline_or_future=4 #1 for baseline, 4 for future
+baseline_or_future=1 #1 for baseline, 4 for future
 memory = T #keep.in.memory=memory
 dir_for_temp_files<-paste(rootDir,'/temp/', project_name,'/', baseline_or_future, '/', sep='') #dir for temp run data (to avoid memory errors)
 

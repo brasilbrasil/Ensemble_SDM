@@ -6,7 +6,7 @@ spp_nm = c('Akekee', 'Hawaii_Amakihi', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'An
 baseline_or_future=4 #0 for baseline, 1 for future
 overwrite=0 #if 1, will overwrite past results
 env_var_files=c("bio1.tif", "bio7.tif", "bio12.tif", "bio15.tif") 
-project_name='finalmodel_P_PA_oldcode'
+project_name='finalmodel_P_PA_oldcode_less_PAs'
 
 working_dir=paste0(resultsDir,project_name,'/')
 ####START UNDERHOOD
