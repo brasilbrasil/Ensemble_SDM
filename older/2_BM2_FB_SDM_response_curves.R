@@ -23,7 +23,8 @@ library(stringr)
 dir.create("output_rasters/", showWarnings = FALSE)
 dir.create("output_rasters/response_curves/", showWarnings = FALSE)
 
-memory.limit(size=4095)
+#memory.limit(size=24000000)
+
 sp_nm=spp_nm[1]
 for (sp_nm in spp_nm){
   sp_nm=as.character(sp_nm)  

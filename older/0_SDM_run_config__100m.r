@@ -16,7 +16,7 @@ plot_graphs=1
 EM_fit=T
 EM_ensemble=T
 EM_project=T
-memory.limit(size=24000000)
+#memory.limit(size=24000000)
 
 if (server==1){
   working_dir=paste0(DR_FB_SDM_results_S,project_name,'/')

@@ -16,7 +16,7 @@ plot_graphs=1
 EM_fit=T
 EM_ensemble=T
 EM_project=T
-memory.limit(size=24000000)
+#memory.limit(size=24000000)
 apply_biomod2_fixes=F #if running large models use this option
 
 

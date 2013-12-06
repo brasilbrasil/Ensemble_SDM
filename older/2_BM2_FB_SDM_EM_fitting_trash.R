@@ -23,7 +23,8 @@ library(biomod2)
 library(stringr)
 #sp_nm="Akepa" #debug
 
-memory.limit(size=4095)
+#memory.limit(size=24000000)
+
 #sp_nm=spp_nm[1]
 for (sp_nm in spp_nm){
   sp_nm=as.character(sp_nm)  

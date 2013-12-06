@@ -192,7 +192,8 @@ for (sp_nm in spp_nm){
     dev.off() 
     }
     
-    memory.limit(size=4095) #increases computer memory allocation
+    #memory.limit(size=24000000)
+ #increases computer memory allocation
     
     #SETTING MODELING OPTIONS FOR EACH MODEL TYPE
     myBiomodOption <- BIOMOD_ModelingOptions(

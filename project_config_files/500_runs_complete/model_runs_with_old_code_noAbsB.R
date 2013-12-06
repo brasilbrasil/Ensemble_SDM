@@ -7,15 +7,16 @@ source(paste0("C:/Users/lfortini/","directory_registry.r"))
 ###################################
 #local_config_dir=resultsDir
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
-spp_nm = c('Akekee', 'Hawaii_Amakihi', 'Akiapolauu', 'Apapane', 'Akikiki', 'Akohekohe', 'Anianiau', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Oahu_Amakihi','Hawaii_Elepaio', 'Iiwi', 'Kauai_Elepaio', 'Maui_Alauahio', 'Amakihi', 'Maui_Parrotbill', 'Omao', 'Oahu_Elepaio', 'Palila', 'Puaiohi', 'Elepaio', 'Kauai_Amakihi')
+#spp_nm = c('Akekee', 'Hawaii_Amakihi', 'Akiapolauu', 'Apapane', 'Akikiki', 'Akohekohe', 'Anianiau', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Oahu_Amakihi','Hawaii_Elepaio', 'Iiwi', 'Kauai_Elepaio', 'Maui_Alauahio', 'Amakihi', 'Maui_Parrotbill', 'Omao', 'Oahu_Elepaio', 'Palila', 'Puaiohi', 'Elepaio', 'Kauai_Amakihi')
+spp_nm = c('Akekee', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'Anianiau', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Oahu_Amakihi','Hawaii_Elepaio', 'Kauai_Elepaio', 'Maui_Alauahio', 'Amakihi', 'Maui_Parrotbill', 'Omao', 'Oahu_Elepaio', 'Palila', 'Puaiohi', 'Elepaio', 'Kauai_Amakihi', 'Hawaii_Amakihi', 'Apapane', 'Iiwi')
 
 jnkn=length(spp_nm)
 x=c(1:jnkn)
 chunk <- function(x,n) split(x, factor(sort(rank(x)%%n)))
 groups=chunk(x,5)
-jnk=groups[5][[1]]
-spp_nm=spp_nm[jnk]
-#spp_nm=spp_nm[c(1,4)]
+jnk=groups[1][[1]]
+#spp_nm=spp_nm[jnk]
+#spp_nm=spp_nm[c(4)]
 project_name='finalmodel_P_PA_oldcode_220runs'
 server=1
 overwrite=0; paralelize=F

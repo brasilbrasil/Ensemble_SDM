@@ -23,7 +23,7 @@ baseline_or_future=1 #1 for baseline, 2 for baseline_wettest, 3 for baseline_dri
 overwrite=1 #if 1, will overwrite past results
 eval_stats=c("ROC","TSS","KAPPA") 
 maxentWDtmp = paste("maxentWDtmp_", baseline_or_future, sep = "")
-memory.limit(size=24000000)
+#memory.limit(size=24000000)
 temp<-paste('J:/pioapps/Science_Division/Adam_GIS/temp/RWorkDir_Maui_', baseline_or_future, '/', sep='')
 file.copy(paste(working_dir, 'maxent.jar', sep = ""), paste(working_dir, 'maxent', baseline_or_future, '.jar', sep = ""), copy.mode = TRUE)
 
@@ -72,7 +72,8 @@ for (env_var_file  in env_var_files){
   a=strsplit(env_var_file,"\\.")
   var_name=c(var_name, a[[1]][1])
 }
-memory.limit(size=240000)
+#memory.limit
+(size=240000)
 #sp_nm=spp_nm[1]
 spp_info=read.csv(paste(csv_dir,'FB_spp_data.csv', sep = ""))
 

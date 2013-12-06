@@ -211,7 +211,8 @@ MyBiomodSF <- function(sp_nm){
       PA.nb.rep = 0)
     
     
-    #memory.limit(size=4095)
+    ##memory.limit(size=24000000)
+
     myBiomodOption <- BIOMOD_ModelingOptions(
       GBM = list( distribution = 'bernoulli', interaction.depth = 7,  shrinkage = 0.001, bag.fraction = 0.5, train.fraction = 1, n.trees = 100,
                   cv.folds = 10),

@@ -48,7 +48,8 @@ EM_fit = T #if you want to run the model fitting = T
 EM_ensemble = F #if you want to run the ensemble modelling = T
 EM_project = F #if you want to project the model results = T
 apply_biomod2_fixes = F #if running large models use this option - solves memory problems
-memory.limit(size = 4000) #increases memory allocation
+#memory.limit
+(size = 4000) #increases memory allocation
 overwrite=0
 options(error=stop) #this keeps the code from running after errors
 
