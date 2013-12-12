@@ -8,8 +8,7 @@ setwd(working_dir) #sets working directory
 library(biomod2)
 library(stringr)
 
-#memory.limit
-(size = 4095) #increases memory limit size
+#memory.limit(size = 4095) #increases memory limit size
 sp_nm = spp_nm[1] #resets so the first species to run is the first one listed in config file or csv
 for (sp_nm in spp_nm){
   sp_nm = as.character(sp_nm) #defines the species name as a character string - not needed if it is already a text name
@@ -106,7 +105,7 @@ for (sp_nm in spp_nm){
     myBiomodEM #returns summary of ensemble modeling
     
     # get evaluation scores
-    getEMeval(myBiomodEM) #returns evaluation stats (testing.data, cutoff, sensitivity, and specificity) for mean, cv, etc.    
+    get_evaluations(myBiomodEM) #returns evaluation stats (testing.data, cutoff, sensitivity, and specificity) for mean, cv, etc.    
     save("myBiomodEM", "myBiomodModelOut","remaining_models", file = workspace_name_out)   #save workspace
     
     #Stop the clock
