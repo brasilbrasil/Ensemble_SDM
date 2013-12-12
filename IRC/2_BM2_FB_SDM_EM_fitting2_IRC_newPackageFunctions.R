@@ -49,10 +49,11 @@ for (sp_nm in spp_nm){
     ####This next section works fine as long as you are using more than one evaluation statistic. However, it returns an error if you are using
     ####only one evalulation statistic.
     jnk = myBiomodModelEval[,2,,,]
+    NAs = which(is.na(jnk), arr.ind = TRUE)
+    all_models = list()
     
     ####Testing new code to work with one evaluation statistic
-    #     NAs = which(is.na(jnk), arr.ind = TRUE)
-    #     all_models = list()
+    #     
     #     
     #     numRows = nrow(NAs)
     #     
@@ -65,8 +66,8 @@ for (sp_nm in spp_nm){
       for (c in dimnames(jnk)[[3]]){
         for (b in dimnames(jnk)[[2]]){
           for (a in dimnames(jnk)[[1]]){
-            jnk_str = paste(sp_nm,c,b,a,sep="_")
-            jnk_str2 = paste(sp_nm,c,b,sep="_")
+            jnk_str=paste(sp_nm,d,c,b,a,sep="_")
+            jnk_str2=paste(sp_nm,d,c,b,sep="_")
             all_models[length(all_models)+1] = jnk_str2
           }
         }
