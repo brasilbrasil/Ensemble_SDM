@@ -10,6 +10,7 @@ library(colorRamps)
 library(rasterVis)
 library(tools)
 library(ncdf)
+library(gbm) #needed for projection of "gbm" data (i.e. "BIOMOD_Projection(...)" function)
 
 ####START UNDERHOOD
 #assigning which projected climate data set to use depending on scenario
@@ -48,7 +49,8 @@ for (sp_nm in spp_nm){
   load(workspace_name) #loads workspace from previous ensemble modelling step
   plots = paste(working_dir,"AllEMplots_pmw",  sep="/") #assigns location for all plots
   if (file.exists(plots) == F | overwriteData == T){ #run only if plots have not already been collected and the overwrite function is off
-    dir.create(plots, showWarnings = FALSE)} #create directory for plots
+    dir.create(plots, showWarnings = FALSE)
+    } #create directory for plots
   
   workspace_name_out = paste0(sp_nm,"_FB_EM_proj_", proj_nm, ".RData") #assigns name to save workspace
   

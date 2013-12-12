@@ -29,7 +29,7 @@ if (machine == 1){
 ####GENERAL MODEL CONFIGURATION####
 ###################################
 #setting file locations 
-project_name = "FB_test20131212" #assign project name to the current run
+project_name = "FB_test20131212c" #assign project name to the current run
 
 #choose species of interest - all (from CSV file) or subset listed
 run_all_spp = F #if running all species enter "T" and if only subset enter "F"
@@ -41,8 +41,8 @@ eval_stats = c("ROC", "KAPPA") #choose evaluation methods - possibilties are: 'K
 env_var_files = c("bio1.grd", "bio7.grd", "bio12.grd", "bio15.grd") #choose bioclimatic variables of interest - if using new clim data use ".tif" instead
 plot_graphs = T #plot graphs of results (T) or not (F)
 EM_fit = T #if you want to run the model fitting = T
-EM_ensemble = F  #if you want to run the ensemble modelling = T
-EM_project = F #if you want to project the model results = T
+EM_ensemble = T  #if you want to run the ensemble modelling = T
+EM_project = T #if you want to project the model results = T
 create_response_curves = F
 apply_biomod2_fixes = F #if running large models use this option - solves memory problems
 overwriteData = F #T if want to overwrite and F if not
@@ -138,7 +138,7 @@ if (create_response_curves){
   source(paste0(codeDir,"2opt_BM2_FB_SDM_response_curves3.r"))
 }
 if (EM_ensemble){ #runs ensemble code
-  source(paste0(codeDir,"2_BM2_FB_SDM_EM_fitting2_IRC.r")) 
+  source(paste0(codeDir,"2_BM2_FB_SDM_EM_fitting2_IRC_newPackageFunctions.r")) 
 }
 if (EM_project){ #runs projection code
   source(paste0(codeDir,"3_BM2_FB_SDM_EM_projection_with_crop4_IRC.r")) 
