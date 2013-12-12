@@ -34,13 +34,13 @@ for (sp_nm in spp_nm){
     ### code chunk number 9: modeling_model_evaluation
     ###################################################
     # get all models evaluation
-    myBiomodModelEval <- getModelsEvaluations(myBiomodModelOut) #creates an array with model evaluation results for each species model
+    myBiomodModelEval <- get_evaluations(myBiomodModelOut) #creates an array with model evaluation results for each species model
     
     ###################################################
     ### code chunk number 10: modeling_variable_importance
     ###################################################
     # print variable importances
-    getModelsVarImport(myBiomodModelOut) #returns an array with model variable importances (i.e bio1, bio7, etc)
+    get_variables_importance(myBiomodModelOut) #returns an array with model variable importances (i.e bio1, bio7, etc)
     
     ###################################################
     ###new code- remove models with bad cutoffs
@@ -48,19 +48,17 @@ for (sp_nm in spp_nm){
     ####STILL NEEDS WORK ON THIS - look at "http://stackoverflow.com/questions/19866188/finding-the-dim-names-of-item-in-multidimensional-array"
     ####This next section works fine as long as you are using more than one evaluation statistic. However, it returns an error if you are using
     ####only one evalulation statistic.
-    
     jnk = myBiomodModelEval[,2,,,]
     
-    
     ####Testing new code to work with one evaluation statistic
-#     NAs = which(is.na(jnk), arr.ind = TRUE)
-#     all_models = list()
-#     
-#     numRows = nrow(NAs)
-#     
-#     for (row in 1:numRows) {
-#       print(mapply("[", dimnames(my.array), NAs[row,]))
-#     }
+    #     NAs = which(is.na(jnk), arr.ind = TRUE)
+    #     all_models = list()
+    #     
+    #     numRows = nrow(NAs)
+    #     
+    #     for (row in 1:numRows) {
+    #       print(mapply("[", dimnames(my.array), NAs[row,]))
+    #     }
     ####End of testing
     
     for (d in dimnames(jnk)[[4]]){
