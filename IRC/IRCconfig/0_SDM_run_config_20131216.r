@@ -40,9 +40,9 @@ models_to_run = c("GBM","MAXENT") #choose biomod2 models to run - possibilities 
 eval_stats = c("ROC", "KAPPA") #choose evaluation methods - possibilties are: 'KAPPA','TSS','ROC'
 env_var_files = c("bio1.grd", "bio7.grd", "bio12.grd", "bio15.grd") #choose bioclimatic variables of interest - if using new clim data use ".tif" instead
 plot_graphs = T #plot graphs of results (T) or not (F)
-EM_fit = T #if you want to run the model fitting = T
+EM_fit = F #if you want to run the model fitting = T
 EM_ensemble = F  #if you want to run the ensemble modelling = T
-EM_project = F #if you want to project the model results = T
+EM_project = T #if you want to project the model results = T
 create_response_curves = F
 apply_biomod2_fixes = F #if running large models use this option - solves memory problems
 overwriteData = F #T if want to overwrite and F if not
