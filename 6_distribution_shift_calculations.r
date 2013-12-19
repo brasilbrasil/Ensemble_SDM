@@ -2,7 +2,7 @@ rm(list = ls()) #remove all past worksheet variables
 source(paste0("C:/Users/lfortini/","directory_registry.r"))
 ###USER CONFIGURATION
 spp_nm = c('Akekee', 'Hawaii_Amakihi', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'Anianiau', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Oahu_Amakihi','Hawaii_Elepaio', 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Omao', 'Oahu_Elepaio', 'Palila', 'Puaiohi','Kauai_Amakihi', 'Iiwi', 'Amakihi', 'Elepaio', 'Apapane')
-project_name='finalmodel_P_PA_oldcode_less_PAs'
+project_name='finalmodel_P_PA_oldcode_220runs'
 
 model_resolution=0.5 #inkm
 comp_projects=c('baseline', 'future') #put future second!
@@ -13,7 +13,7 @@ habitat_overlay=T
 
 working_dir=paste0(resultsDir,project_name,'/')
 clim_data_dir=paste0(bioclimData2013Dir,"all_baseline/500m/")
-overwrite=1 #if 1, will overwrite past results
+overwrite=0 #if 1, will overwrite past results
 current_biome_distribution_dir="Y:/PICCC_analysis/FB_analysis/habitat analysis/veg_overlay/current_veg_mask/"
 projected_biome_distribution_dir="Y:/PICCC_analysis/FB_analysis/habitat analysis/veg_overlay/projected_veg_mask/"
 
@@ -28,7 +28,7 @@ all_stats<- as.data.frame(setNames(replicate(length(vars),numeric(0), simplify =
 if (habitat_overlay){
 mask_text="habitat_mask_"
 }else{
-  mask_test=""
+  mask_text=""
 }
 
 sp_nm=spp_nm[1]

@@ -7,11 +7,20 @@ comp_projects=c('baseline', 'future') #put future second!
 ensemble_type="ef.pmw"
 eval_stat="ROC"
 veg_overlay=T #this code is not complete!
+BPS=T
 projected_veg_overlay=T #this code is not complete!
 project_name='finalmodel_P_PA_oldcode_less_PAs'
 working_dir=paste0(resultsDir,project_name,'/')
 overwrite=1 #if 1, will overwrite past results
-current_biome_distribution_dir="Y:/PICCC_analysis/FB_analysis/habitat analysis/veg_overlay/current_veg_mask/"
+
+if(BPS){
+  current_biome_distribution_dir="Y:/PICCC_analysis/FB_analysis/habitat analysis/veg_overlay/BPS/current_veg_mask/" 
+  projected_veg_overlay=F
+  BPS_str='BPS/'
+}else{
+  current_biome_distribution_dir="Y:/PICCC_analysis/FB_analysis/habitat analysis/veg_overlay/current_veg_mask/"
+  BPS_str=''
+}
 projected_biome_distribution_dir="Y:/PICCC_analysis/FB_analysis/habitat analysis/veg_overlay/projected_veg_mask/"
 
 
@@ -21,6 +30,9 @@ library(biomod2)
 library(stringr)
 
 dir.create('output_rasters/veg_overlays/',showWarnings=FALSE)
+if(BPS){
+  dir.create('output_rasters/veg_overlays/BPS/',showWarnings=FALSE)  
+}
 sp_nm=spp_nm[10]
 for (sp_nm in spp_nm){
   sp_nm=as.character(sp_nm)  
@@ -31,7 +43,7 @@ for (sp_nm in spp_nm){
   resp_zone_file_name=paste('output_rasters/main/', sp_nm0,"_response_zones_",eval_stat, "_", ensemble_type, ".tif", sep = "")
   resp_zone=raster(resp_zone_file_name)  
   if (veg_overlay){
-    jpeg_name=paste('output_rasters/veg_overlays/', sp_nm0,"_response_zones_w_current_veg_distribution.jpg", sep = "")
+    jpeg_name=paste('output_rasters/veg_overlays/', BPS_str, sp_nm0,"_response_zones_w_current_veg_distribution.jpg", sep = "")
     if (file.exists(jpeg_name)==F | overwrite==1){ #check to see if the analysis for this species was already done    
       
       mypalette_numbers=c(0, 1, 2, 3, 4, 5, 6, 7)
@@ -65,7 +77,7 @@ for (sp_nm in spp_nm){
       
       zone_raster_vals=unique(temp_resp_zone)    
       
-      jpeg_name=paste('output_rasters/veg_overlays/', sp_nm0,"_response_zones_w_current_veg_distribution.jpg", sep = "")
+      jpeg_name=paste('output_rasters/veg_overlays/', BPS_str, sp_nm0,"_response_zones_w_current_veg_distribution.jpg", sep = "")
       
       jpeg(jpeg_name,
            width = 10, height = 8, units = "in",
@@ -77,13 +89,13 @@ for (sp_nm in spp_nm){
       dev.off()
       
       resp_zone_in_habitat=Response_var1*resp_zone
-      out_raster_name0=paste('output_rasters/veg_overlays/', sp_nm0,"_response_zones_w_current_habitat.tif", sep = "")
+      out_raster_name0=paste('output_rasters/veg_overlays/', BPS_str, sp_nm0,"_response_zones_w_current_habitat.tif", sep = "")
       writeRaster(resp_zone_in_habitat, out_raster_name0, format="GTiff", overwrite=TRUE)     
     }  
   }
   
   if (projected_veg_overlay){
-    jpeg_name=paste('output_rasters/veg_overlays/', sp_nm0,"_response_zones_w_future_clim_env_of_primary_habitat.jpg", sep = "")
+    jpeg_name=paste('output_rasters/veg_overlays/', BPS_str, sp_nm0,"_response_zones_w_future_clim_env_of_primary_habitat.jpg", sep = "")
     if (file.exists(jpeg_name)==F | overwrite==1){ #check to see if the analysis for this species was already done          
       mypalette_numbers=c(0, 1, 2, 3, 4, 5, 6, 7)
       mypalette_breaks=c(-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5)
@@ -120,7 +132,7 @@ for (sp_nm in spp_nm){
       #jnk0=match(zone_raster_vals,mypalette_numbers, nomatch = 0)
       #mypalette1=mypalette[jnk0]
       
-      jpeg_name=paste('output_rasters/veg_overlays/', sp_nm0,"_response_zones_w_future_clim_env_of_primary_habitat.jpg", sep = "")
+      jpeg_name=paste('output_rasters/veg_overlays/', BPS_str, sp_nm0,"_response_zones_w_future_clim_env_of_primary_habitat.jpg", sep = "")
       
       jpeg(jpeg_name,
            width = 10, height = 8, units = "in",
@@ -132,7 +144,7 @@ for (sp_nm in spp_nm){
       dev.off()
       
       resp_zone_in_habitat=Response_var1*resp_zone
-      out_raster_name0=paste('output_rasters/veg_overlays/', sp_nm0,"_response_zones_w_future_clim_env_of_primary_habitat.tif", sep = "")
+      out_raster_name0=paste('output_rasters/veg_overlays/', BPS_str, sp_nm0,"_response_zones_w_future_clim_env_of_primary_habitat.tif", sep = "")
       writeRaster(resp_zone_in_habitat, out_raster_name0, format="GTiff", overwrite=TRUE)     
     }  
   }

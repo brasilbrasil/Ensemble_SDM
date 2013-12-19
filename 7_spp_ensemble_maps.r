@@ -5,13 +5,17 @@ spp_nm = c('Akekee', 'Hawaii_Amakihi', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'An
 project_name='finalmodel_P_PA_oldcode_less_PAs'
 ensemble_type="ef.pmw"
 eval_stats=c('ROC') 
-habitat_overlay=F
+habitat_overlay=T
+BPS=T
 
 working_dir=paste0(resultsDir,project_name,'/')
 clim_data_dir=paste0(bioclimData2013Dir,"all_baseline/500m/")
 overwrite=0 #if 1, will overwrite past results
-current_biome_distribution_dir="Y:/PICCC_analysis/FB_analysis/habitat analysis/veg_overlay/current_veg_mask/"
-projected_biome_distribution_dir="Y:/PICCC_analysis/FB_analysis/habitat analysis/veg_overlay/projected_veg_mask/"
+if(BPS){
+  current_biome_distribution_dir="Y:/PICCC_analysis/FB_analysis/habitat analysis/veg_overlay/BPS/current_veg_mask/" 
+}else{
+  current_biome_distribution_dir="Y:/PICCC_analysis/FB_analysis/habitat analysis/veg_overlay/current_veg_mask/"
+}
 
 ####START UNDERHOOD
 setwd(working_dir)
@@ -102,7 +106,12 @@ for (sp_nm in spp_nm){
     lost_range=lost_range*Response_var1
     kept_range=kept_range*Response_var1
     gained_range=gained_range*Response_var1    
-    masked_text="current_habitat_"
+    if (BPS){
+      masked_text="BPS_habitat_"
+    }else{
+      masked_text="current_habitat_"      
+    }
+    
   }else{
     masked_text=""
   }
@@ -238,3 +247,12 @@ Process_raster_data_BadtoGood(spp_em_suitability_delta, paste0('output_rasters/s
 Process_raster_data_NeutraltoGood(spp_em_lost_range, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_lost_range'), mask_data=mask_layer)
 Process_raster_data_NeutraltoGood(spp_em_kept_range, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_kept_range'), mask_data=mask_layer)
 Process_raster_data_NeutraltoGood(spp_em_gained_range, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_gained_range'), mask_data=mask_layer)
+
+if (BPS){
+  FUT_w_BPS_hab=raster(paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_future_bin.tif'))  
+  FUT_w_Curr_hab=raster(paste0('output_rasters/spp_ensembles/',"current_habitat_",'spp_em_future_bin.tif'))
+  not_cur_hab=FUT_w_Curr_hab==0
+  
+  restoration_priority=FUT_w_BPS_hab*not_cur_hab
+  Process_raster_data_NeutraltoGood(restoration_priority, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_restoration_priority'), mask_data=mask_layer)  
+}

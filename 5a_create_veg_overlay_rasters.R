@@ -2,9 +2,11 @@ rm(list = ls()) #remove all past worksheet variables
 source(paste0("C:/Users/lfortini/","directory_registry.r"))
 
 ###USER CONFIGURATION
-working_dir='Y:/PICCC_analysis/FB_analysis/habitat analysis/veg_overlay/'
+working_dir='Y:/PICCC_analysis/FB_analysis/habitat analysis/veg_overlay/BPS/'
 clim_data_dir=clim_data_2000 
 overwrite=0 #if 1, will overwrite past results
+projected_biome=F
+BPS=T
 
 ####START UNDERHOOD
 setwd(working_dir)
@@ -12,7 +14,11 @@ library(biomod2)
 library(stringr)
 
 biome_map_dir="//10.0.0.5/data2$//PICCC_analysis/community_SRE/"
-landfire_reclass_resampled=raster(paste(biome_map_dir, "landfire_reclass_wetland_coastal_500m.tif", sep=""))
+if (BPS){
+  landfire_reclass_resampled=raster(paste(biome_map_dir, "landfire_BPS_reclass_500m.tif", sep=""))  
+}else{
+  landfire_reclass_resampled=raster(paste(biome_map_dir, "landfire_reclass_wetland_coastal_500m.tif", sep=""))  
+}
 biome_proj_map_dir="//10.0.0.5/data2$//PICCC_analysis/community_SRE/tifs/"
 
 biome_association_table=(read.csv('bird_biome_association.csv',header=T, stringsAsFactors=F))
@@ -54,6 +60,8 @@ for (sp_nm in spp_nm){
     dev.off()  
     
     ##projected biome associations
+    if (projected_biome){
+      
     sp_biome_association=sp_biome_associations[1]
     sp_biome_association=sp_biome_associations[2]
     for (sp_biome_association in sp_biome_associations){
@@ -88,6 +96,8 @@ for (sp_nm in spp_nm){
     plot(combined_projection_map, legend=F)
     title(paste(sp_nm, " projected overlap and gained climate envelope for primary biomes", sep=""))
     dev.off()  
+    }
+    
   }
 }
 
