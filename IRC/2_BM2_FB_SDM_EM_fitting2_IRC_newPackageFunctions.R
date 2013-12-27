@@ -8,8 +8,7 @@ setwd(working_dir) #sets working directory
 library(biomod2)
 library(stringr)
 
-#memory.limit
-(size = 4095) #increases memory limit size
+#memory.limit(size = 4095) #increases memory limit size
 sp_nm = spp_nm[1] #resets so the first species to run is the first one listed in config file or csv
 for (sp_nm in spp_nm){
   sp_nm = as.character(sp_nm) #defines the species name as a character string - not needed if it is already a text name
@@ -34,13 +33,13 @@ for (sp_nm in spp_nm){
     ### code chunk number 9: modeling_model_evaluation
     ###################################################
     # get all models evaluation
-    myBiomodModelEval <- getModelsEvaluations(myBiomodModelOut) #creates an array with model evaluation results for each species model
+    myBiomodModelEval <- get_evaluations(myBiomodModelOut) #creates an array with model evaluation results for each species model
     
     ###################################################
     ### code chunk number 10: modeling_variable_importance
     ###################################################
     # print variable importances
-    getModelsVarImport(myBiomodModelOut) #returns an array with model variable importances (i.e bio1, bio7, etc)
+    get_variables_importance(myBiomodModelOut) #returns an array with model variable importances (i.e bio1, bio7, etc)
     
     ###################################################
     ###new code- remove models with bad cutoffs
@@ -77,7 +76,7 @@ for (sp_nm in spp_nm){
     bad_models_short=unique(bad_models_short)
     jnk_good=!(all_models %in% bad_models_short)
     remaining_models=all_models[jnk_good]
-    remaining_models=unlist(unique(remaining_models))   
+    remaining_models=unlist(unique(remaining_models))    
     
     ###################################################
     ### code chunk number 11: ensemble_modeling
@@ -106,7 +105,7 @@ for (sp_nm in spp_nm){
     myBiomodEM #returns summary of ensemble modeling
     
     # get evaluation scores
-    getEMeval(myBiomodEM) #returns evaluation stats (testing.data, cutoff, sensitivity, and specificity) for mean, cv, etc.    
+    get_evaluations(myBiomodEM) #returns evaluation stats (testing.data, cutoff, sensitivity, and specificity) for mean, cv, etc.    
     save("myBiomodEM", "myBiomodModelOut","remaining_models", file = workspace_name_out)   #save workspace
     
     #Stop the clock
