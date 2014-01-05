@@ -8,7 +8,7 @@ source(paste0("C:/Users/lfortini/","directory_registry.r"))
 #local_config_dir=resultsDir
 #spp_nm=(read.csv(paste(local_config_dir,'spp_to_run_all.csv', sep = ""),header=F, stringsAsFactors=F))
 #spp_nm = c('Akekee', 'Hawaii_Amakihi', 'Akiapolauu', 'Apapane', 'Akikiki', 'Akohekohe', 'Anianiau', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Oahu_Amakihi','Hawaii_Elepaio', 'Iiwi', 'Kauai_Elepaio', 'Maui_Alauahio', 'Amakihi', 'Maui_Parrotbill', 'Omao', 'Oahu_Elepaio', 'Palila', 'Puaiohi', 'Elepaio', 'Kauai_Amakihi')
-spp_nm = c('Akekee', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'Anianiau', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Oahu_Amakihi','Hawaii_Elepaio', 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Omao', 'Oahu_Elepaio', 'Palila', 'Puaiohi', 'Kauai_Amakihi', 'Hawaii_Amakihi', 'Apapane', 'Amakihi', 'Elepaio', 'Iiwi')
+spp_nm = c('Koa')
 
 jnkn=length(spp_nm)
 x=c(1:jnkn)
@@ -17,7 +17,7 @@ groups=chunk(x,5)
 jnk=groups[1][[1]]
 #spp_nm=spp_nm[jnk]
 #spp_nm=spp_nm[c(4)]
-project_name='finalmodel_P_PA_oldcode_220runs'
+project_name='test_plant'
 server=1
 overwrite=0; paralelize=F
 models_to_run=c('GBM','MAXENT')
@@ -26,7 +26,7 @@ plot_graphs=1
 EM_fit=T
 EM_ensemble=T
 EM_project=T
-create_response_curves=F
+create_response_curves=T
 apply_biomod2_fixes=T #if running large models use this option
 
 if (server==1){
@@ -49,11 +49,11 @@ csv_dir=paste(working_dir,"single_sp_CSVs/", sep="")
 ####CONFIG FOR SPECIFIC STEPS####
 #################################
 ####fit config (script#1)
-NbRunEval=5
+NbRunEval=4
 include_Abs=F #in test phase
 PAs_outside_CE=F #if T, will only consider PAs outside climate envelope of all points collected
 dens_PAs_outside_CE=1 #if 1 will create PA density that is equal to point density within surveyed areas
-PA.nb.rep=40
+PA.nb.rep=5
 PA.nb.absences = 10000 #only used if if PAs_outside_CE=F, this will be overridden! (n of PAs will be determined by P/A point density within CE 
 candidatePAperPA=100 #only used if if PAs_outside_CE=F, if value ==0, will use PA.nb.absences   
 PA.strategy = "random"
@@ -69,12 +69,10 @@ memory = T #keep.in.memory=memory
 dir_for_temp_files<-paste(rootDir,'/temp/', project_name,'/', baseline_or_future, '/', sep='') #dir for temp run data (to avoid memory errors)
 
 if (server==1){
-  clim_data_2004hottest=paste0(bioclimData2013Dir,"2004_hottest/500m/")
   clim_data_2000wettest="D:/GIS_Data/REnviroLayers/mixed_data_2000_250mwettest/"
   clim_data_2000driest= "D:/GIS_Data/REnviroLayers/mixed_data_2000_250mdriest/"
   clim_data_2100wettest="D:/GIS_Data/REnviroLayers/mixed_data_2100_250mwettest/"
   clim_data_2100driest= "D:/GIS_Data/REnviroLayers/mixed_data_2100_250mdriest/"  
-  
 }else{
   clim_data_2000="Y:/SDM_env_data/bioclim_variables/full extent bioclim data/all_grd/all_baseline/250m/"
   clim_data_2100="Y:/SDM_env_data/bioclim_variables/full extent bioclim data/all_grd/all_future/250m/"

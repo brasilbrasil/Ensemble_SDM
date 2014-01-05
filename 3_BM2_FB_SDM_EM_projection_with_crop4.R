@@ -20,18 +20,21 @@ if (baseline_or_future==5){
 if (baseline_or_future==6){
   clim_surface_to_use=clim_data_2100driest
   proj_nm0='future_driest'}
+if (baseline_or_future==7){
+  clim_surface_to_use=clim_data_2004hottest
+  proj_nm0='present_hottest'}
 csv_dir=paste(working_dir,"single_sp_CSVs/", sep="")
 
-setwd(working_dir)
 
 library(biomod2)
+#library(biomod2,lib.loc="C:/Users/lfortini/r_test_libraries")
 library(stringr)
 library(colorRamps)
 library(rasterVis)
 
 if (apply_biomod2_fixes){
   rasterOptions(tmpdir=dir_for_temp_files, timer = T, progress = "text", todisk  = T)
-  source(paste0(DR_code_S,"Ensemble_SDM/3b_modifications_of_projection_code.r")) #all of fixes to biomod2 code created by AV
+  source(paste0(DR_code_S,"Ensemble_SDM/3b_modifications_of_projection_code.r"), local=T) #all of fixes to biomod2 code created by AV
 }
 
 var_name=c()
@@ -42,7 +45,7 @@ for (env_var_file  in env_var_files){
 spp_info=read.csv(paste(csv_dir,'FB_spp_data.csv', sep = ""))
 
 
-sp_nm=spp_nm[5]
+sp_nm=spp_nm[1]
 for (sp_nm in spp_nm){
   sp_nm=as.character(sp_nm)  
   cat('\n',sp_nm,'model projection...')

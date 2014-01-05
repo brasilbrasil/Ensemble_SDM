@@ -17,7 +17,7 @@ groups=chunk(x,5)
 jnk=groups[1][[1]]
 #spp_nm=spp_nm[jnk]
 #spp_nm=spp_nm[c(4)]
-project_name='finalmodel_P_PA_oldcode_220runs'
+project_name='hot2100'
 server=1
 overwrite=0; paralelize=F
 models_to_run=c('GBM','MAXENT')
@@ -69,12 +69,10 @@ memory = T #keep.in.memory=memory
 dir_for_temp_files<-paste(rootDir,'/temp/', project_name,'/', baseline_or_future, '/', sep='') #dir for temp run data (to avoid memory errors)
 
 if (server==1){
-  clim_data_2004hottest=paste0(bioclimData2013Dir,"2004_hottest/500m/")
   clim_data_2000wettest="D:/GIS_Data/REnviroLayers/mixed_data_2000_250mwettest/"
   clim_data_2000driest= "D:/GIS_Data/REnviroLayers/mixed_data_2000_250mdriest/"
   clim_data_2100wettest="D:/GIS_Data/REnviroLayers/mixed_data_2100_250mwettest/"
   clim_data_2100driest= "D:/GIS_Data/REnviroLayers/mixed_data_2100_250mdriest/"  
-  
 }else{
   clim_data_2000="Y:/SDM_env_data/bioclim_variables/full extent bioclim data/all_grd/all_baseline/250m/"
   clim_data_2100="Y:/SDM_env_data/bioclim_variables/full extent bioclim data/all_grd/all_future/250m/"

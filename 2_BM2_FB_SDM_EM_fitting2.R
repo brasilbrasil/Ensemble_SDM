@@ -5,6 +5,7 @@
 setwd(working_dir)
 
 library(biomod2)
+#library(biomod2,lib.loc="C:/Users/lfortini/r_test_libraries")
 library(stringr)
 #sp_nm="Akepa" #debug
 
