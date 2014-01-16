@@ -8,8 +8,6 @@ spp_nm = c('Akekee', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'Anianiau', 'Hawaii_A
 project_name='finalmodel_P_PA_oldcode_less_PAs'
 server=1
 overwrite=0; paralelize=F
-models_to_run=c('GBM','MAXENT')
-eval_stats=c("ROC","KAPPA", "TSS")
 plot_graphs=1
 EM_fit=T
 EM_ensemble=T
@@ -49,7 +47,6 @@ equiv_100m=0.0009430131
 PA.dist.min = 5*equiv_100m #500 min distance from actual data points 
 do.full.models=T
 ####ensemble config (script#2)
-eval.metric.threshold = rep(0.5,length(eval_stats))
 
 ####projection config (script#3)
 baseline_or_future=1 #1 for baseline, 4 for future
@@ -70,6 +67,7 @@ if (server==1){
 ####RUNNING SCRIPTS!!!####
 ##########################
 library(stringr)
+library(raster)
 if (apply_biomod2_fixes){
   maxentWDtmp = paste("maxentWDtmp_", baseline_or_future, sep = "")
   dir.create(dir_for_temp_files, showWarnings=F, recursive=T)
@@ -98,6 +96,8 @@ if (paralelize){
   file.create(paste0(working_dir,instance_file),showWarnings=F)  
 }
 
+coverMap=raster("Y:/PICCC_analysis/FB_analysis/habitat analysis/dominant cover/landfire_reclass_wetland_coastal_500m.tif")
+hab_assoc=data.frame(cover=c(0:13))
 for (sp_nm in spp_nm){
   sp_nm=as.character(sp_nm)
   cat('\n',sp_nm,'modeling...')  
@@ -122,6 +122,19 @@ for (sp_nm in spp_nm){
   }else{
     all_mySpeciesOcc=rbind(all_mySpeciesOcc, mySpeciesOcc[,1:4])
   }
+  
+  data=mySpeciesOcc[,3:4]
+  sp_hab=extract(coverMap,data)
+  jnk=as.data.frame(table(sp_hab))
+  hab_assoc=cbind(hab_assoc,rep(0,dim(hab_assoc)[1]))
+  names(hab_assoc)[dim(hab_assoc)[2]]=sp_nm
+  hab_assoc[hab_assoc[,1] %in% jnk$sp_hab,dim(hab_assoc)[2]]=jnk$Freq
 }
+
+write.table(hab_assoc, file = "hab_assoc.csv", sep=",", col.names=NA)
+rel_hab_assoc=data.frame(mapply('/', hab_assoc,colSums(hab_assoc)))
+rel_hab_assoc=rel_hab_assoc*100
+rel_hab_assoc[,1]=hab_assoc[,1]
+write.table(rel_hab_assoc, file = "rel_hab_assoc.csv", sep=",", col.names=NA)
 
 write.table(all_mySpeciesOcc, file = "all_pres_points.csv", sep=",", col.names=NA)

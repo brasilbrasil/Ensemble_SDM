@@ -10,6 +10,7 @@ spp_nm = c('Akekee', 'Hawaii_Amakihi', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'An
 #'Iiwi', 'Amakihi', 'Elepaio', 'Apapane', 
 project_name='finalmodel_P_PA_oldcode_less_PAs'
 working_dir=paste0(resultsDir,project_name,'/')
+eval_stats=c("ROC","KAPPA", "TSS")
 
 ###START UNDERHOOD
 setwd(working_dir)
@@ -23,15 +24,19 @@ for (sp_nm in spp_nm){
   myBiomodModelEval <- getModelsEvaluations(myBiomodModelOut)    
   dimnames(myBiomodModelEval)
   #######Loading datasets#######
-  myBiomodModelEval["ROC","Testing.data",,,]
-  Spp_ROC<- data.frame(myBiomodModelEval["ROC","Testing.data",,,])
-  Spp_ROC=cbind(matrix(sp_nm,dim(Spp_ROC)[1],1),rownames(Spp_ROC),Spp_ROC)
-  
+  for (eval_stat in eval_stats){
+    myBiomodModelEval[eval_stat,"Testing.data",,,]
+    Spp_eval<- data.frame(myBiomodModelEval[eval_stat,"Testing.data",,,])
+    Spp_eval=cbind(matrix(sp_nm,dim(Spp_eval)[1],1),rownames(Spp_eval),Spp_eval)
+    
     if (i==1){
-      all_eval_mat=Spp_ROC
+      assign(paste0("all_eval_mat_",eval_stat),Spp_eval)
+      #all_eval_mat=Spp_eval
     }else{
-      all_eval_mat=rbind(all_eval_mat,Spp_ROC)
+      jnk=rbind(get(paste0("all_eval_mat_",eval_stat)),Spp_eval)
+      assign(paste0("all_eval_mat_",eval_stat),jnk)      
     }
+  }
   
   ## getting the variable importance ##
   getModelsVarImport(myBiomodModelOut)
@@ -48,5 +53,7 @@ for (sp_nm in spp_nm){
 FileName<-paste("all_VariImp.csv")
 write.table(all_var_imp_mat, file = FileName, sep=",", row.names = FALSE)
 
-FileName<-paste("all_eval_mat.csv")
-write.table(all_eval_mat, file = FileName, sep=",", row.names = FALSE)
+for (eval_stat in eval_stats){
+  FileName<-paste0("all_eval_mat_",eval_stat,".csv")
+  write.table(get(paste0("all_eval_mat_",eval_stat)), file = FileName, sep=",", row.names = FALSE)
+}

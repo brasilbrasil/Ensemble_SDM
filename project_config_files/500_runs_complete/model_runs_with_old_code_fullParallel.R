@@ -47,12 +47,13 @@ sp_parallel_run=function(spp_nm){
   eval.metric.threshold = rep(0.5,length(eval_stats))
   
   ####projection config (script#3)
-  baseline_or_future=7 #1 for baseline, 4 for future, 7 for hot
+  baseline_or_future=8 #1 for baseline, 4 for future, 7 for hot
   memory = T #keep.in.memory=memory
   dir_for_temp_files<-paste(rootDir,'/temp/', project_name,'/', baseline_or_future, '/', sep='') #dir for temp run data (to avoid memory errors)
   
   if (server==1){
     clim_data_2004hottest=paste0(bioclimData2013Dir,"2004_hottest/500m/")
+    clim_data_2104hottest=paste0(bioclimData2013Dir,"2104_hottest/500m/")
     clim_data_2000wettest="D:/GIS_Data/REnviroLayers/mixed_data_2000_250mwettest/"
     clim_data_2000driest= "D:/GIS_Data/REnviroLayers/mixed_data_2000_250mdriest/"
     clim_data_2100wettest="D:/GIS_Data/REnviroLayers/mixed_data_2100_250mwettest/"

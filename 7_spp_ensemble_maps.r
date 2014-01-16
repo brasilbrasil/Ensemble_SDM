@@ -6,7 +6,7 @@ project_name='finalmodel_P_PA_oldcode_less_PAs'
 ensemble_type="ef.pmw"
 eval_stats=c('ROC') 
 habitat_overlay=T
-BPS=T
+BPS=F
 
 working_dir=paste0(resultsDir,project_name,'/')
 clim_data_dir=paste0(bioclimData2013Dir,"all_baseline/500m/")
@@ -53,7 +53,9 @@ spp_em_masked_future_suitability=jnk
 spp_em_masked_current_suitability_CV=jnk
 spp_em_masked_future_suitability_CV=jnk
 spp_em_current_suitability=jnk
+spp_em_current_suitability_bin=jnk
 spp_em_future_suitability=jnk
+spp_em_future_suitability_bin=jnk
 spp_em_current_bin=jnk
 spp_em_future_bin=jnk
 spp_em_suitability_delta=jnk
@@ -72,7 +74,9 @@ for (sp_nm in spp_nm){
   baseline_masked_suitability=raster(paste('output_rasters/', sp_nm0,"_", "clipped_suitability_","baseline","_",eval_stat,"_",ensemble_type, ".tif", sep = ""))
   future_masked_suitability=raster(paste('output_rasters/', sp_nm0,"_", "clipped_suitability_","future","_",eval_stat,"_",ensemble_type, ".tif", sep = ""))
   baseline_suitability=raster(paste('output_rasters/', sp_nm0,"_", "suitability_","baseline","_",eval_stat,"_",ensemble_type, ".tif", sep = ""))
+  baseline_suitability_bin=baseline_suitability>0
   future_suitability=raster(paste('output_rasters/', sp_nm0,"_", "suitability_","future","_",eval_stat,"_",ensemble_type, ".tif", sep = ""))
+  future_suitability_bin=future_suitability>0
   baseline_suitability_CV=raster(paste0('output_rasters/', sp_nm0,"_", "suitability_CV_","baseline","_",eval_stat,"_",ensemble_type, ".tif"))
   future_suitability_CV=raster(paste0('output_rasters/', sp_nm0,"_", "suitability_CV_","future","_",eval_stat,"_",ensemble_type, ".tif", sep = ""))
   current_bin=raster(paste('output_rasters/', sp_nm0,"_", "BIN_","baseline","_",eval_stat,"_",ensemble_type, ".tif", sep = ""))
@@ -97,7 +101,9 @@ for (sp_nm in spp_nm){
     baseline_masked_suitability=baseline_masked_suitability*Response_var1
     future_masked_suitability=future_masked_suitability*Response_var1
     baseline_suitability=baseline_suitability*Response_var1
+    baseline_suitability_bin=baseline_suitability_bin*Response_var1
     future_suitability=future_suitability*Response_var1
+    future_suitability_bin=future_suitability_bin*Response_var1
     baseline_suitability_CV=baseline_suitability_CV*Response_var1
     future_suitability_CV=future_suitability_CV*Response_var1
     current_bin=current_bin*Response_var1
@@ -121,7 +127,9 @@ for (sp_nm in spp_nm){
   baseline_masked_suitability=extend_raster(baseline_masked_suitability)
   future_masked_suitability=extend_raster(future_masked_suitability)  
   baseline_suitability=extend_raster(baseline_suitability)
+  baseline_suitability_bin=extend_raster(baseline_suitability_bin)
   future_suitability=extend_raster(future_suitability)
+  future_suitability_bin=extend_raster(future_suitability_bin)
   baseline_suitability_CV=extend_raster(baseline_suitability_CV)
   future_suitability_CV=extend_raster(future_suitability_CV)
   current_bin=extend_raster(current_bin)
@@ -135,7 +143,9 @@ for (sp_nm in spp_nm){
   spp_em_masked_current_suitability=spp_em_masked_current_suitability+baseline_masked_suitability
   spp_em_masked_future_suitability=spp_em_masked_future_suitability+future_masked_suitability
   spp_em_current_suitability=spp_em_current_suitability+baseline_suitability
+  spp_em_current_suitability_bin=spp_em_current_suitability_bin+baseline_suitability_bin
   spp_em_future_suitability=spp_em_future_suitability+future_suitability
+  spp_em_future_suitability_bin=spp_em_future_suitability_bin+future_suitability_bin
   spp_em_masked_current_suitability_CV=spp_em_masked_current_suitability_CV+baseline_suitability_CV
   spp_em_masked_future_suitability_CV=spp_em_masked_future_suitability_CV+future_suitability_CV
   spp_em_current_bin=spp_em_current_bin+current_bin
@@ -203,6 +213,36 @@ Process_raster_data_NeutraltoGood=function(raster_var,out_nm,min_lim=NULL, max_l
   writeRaster(raster_var, out_raster_name, format="GTiff", overwrite=TRUE)
 }
 
+Process_raster_data_NeutraltoGood_W_overlay=function(raster_var,out_nm,min_lim=NULL, max_lim=NULL, mask_data=NULL, overlay_data=NULL){
+  jpeg_name=paste(out_nm, ".jpg", sep = "")
+  out_raster_name=paste(out_nm, ".tif", sep = "")
+  jpeg(jpeg_name,
+       width = 14, height = 14, units = "in",
+       pointsize = 12, quality = 90, bg = "white", res = 300)
+  if (is.null(min_lim)){
+    min_lim=minValue(raster_var)
+  }
+  if (is.null(max_lim)){
+    max_lim=maxValue(raster_var)
+  }
+  library(colorRamps)
+  col5 <- colorRampPalette(c('gray96', 'darkgreen'))#lightgrey  
+  plot(raster_var, col=col5(n=99), breaks=seq(min_lim,max_lim,length.out=100) , axes=FALSE, box=FALSE,
+       legend=T, legend.width=1, legend.shrink=0.75,
+       legend.args=list(text="", side=4, font=2, line=2.5, cex=0.8),
+       axis.args=list(at=seq(min_lim,max_lim, (max_lim-min_lim)/10),
+                      labels=seq(min_lim,max_lim, (max_lim-min_lim)/10)))
+  if (!is.null(mask_data)){
+    plot(mask_data,add=T)    
+  }
+  if (!is.null(overlay_data)){
+    plot(overlay_data,add=T, border="red", lwd=3)    
+  }
+  dev.off()  
+  
+  writeRaster(raster_var, out_raster_name, format="GTiff", overwrite=TRUE)
+}
+
 Process_raster_data_NeutraltoBad=function(raster_var,out_nm,min_lim=NULL, max_lim=NULL, mask_data=NULL){
   jpeg_name=paste(out_nm, ".jpg", sep = "")
   out_raster_name=paste(out_nm, ".tif", sep = "")
@@ -234,25 +274,65 @@ shapedir=paste0(DR_PICCC_data_S,"/climate_data/bioclim_data_Aug2013/original_raw
 mask_layer=shapefile(paste0(shapedir,"Main_Hawaiian_Islands_simple3.shp"))
 
 
-Process_raster_data_NeutraltoGood(spp_em_current_suitability, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_current_suitability'), mask_data=mask_layer)
-Process_raster_data_NeutraltoGood(spp_em_future_suitability, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_future_suitability'), mask_data=mask_layer)
-Process_raster_data_NeutraltoGood(spp_em_masked_current_suitability, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_masked_current_suitability'), mask_data=mask_layer)
-Process_raster_data_NeutraltoGood(spp_em_masked_future_suitability, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_masked_future_suitability'), mask_data=mask_layer)
+Process_raster_data_NeutraltoGood(spp_em_current_suitability/spp_em_current_suitability_bin, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_current_suitability'), max_lim=1, min_lim=0, mask_data=mask_layer)
+Process_raster_data_NeutraltoGood(spp_em_future_suitability/spp_em_future_suitability_bin, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_future_suitability'), max_lim=1, min_lim=0, mask_data=mask_layer)
+Process_raster_data_NeutraltoGood(spp_em_masked_current_suitability/spp_em_current_bin, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_masked_current_suitability'), max_lim=1, min_lim=0, mask_data=mask_layer)
+Process_raster_data_NeutraltoGood(spp_em_masked_future_suitability/spp_em_future_bin, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_masked_future_suitability'),max_lim=1, min_lim=0,  mask_data=mask_layer)
 Process_raster_data_NeutraltoBad(spp_em_masked_current_suitability_CV, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_current_suitability_CV'), mask_data=mask_layer)
 Process_raster_data_NeutraltoBad(spp_em_masked_future_suitability_CV, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_future_suitability_CV'), mask_data=mask_layer)
 Process_raster_data_NeutraltoGood(spp_em_current_bin, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_current_bin'), mask_data=mask_layer)
 Process_raster_data_NeutraltoGood(spp_em_future_bin, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_future_bin'), mask_data=mask_layer)
+avg_spp_em_suitability_delta=(spp_em_future_suitability/spp_em_future_suitability_bin)-(spp_em_current_suitability/spp_em_current_suitability_bin)
+max_val=max(abs(c(cellStats(avg_spp_em_suitability_delta,max),cellStats(avg_spp_em_suitability_delta,min))))
+Process_raster_data_BadtoGood(avg_spp_em_suitability_delta, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_suitability_avg_delta'), max_lim=max_val, min_lim=-max_val, mask_data=mask_layer)
+
 max_val=max(abs(c(cellStats(spp_em_suitability_delta,max),cellStats(spp_em_suitability_delta,min))))
 Process_raster_data_BadtoGood(spp_em_suitability_delta, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_suitability_delta'), max_lim=max_val, min_lim=-max_val, mask_data=mask_layer)
 Process_raster_data_NeutraltoGood(spp_em_lost_range, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_lost_range'), mask_data=mask_layer)
 Process_raster_data_NeutraltoGood(spp_em_kept_range, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_kept_range'), mask_data=mask_layer)
 Process_raster_data_NeutraltoGood(spp_em_gained_range, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_gained_range'), mask_data=mask_layer)
 
+#MS figures
+prot_areas=shapefile(paste0("Y:/PICCC_analysis/FB_analysis/habitat analysis/","protected_areas_20100331_simpleWGS1984.shp"))
+Process_raster_data_NeutraltoGood_W_overlay(spp_em_kept_range, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_kept_ranges_w_prot_areas'), mask_data=mask_layer, overlay_data=prot_areas)
+
 if (BPS){
+  #future restoration priority
   FUT_w_BPS_hab=raster(paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_future_bin.tif'))  
   FUT_w_Curr_hab=raster(paste0('output_rasters/spp_ensembles/',"current_habitat_",'spp_em_future_bin.tif'))
   not_cur_hab=FUT_w_Curr_hab==0
   
   restoration_priority=FUT_w_BPS_hab*not_cur_hab
-  Process_raster_data_NeutraltoGood(restoration_priority, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_restoration_priority'), mask_data=mask_layer)  
+  Process_raster_data_NeutraltoGood(restoration_priority, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_restoration_priority_future'), mask_data=mask_layer)  
+
+  #current restoration priority
+  CUR_w_BPS_hab=raster(paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_current_bin.tif'))  
+  CUR_w_Curr_hab=raster(paste0('output_rasters/spp_ensembles/',"current_habitat_",'spp_em_current_bin.tif'))
+  not_cur_hab=CUR_w_Curr_hab==0
+  
+  restoration_priority=CUR_w_BPS_hab*not_cur_hab
+  Process_raster_data_NeutraltoGood(restoration_priority, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_restoration_priority_current'), mask_data=mask_layer)  
+
+  #gained restoration priority
+  CUR_w_BPS_hab=raster(paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_gained_range.tif'))  
+  CUR_w_Curr_hab=raster(paste0('output_rasters/spp_ensembles/',"current_habitat_",'spp_em_gained_range.tif'))
+  not_cur_hab=CUR_w_Curr_hab==0
+  
+  restoration_priority=CUR_w_BPS_hab*not_cur_hab
+  Process_raster_data_NeutraltoGood(restoration_priority, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_restoration_priority_gained'), mask_data=mask_layer)  
+
+  #kept restoration priority
+  CUR_w_BPS_hab=raster(paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_kept_range.tif'))  
+  CUR_w_Curr_hab=raster(paste0('output_rasters/spp_ensembles/',"current_habitat_",'spp_em_kept_range.tif'))
+  not_cur_hab=CUR_w_Curr_hab==0
+  
+  restoration_priority=CUR_w_BPS_hab*not_cur_hab
+  Process_raster_data_NeutraltoGood(restoration_priority, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_restoration_priority_kept'), mask_data=mask_layer)  
+  
+  #MERGE current and future restoration priorities
+  #NA/ 0 as no display
+  
+  
+  
+
 }

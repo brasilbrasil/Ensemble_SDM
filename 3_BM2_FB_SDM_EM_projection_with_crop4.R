@@ -23,6 +23,9 @@ if (baseline_or_future==6){
 if (baseline_or_future==7){
   clim_surface_to_use=clim_data_2004hottest
   proj_nm0='present_hottest'}
+if (baseline_or_future==8){
+  clim_surface_to_use=clim_data_2104hottest
+  proj_nm0='future_hottest'}
 csv_dir=paste(working_dir,"single_sp_CSVs/", sep="")
 
 

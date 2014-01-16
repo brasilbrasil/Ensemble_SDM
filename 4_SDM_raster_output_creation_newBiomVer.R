@@ -4,7 +4,7 @@ source(paste0("C:/Users/lfortini/","directory_registry.r"))
 spp_nm = c('Akekee', 'Hawaii_Amakihi', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'Anianiau', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Oahu_Amakihi','Hawaii_Elepaio', 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Omao', 'Oahu_Elepaio', 'Palila', 'Puaiohi','Kauai_Amakihi', 'Iiwi', 'Amakihi', 'Elepaio', 'Apapane')
 project_name='finalmodel_P_PA_oldcode_less_PAs_hot'
 
-comp_projects=c('baseline', 'present_hottest') #put future second!
+comp_projects=c('future', 'future_hottest') #put future second!
 ensemble_type="wmean"
 eval_stats=c('ROC') 
 plot_CV=T
@@ -119,6 +119,7 @@ shapedir=paste0(DR_PICCC_data_S,"/climate_data/bioclim_data_Aug2013/original_raw
 mask_layer=shapefile(paste0(shapedir,"Main_Hawaiian_Islands_simple3.shp"))
 
 
+dir.create('output_rasters/',showWarnings=F)
 dir.create('output_rasters/main/',showWarnings=F)
 sp_nm=spp_nm[1]
 eval_stat=eval_stats[1]
