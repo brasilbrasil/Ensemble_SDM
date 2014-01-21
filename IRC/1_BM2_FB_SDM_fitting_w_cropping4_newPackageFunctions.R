@@ -15,7 +15,7 @@ library(tools)
 
 ###not in FWS code (copy necessary files)
 #this loop copies the necessary data to run the models into the working directory
-dirs = list.dirs(gsub(".$", "", necessary_run_data), full.names = FALSE, recursive = TRUE)
+dirs = list.dirs(gsub(".$", "", necessary_run_data), full.names = TRUE, recursive = TRUE)
 for (dir in dirs){
   layers <- list.files(dir, pattern = NULL, full.names = FALSE, include.dirs = FALSE)
   for (layer in layers){
@@ -42,7 +42,7 @@ spp_info = read.csv(paste0(csv_dir, "FB_spp_data.csv"))
 #creates vector with bioclimatic variable names without the file extension (.grd)
 var_names <- unlist(file_path_sans_ext(env_var_files))
 
-sp_nm = spp_nm[1]
+#sp_nm = spp_nm[1]
 n_abs_removed = c()
 for (sp_nm in spp_nm){
   sp_nm = as.character(sp_nm) #converts sp_nm into character variable (in case the species are numbered)
@@ -281,6 +281,6 @@ for (sp_nm in spp_nm){
     jnk = jnk/60 #converts elapsed time into minutes
     cat('\n','It took ', jnk, "minutes to model", sp_nm) #sign-posting
   }else{
-    cat('\n','fitting for ',sp_nm,'already done...') #sign-posting in case file for variable importance has already been created (indicating this species has already been run)  
+    cat('\n','fitting for ', sp_nm,'already done...') #sign-posting in case file for variable importance has already been created (indicating this species has already been run)  
   }    
 }
