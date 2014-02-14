@@ -29,11 +29,11 @@ if (machine == 1){
 ####GENERAL MODEL CONFIGURATION####
 ###################################
 #setting file locations 
-project_name = "FB_test20140213b" #assign project name to the current run
+project_name = "FB_test20140213e" #assign project name to the current run
 
 #choose species of interest - all (from CSV file) or subset listed
 run_all_spp = F #if running all species enter "T" and if only subset enter "F"
-spp_subset = c("Akekee") # "Oahu_Amakihi","Hawaii_Akepa", "Palila") #if only subset, enter spp names here 
+spp_subset = c("Apapane") # "Oahu_Amakihi","Hawaii_Akepa", "Palila") #if only subset, enter spp names here 
 
 #Biomod2 modelling options for species of interest
 models_to_run = c("GBM") #"GBM","MAXENT" #choose biomod2 models to run - possibilities are: 'GLM','GBM','GAM','CTA','ANN','SRE','FDA','MARS','RF','MAXENT' 
@@ -41,9 +41,9 @@ eval_stats = c("ROC") #"ROC", "TSS" #choose evaluation methods - possibilties ar
 env_var_files = c("bio1.grd", "bio7.grd", "bio12.grd", "bio15.grd") #choose bioclimatic variables of interest - if using new clim data use ".tif" instead
 plot_graphs = T #plot graphs of results (T) or not (F)
 EM_fit = T #if you want to run the model fitting = T
-EM_ensemble = F  #if you want to run the ensemble modelling = T
+EM_ensemble = T  #if you want to run the ensemble modelling = T
 EM_project = F #if you want to project the model results = T
-create_response_curves = F
+create_response_curves = T
 apply_biomod2_fixes = F #if running large models use this option - solves memory problems
 overwriteData = F #T if want to overwrite and F if not
 paralelize = T #turn on multi instance auto start
@@ -135,10 +135,10 @@ if (EM_fit){ #runs fitting code
   source(paste0(codeDir,"1_BM2_FB_SDM_fitting_w_cropping4_newPackageFunctions.r")) 
 }
 if (create_response_curves){
-  source(paste0(codeDir,"2opt_BM2_FB_SDM_response_curves3_newPackageFunctions.r"))
+  source(paste0(codeDir,"2opt_BM2_FB_SDM_response_curves3_newPackageFunctionsMerged.r"))
 }
 if (EM_ensemble){ #runs ensemble code
-  source(paste0(codeDir,"2_BM2_FB_SDM_EM_fitting2_IRC_newPackageFunctions.r")) 
+  source(paste0(codeDir,"2_BM2_FB_SDM_EM_fitting2_newPackageFunctions.r")) 
 }
 if (EM_project){ #runs projection code
   source(paste0(codeDir,"3_BM2_FB_SDM_EM_projection_with_crop4_IRC.r")) 

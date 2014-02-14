@@ -1,4 +1,4 @@
-# Defining the extent of the different islands each Trupanea lives on 
+# Defineing the extent of the different islands each Trupanea lives on 
 Kauai = c(-159.82,-159.26, 21.84, 22.25)
 Oahu = c(-158.32, -157.62,  21.22, 21.73)
 Molokai = c(-157.34, -156.69, 21.03, 21.25)
@@ -6,7 +6,6 @@ Lanai = c(-157.08, -156.78, 20.70, 20.92)
 Maui= c(-156.8, -155.53, 20.46, 21.05)
 Hawaii = c(-156.10,-154.74, 18.87, 20.30)
 Kahoolawe = c(-156.8, -156.51, 20.46, 20.62)
-
 
 # Cutting out each island
 for (i in 1:length(Islands)){
