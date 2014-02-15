@@ -5,7 +5,7 @@ rm(list = ls()) #remove all past worksheet variables
 ###################################
 #local_config_dir=resultsDir
 #spp_nmS = c('Akekee', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'Anianiau', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Oahu_Amakihi','Hawaii_Elepaio', 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Omao', 'Oahu_Elepaio', 'Palila', 'Puaiohi', 'Kauai_Amakihi', 'Hawaii_Amakihi', 'Apapane', 'Amakihi', 'Elepaio', 'Iiwi')
-spp_nmS = c('Akekee', 'Hawaii_Akepa', 'Palila', 'Hawaii_Amakihi', 'Maui_Parrotbill')
+spp_nmS = c('Akekee', 'Hawaii_Akepa', 'Palila', 'Maui_Parrotbill', 'Oahu_Amakihi', 'Omao', 'Iiwi', 'Akikiki', 'Oahu_Elepaio', 'Apapane', 'Hawaii_Amakihi')
 spp_nm=spp_nmS[1]
 sp_parallel_run=function(spp_nm){
   spp_nm=c(spp_nm)
@@ -13,14 +13,14 @@ sp_parallel_run=function(spp_nm){
   project_name='finalmodel_P_PA_oldcode_less_PAs_all_models'
   server=1
   overwrite=0
-  models_to_run=c('GLM','GBM','GAM','CTA','ANN', 'SRE','FDA','MARS','RF','MAXENT')
+  models_to_run=c('GLM','GBM','GAM','CTA','ANN', 'SRE','FDA','MARS','RF','MAXENT') #
   eval_stats=c("ROC","TSS")
   plot_graphs=1
   EM_fit=T
   EM_ensemble=T
   EM_project=T
   create_response_curves=F
-  apply_biomod2_fixes=T #if running large models use this option
+  apply_biomod2_fixes=F #if running large models use this option
   
   working_dir=paste0(resultsDir,project_name,'/')
   dir.create(working_dir,showWarnings=F)
@@ -49,7 +49,7 @@ sp_parallel_run=function(spp_nm){
   eval.metric.threshold = rep(0.5,length(eval_stats))
   
   ####projection config (script#3)
-  baseline_or_future=1 #1 for baseline, 4 for future, 7 for hot
+  baseline_or_future=4 #1 for baseline, 4 for future, 7 for hot
   memory = T #keep.in.memory=memory
   dir_for_temp_files<-paste(rootDir,'/temp/', project_name,'/', baseline_or_future, '/', sep='') #dir for temp run data (to avoid memory errors)
   
