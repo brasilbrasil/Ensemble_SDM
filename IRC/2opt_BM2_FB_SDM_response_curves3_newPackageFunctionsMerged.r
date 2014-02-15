@@ -10,22 +10,15 @@ library(stringr)
 dir.create("output_rasters/", showWarnings = FALSE)
 dir.create("output_rasters/response_curves/", showWarnings = FALSE)
 dir.create("output_rasters/response_curves/combo/", showWarnings = FALSE)
-#sp_nm = spp_nm[1] #for testing
+sp_nm=spp_nm[1]
 #spp_nm=rev(spp_nm)
 for (sp_nm in spp_nm){
   sp_nm = as.character(sp_nm) #convert any species names to characters 
   cat('\n',sp_nm,'modeling...')
   sp_nm0 = sp_nm
-  
-  workspace_name = paste0(sp_nm,"_FB_modelfitting.RData") #set name of file to save all workspace data after model run
-  if (file.exists(workspace_name)){
-    load(workspace_name)    
-  }else{
-    workspace_name = paste0(sp_nm0,"_FB_run.RData") #set name of file to load workspace data from model run    
-    load(workspace_name)    
-  }
-  
-  sp_nm = str_replace_all(sp_nm,"_", ".") #convert any species names with "_" to "."
+  workspace_name=paste(sp_nm,"_FB_modelfitting.RData", sep = "") #set name of file to save all workspace data after model run   
+  load(workspace_name)    
+  sp_nm = str_replace_all(sp_nm, "_", ".")
   
   model = models_to_run[1]
   for (model in models_to_run){
@@ -46,7 +39,7 @@ for (sp_nm in spp_nm){
                                      ImageSize=480, 
                                      plot=FALSE)
       
-      ####These next sections need to be changed because "myRespPlot2D" is now a list rather than an array####
+      ####These next sections needed to be changed because "myRespPlot2D" is now a list rather than an array####
       
       bioclim_cnt = 1 #for testing
       for (bioclim_cnt in 1:length(myRespPlot2D)) { #for each bioclimatic variable
@@ -82,7 +75,7 @@ for (sp_nm in spp_nm){
         dev.off()
       }
       
-#       OLD CODE - had to be converted to deal with list
+#       ####OLD CODE - had to be converted to deal with list
 #       bioclim_cnt = 1
 #       for (bioclim_cnt in 1:dim(myRespPlot2D)[3]){
 #         ymax_lim=max(myRespPlot2D[,2,bioclim_cnt,])

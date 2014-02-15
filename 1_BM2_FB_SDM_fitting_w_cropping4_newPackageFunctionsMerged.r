@@ -2,7 +2,8 @@
 #see 0_sdm_config.r file
 
 ###START UNDERHOOD
-setwd(working_dir) #sets the working directory
+setwd(working_dir)
+base_working_dir=working_dir
 
 #Load required libraries
 library(biomod2)
@@ -15,7 +16,7 @@ library(tools)
 
 ###not in FWS code (copy necessary files)
 #this loop copies the necessary data to run the models into the working directory
-dirs = list.dirs(gsub(".$", "", necessary_run_data), full.names = TRUE, recursive = TRUE)
+dirs=list.dirs(necessary_run_data, full.names = FALSE, recursive = TRUE)
 for (dir in dirs){
   layers <- list.files(dir, pattern = NULL, full.names = FALSE, include.dirs = FALSE)
   for (layer in layers){
@@ -74,6 +75,7 @@ for (sp_nm in spp_nm){
     }
     names(predictors) <- var_names #assigns names to bioclimate raster stack
     rm("jnk0","jj","crop_raster" ,"temp") #removes temporary variables
+    predictors
     
     jpeg_name = paste0(sp_nm, "_env_vars_used.jpg") #names jpeg file to be created
     jpeg(jpeg_name, #creates blank jpeg file in working directory
@@ -116,10 +118,10 @@ for (sp_nm in spp_nm){
       n_PseudoAbs_pts = round(neg_CE_cells * dens_PAs_outside_CE * CE_point_density) + Act_abs #accounts for the actual absences for calculating pseudo absences      
       PseudoAbs_cand_pts = rasterToPoints(neg_sp_CE, fun = function(x){x == 1}) #Creates matrix of candidate points (x,y,layer)
       
-      #plot(mySREresp) #plots all cells with data - must fix - margins too large
-      #plot(sp_CE) #plots climate envelope
-      #plot(neg_sp_CE) #plots areas outside climate envelope
-
+#       plot(mySREresp)
+#       plot(sp_CE)
+#       plot(neg_sp_CE)
+            
       # next section assigns pseudo absences anywhere (not limited to CE)       
     }else{
       neg_mySREresp = mySREresp == 0 #creates raster of areas outside those with known data (presence and absence)

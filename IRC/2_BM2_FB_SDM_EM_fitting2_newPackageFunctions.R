@@ -6,7 +6,11 @@ setwd(working_dir) #sets working directory
 
 ##Loading package libraries
 library(biomod2)
+#library(biomod2,lib.loc="C:/Users/lfortini/r_test_libraries")
 library(stringr)
+#sp_nm="Akepa" #debug
+
+#memory.limit(size=24000000)
 
 #memory.limit(size = 4095) #increases memory limit size
 sp_nm = spp_nm[1] #resets so the first species to run is the first one listed in config file or csv
