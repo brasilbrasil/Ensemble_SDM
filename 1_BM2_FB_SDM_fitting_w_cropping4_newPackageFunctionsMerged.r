@@ -16,7 +16,7 @@ library(tools)
 
 ###not in FWS code (copy necessary files)
 #this loop copies the necessary data to run the models into the working directory
-dirs=list.dirs(necessary_run_data, full.names = FALSE, recursive = TRUE)
+dirs = list.dirs(necessary_run_data, full.names = TRUE, recursive = TRUE)
 for (dir in dirs){
   layers <- list.files(dir, pattern = NULL, full.names = FALSE, include.dirs = FALSE)
   for (layer in layers){
@@ -63,7 +63,7 @@ for (sp_nm in spp_nm){
     cat('\n', 'loading rasters...') #sign-posting
     
     sp_index = which(spp_info[,"Species"] == sp_nm) #finds which line of species .csv file has information needed
-    raster_res = paste0("/", spp_info[sp_index, "rasterdir"]) #finds which raster directory should be used for the species based on the .csv file
+    raster_res = paste0(spp_info[sp_index, "rasterdir"]) #finds which raster directory should be used for the species based on the .csv file
     crop_raster = raster(paste0(crop_raster_dir, raster_res, ".grd")) #assigns cropped raster associated with sp_nm to "crop_raster" variable
     predictors = raster(paste0(fitting_clim_data_dir, "/", env_var_files[1])) #assigns bioclimate raster to "predictors" variable
     predictors = crop(predictors, crop_raster) #crops predictor grid using crop_raster
