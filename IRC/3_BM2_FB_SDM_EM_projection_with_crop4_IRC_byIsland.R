@@ -117,11 +117,22 @@ for (sp_nm in spp_nm){
     
     SpIslandX<- which(spIsland2 %in% Islands[-(which(Islands =="Kahoolawe"))])
     spIsland2<-names(spIsland[SpIslandX])
-    workspace_name_out0=paste(sp_nm,"_FB_all_model_proj_", proj_nm, ".RData", sep = "")
-    if (file.exists(workspace_name_out0)==F | overwrite==1){  
-      for (spIsl in spIsland2){
-        predictors<-get(spIsl)
     
+    if ((length(spIsland2)>1)==T){
+      pred1<-get(spIsland2[1])
+      for (isle in 2:length(spIsland2)){
+        pred1<-merge(pred1, get(spIsland2[isle]))     
+      }
+      predstack<-pred1
+    }else{
+      predstack<-get(spIsland2)
+    }
+    
+    #   plot(pred1, useRaster=F)
+    #   predstack<-merge(get(spIsland2[1:length(spIsland2)]))
+    names(predstack)<-var_names
+    
+    predictors <- predstack
     
     
     ###changing rasterStack for the "wettest" and "driest" scenarios 

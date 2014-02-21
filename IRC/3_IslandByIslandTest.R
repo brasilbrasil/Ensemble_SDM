@@ -1,4 +1,4 @@
-rm(list = ls()) #remove all past worksheet variables
+#rm(list = ls()) #remove all past worksheet variables #NOT NEEDED
 
 ###USER CONFIGURATION
 # install.packages(c("biomod2", "stringr", "colorRamps", "rasterVis", "raster", "dismo"), 
