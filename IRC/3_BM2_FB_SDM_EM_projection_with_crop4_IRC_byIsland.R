@@ -41,13 +41,14 @@ if (apply_biomod2_fixes){
 
 spp_info = read.csv(paste(csv_dir,'FB_spp_data.csv', sep = "/")) #creates data frame from species info csv file
 
-sp_nm = spp_nm[1] #resets so the first species to run is the first one listed in config file or csv
+sp_nm = spp_nm[2] #resets so the first species to run is the first one listed in config file or csv
 for (sp_nm in spp_nm){
   sp_nm = as.character(sp_nm) #defines the species name as a character string - not needed if it is already a text name 
+  sp_dir = str_replace_all(sp_nm,"_", ".") #replaces "_" with "." in sp_nm
   cat('\n',sp_nm,'model projection...') #sign-posting
   workspace_name = paste0(sp_nm,"_FB_EM_fit.RData") #set name of file to load workspace data from model run
   load(workspace_name) #loads workspace from previous ensemble modelling step
-  plots = paste(working_dir,"AllEMplots_pmw",  sep="/") #assigns location for all plots
+  plots = paste0(working_dir, "AllEMplots_pmw") #assigns location for all plots
   if (file.exists(plots) == F | overwriteData == T){ #run only if plots have not already been collected and the overwrite function is off
     dir.create(plots, showWarnings = FALSE)
     } #create directory for plots
@@ -57,17 +58,17 @@ for (sp_nm in spp_nm){
   if (file.exists(workspace_name_out) == F | overwriteData == T){ #does not run if file already exists and overwrite is off
     #raster_based_env_grid:
     sp_index = which(spp_info[,"Species"] == sp_nm) #assigns index for the line associated with the target species
-    raster_res = spp_info[sp_index,"rasterdir"] #assigns the raster resolution to the directory for the species of interest
+    raster_res = spp_info[sp_index, "rasterdir"] #assigns the raster resolution to the directory for the species of interest
     cat('\n','using these env files for projection raster:', env_var_files, 
         '\n', 'from dir:', clim_data_dir) #sign-posting
-    crop_raster = raster(paste0(crop_raster_dir,"/",raster_res,".grd")) #creates a rasterLayer object from an existing .grd file for ther extent
-    predictors = raster(paste(clim_data_dir, env_var_files[1], sep="/")) #creates rasterLayer from the bioclim .grd file
+    crop_raster = raster(paste0(crop_raster_dir,raster_res,".grd")) #creates a rasterLayer object from an existing .grd file for ther extent
+    predictors = raster(paste0(clim_data_dir, env_var_files[1])) #creates rasterLayer from the bioclim .grd file
     predictors = crop(predictors,  crop_raster) #crops bioclimate rasterLayer by the raster resolution .grd
     jnk0 = length(env_var_files) #assigns the number of bioclimate variables to a temporary variable for runs
     
     ##creates raster stack from raster layers for all bioclimatic variables of interest
     for (jj in 2:jnk0){ #for all except the first bioclimate variable (which was done above)
-      temp = raster(paste(clim_data_dir, env_var_files[jj], sep = "/")) #creates temporary rater layer from bioclimate .grd
+      temp = raster(paste0(clim_data_dir, env_var_files[jj])) #creates temporary rater layer from bioclimate .grd
       temp = crop(temp,  crop_raster) #crops temporary bioclimate raster layer with the extent raster
       predictors = addLayer(predictors, temp) #adds the new bioclimate raster layer to existing one
     }
@@ -80,7 +81,7 @@ for (sp_nm in spp_nm){
     
     ###island by island code
     
-    # Defining the extent of the different islands each Trupanea lives on 
+    # Defining the extent of the different islands
     Kauai = c(-159.82,-159.26, 21.84, 22.25)
     Oahu = c(-158.32, -157.62,  21.22, 21.73)
     Molokai = c(-157.34, -156.69, 21.03, 21.25)
@@ -90,12 +91,9 @@ for (sp_nm in spp_nm){
     Kahoolawe = c(-156.8, -156.51, 20.46, 20.62)
     
     #Identify which islands the species is found on
-    sp_row <- which(spp_info[,"Species"]==sp_nm)
-    spIslands <- spp_info[sp_row,(6:length(names(spp_info)))]
-    
-    spIslandOrd <- seq(1:length(names(spp_info))-1)*spIslands
-    spIslandNum <- spIslandOrd[spIslandOrd>0]
-    spIslandNames<- names(spp_info)[c(spIslandNum+5)]
+    sp_row <- which(spp_info[,"Species"] == sp_nm) #returns the row number for the species of interest - same as sp_index above
+    spIslands <- spp_info[sp_row,(6:length(names(spp_info)))] #returns dataframe indicating whether or not the species is found on each of 6 main Hawaiian islands 
+    spIslandNames <- names(spIslands)[spIslands > 0] #names of islands where the species is found
     
     #add Kahoolawe to species island list if Maui is included - so that it can later be cut out
     if ("Maui" %in% spIslandNames) {
@@ -110,7 +108,7 @@ for (sp_nm in spp_nm){
       assign(spIslandNames[i], Isras)
     }
     
-    # for Maui I need to cut out Kahoolawe, but because of the extent issues one has to first reclass, merge and then reclass the merged Kahoo to NA
+    # for Maui need to cut out Kahoolawe, but because of the extent issues one has to first reclass, merge and then reclass the merged Kahoo to NA
     if ("Maui" %in% spIslandNames) {
       rcl <- c(0, 10000, -1)
       rcl <- matrix(rcl, ncol=3, byrow=TRUE)
@@ -125,9 +123,9 @@ for (sp_nm in spp_nm){
       spIslandNames <- spIslandNames[which(spIslandNames != "Kahoolawe")] #remove Kahoolawe from the list of islands with species
     }
         
-    workspace_name_out0 = paste0(sp_nm,"_FB_all_model_proj_", proj_nm, ".RData") #sets location to save R data
-    
+    spIsland = spIslandNames[1] #for testing
     for (spIsland in spIslandNames){
+      workspace_name_out0 = paste0(sp_nm, spIsland, "_FB_all_model_proj_", proj_nm, ".RData") #sets location to save R data
       if (file.exists(workspace_name_out0) == F | overwriteData == T){  #does not run if RData file already exists and overwrite is off  
     
         predictors <- get(spIsland)
@@ -152,13 +150,19 @@ for (sp_nm in spp_nm){
                interpolate = interpolateDef) #builds raster map and sends to jpeg file  
           dev.off() #saves plot to jpeg
         }
-        cat('\n',sp_nm,"_", spIsland,'projection raster stack created...') #sign-posting
+        cat('\n', sp_nm, "_", spIsland,'projection raster stack created...') #sign-posting
         gc() #reclaims memory that is no longer used and returns summary of memory usage
+        
+        if (length(spIslandNames) > 1) {
+          projection_name = paste0(proj_nm, "_", spIsland)
+        } else {
+          projection_name = proj_nm
+        }
         
         myBiomodProj_baseline <- BIOMOD_Projection(
           modeling.output = myBiomodModelOut, #results from previous model step
           new.env = predictors, #new environment to project onto (in case of baseline it is not new)
-          proj.name = proj_nm, #name for save folder
+          proj.name = projection_name, #name for save folder
           selected.models = remaining_models, #whether all of a subset of the models should be used
           binary.meth = eval_stats, #vector of evaluation statistics to use for projection to presence/ absence
           compress = 'xz', #compression format for files
@@ -328,138 +332,174 @@ for (sp_nm in spp_nm){
       
       cat('\n',sp_nm,'projection graphs done...') #sign-posting
       
-      ###################################################
-      ### code chunk number 19: EnsembleForecasting
-      ###################################################
-      myBiomodEF <- BIOMOD_EnsembleForecasting( #Ensemble projections of species
-        projection.output = myBiomodProjection,
-        total.consensus = T, #setting em.by to all to combine all models
-        EM.output = myBiomodEM, #from module 2 BIOMOD_EnsembleModeling output
-        binary.meth = eval_stats, #names of evaluation metrics - defined in config module
-        keep.in.memory = memory)
-      cat('\n',sp_nm,'ensemble projection done...') #sign-posting
-      #cat('point 1 mem', memory.size(), memory.size(max=TRUE), 'nn') #returns memory used
+      workspace_name_out1 = paste0(sp_nm, spIsland, "_FB_all_model_proj_EF", proj_nm, ".RData") #sets location to save R data
+      if (file.exists(workspace_name_out1) == F | overwriteData == T){  #does not run if RData file already exists and overwrite is off  
+        ###################################################
+        ### code chunk number 19: EnsembleForecasting
+        ###################################################
+        myBiomodEF <- BIOMOD_EnsembleForecasting( #Ensemble projections of species
+          projection.output = myBiomodProjection,
+          total.consensus = T, #setting em.by to all to combine all models
+          EM.output = myBiomodEM, #from module 2 BIOMOD_EnsembleModeling output
+          binary.meth = eval_stats, #names of evaluation metrics - defined in config module
+          keep.in.memory = memory)
+        cat('\n',sp_nm,'ensemble projection done...') #sign-posting
+        #cat('point 1 mem', memory.size(), memory.size(max=TRUE), 'nn') #returns memory used
+        
+        ###################################################
+        ### code chunk number 20: EnsembleForecasting_loading_res
+        ###################################################
+        
+        #plotting the ensemble projections per species per projection
+        #    if (plot_graphs == T){ #set in config file
+        #      for (i in 1:length(eval_stats)){ #for each evaluation statistic
+        #        totalConsDir1 <- paste0(working_dir, "/", sp_nm, "/proj_", proj_nm, 
+        #                                  "/proj_", proj_nm, "_", sp_nm, 
+        #                                  "_TotalConsensus_EMby", eval_stats[i], 
+        #                                  ".grd") #sets location of total consensus ensemble model .grd file
+        #        totalConsStack1 = stack(totalConsDir1) #creates a raster stack from the .grd file
+        #        totalConsSub1 <- subset(totalConsStack1, length(names(totalConsStack1))) #creates a raster layer from the .pmw in the raster stack
+        #        
+        #        #WHAT IS THE DIFFERENCE BETWEEN THIS STACK AND PREVIOUS?
+        #        totalConsDir2 <- paste0(working_dir, "/", sp_nm, "/proj_", proj_nm, 
+        #                                "/proj_", proj_nm, "_", sp_nm, 
+        #                                "_TotalConsensus_EMby", eval_stats[i], "_", 
+        #                                eval_stats[i], "bin.grd") #sets location of total consensus .grd file
+        #        totalConsStack2 = stack(totalConsDir2) #creates raster stack from .grd file
+        #        totalConsSub2 <- subset(totalConsStack2, length(names(totalConsStack2))) #creates raster layer from .pmw file
+        #        
+        #        totalConsComb <- totalConsSub1 * totalConsSub2 #combines the two raster layers from the .pmw files
+        #        totalConsCombReclass <- reclassify(totalConsComb, reclassMatrix2) #reclassifies any values of 0 into NA to get rid of island outline
+        
+        #        names(totalConsCombReclass) <- names(totalConsSub1) #assigns layer name from the original .pmw file to new reclassified layer
+        #        assign(paste0("TotalConsensus_EMScaledandBinnedby_", eval_stats[i]), totalConsComb) #assigns the combined raster layers to a character string
+        #        assign(paste0("TotalConsensus_EMBinnedby_", eval_stats[i]), totalConsSub2) #assigns the raster layer from the 2nd .pmw file to a character string
+        #      }
+        
+        #      emsScaledBinStack <- stack(get(paste0("TotalConsensus_EMScaledandBinnedby_", eval_stats[1])))
+        #      emsBinStack <- stack(get(paste0("TotalConsensus_EMBinnedby_", eval_stats[1])))
+        #      if(length(eval_stats)>1){
+        #        for (i in 2:length(eval_stats)){
+        #          emsScaledBinStack <- addLayer(emsScaledBinStack, get(paste("TotalConsensus_EMScaledandBinnedby_", eval_stats[i], sep="")))
+        #          emsBinStack <- addLayer(emsBinStack, get(paste("TotalConsensus_EMBinnedby_", eval_stats[i], sep="")))
+        #      }}
+        
+        
+        #      setwd(plots)
+        
+        #      jpeg_name=paste(proj_nm,"_", sp_nm,"_TOTALCONSENSUS_Binandscaled_runs_.jpg", sep = "")
+        #      jpeg(jpeg_name, width = 5*length(eval_stats), height = 5, units = "in",
+        #           pointsize = 12, quality = 90, bg = "white", res = 300)  
+        #      par(pin = c(4,4), cex = 1, cex.main = 1, cex.axis = 0.8, mfcol=c(1,length(eval_stats)), mgp = c(1, 0.5, 0),
+        #          mar=c(2, 2, 1.5, 1), oma = c(0, 0, 0, 1), bg = "transparent")
+        
+        #      gc = c('antiquewhite1', 'transparent')
+        #      col5 <- colorRampPalette(c('blue', 'sandybrown', 'darkgreen'))
+        #      jnk <- subset(emsBinStack, 1)
+        #      try(plot(emsScaledBinStack[[1]],  col = col5(255), useRaster=useRasterDef, axes = TRUE, addfun=F, interpolate = interpolateDef, legend = F, add = F, bg = "transparent"),silent=T)
+        #      plot(jnk, col = gc, useRaster=useRasterDef, axes = F, addfun=F, interpolate = interpolateDef, legend = F, add = T)
+        
+        #      if (length(eval_stats)>1){ 
+        #        par(mar=c(2, 0, 1.5, 0))
+        #        jnk <- subset(emsBinStack, 2)
+        #        try(plot(emsScaledBinStack[[2]], col = col5(255), useRaster=useRasterDef, axes = TRUE,interpolate = interpolateDef, legend = F, yaxt = 'n', add = F, bg = "transparent"),silent=T)  # addfun=F, 
+        #        plot(jnk, col = gc, useRaster=useRasterDef, axes = F, addfun=F, interpolate = interpolateDef, yaxt = 'n', legend = F, add = T)
+        #      }
+        
+        #      if (length(eval_stats)>2){ 
+        #        par(mar=c(2, 0, 1.5, 3.5))
+        #        jnk <- subset(emsBinStack, 3)
+        #        try(plot(emsScaledBinStack[[3]], col = col5(255), useRaster=useRasterDef, axes = T, interpolate = interpolateDef, legend = T, yaxt = 'n', add = F, bg = "transparent"),silent=T)
+        #        plot(jnk, col = gc, useRaster=useRasterDef, axes = F, interpolate = interpolateDef, legend = F, add = T)
+        #      }
+        
+        #     legend("bottomright",legend = c("Absent"), fill = gc[1], cex = 0.8)
+        #      dev.off()
+        #    }  
+        
+        #    setwd(working_dir)
+        #    if (plot_graphs==1){
+        #      for (eval_stat in eval_stats){
+        #        try(load(paste0(sp_nm,"/proj_", proj_nm, "/",sp_nm,"_AllData_Full_AllAlgos_EM.",eval_stat)), TRUE)    
+        #        try(load(paste0(sp_nm,"/proj_", proj_nm, "/",sp_nm,"_AllData_AllRun_EM.",eval_stat)), TRUE)
+        #        jpeg_name=paste0(sp_nm,"_", eval_stat,"_ensemble_", proj_nm, "runs.jpg")
+        #        jpeg(jpeg_name,
+        #             width = 10, height = 8, units = "in",
+        #             pointsize = 12, quality = 90, bg = "white", res = 300)
+        #        par(mfrow=c(1,2))
+        #        try(plot(get(paste0(sp_nm,"_AllData_Full_AllAlgos_EM.",eval_stat))), TRUE)
+        #        try(plot(get(paste0(sp_nm,"_AllData_AllRun_EM.",eval_stat))), TRUE)
+        #        sp_bin_file=paste(proj_nm, "_", sp_nm, "_TotalConsensus_EMby", eval_stat,".grd", sep = "")
+        #        sp_bin_file=paste(sp_nm,"/proj_", proj_nm, "/proj_", sp_bin_file , sep = "") #current_BI_Akepa_bin_ROC_RasterStack          
+        #        try(plot(raster(sp_bin_file)), TRUE)
+        #        dev.off()
+        #        eval_stat0=eval_stat
+        #        for (eval_stat in eval_stats){
+        #          try(load(paste(sp_nm,"/proj_", proj_nm, "/",sp_nm,"_AllData_Full_AllAlgos_EM.",eval_stat0,".bin.",eval_stat, sep = "")), TRUE)    
+        #          try(load(paste(sp_nm,"/proj_", proj_nm, "/",sp_nm,"_AllData_AllRun_EM.",eval_stat0,".bin.",eval_stat, sep = "")), TRUE)
+        #          jpeg_name=paste(sp_nm,"_", eval_stat0,"_ensemble_", proj_nm, "_bin_",eval_stat,"runs.jpg", sep = "")
+        #          jpeg(jpeg_name,
+        #               width = 10, height = 8, units = "in",
+        #               pointsize = 12, quality = 90, bg = "white", res = 300)
+        #par(mfrow=c(1,2))
+        #          try(plot(get(paste(sp_nm,"_AllData_Full_AllAlgos_EM.",eval_stat0,".bin.",eval_stat, sep = ""))), TRUE)
+        #          try(plot(get(paste(sp_nm,"_AllData_AllRun_EM.",eval_stat0,".bin.",eval_stat, sep = ""))), TRUE)
+        #          sp_bin_file=paste(proj_nm, "_", sp_nm, "_TotalConsensus_EMby", eval_stat0,"_",eval_stat, "bin.grd", sep = "")
+        #          sp_bin_file=paste(sp_nm,"/proj_", proj_nm, "/proj_", sp_bin_file , sep = "") #current_BI_Akepa_bin_ROC_RasterStack          
+        #          try(plot(raster(sp_bin_file)), TRUE)
+        #          dev.off()
+        #        }
+        #      }
+        #    }
+        #    cat('\n',sp_nm,'ensemble projection figures done...')
+        save("myBiomodProjection", "myBiomodEF", file = workspace_name_out1)   #save workspace
+        
+        removeTmpFiles(h=1)
+        cat('\n',sp_nm, "_", spIsland,'done...')
+      } else {
+        cat('\n',sp_nm, "_", spIsland,'previously done...')
+      }
+        
+    }
+
+    if (length(spIslandNames) > 0) {
+      combinedDir = paste0(working_dir, sp_dir, "/proj_", proj_nm)
+      dir.create(combinedDir, showWarnings = FALSE)
+      island1Dir = paste0(working_dir, sp_dir, "/proj_", proj_nm, "_", spIslandNames[1], "/")
+      fileList <- list.files(island1Dir, pattern = "*.gri")
+      for (file in fileList) {
+        rasterStack <- stack(paste0(island1Dir, file))
+        for (islandNum in 2:length(spIslandNames)) {
+          newIslandName = spIslandNames[islandNum]
+          tempIslandDir = str_replace_all(island1Dir, spIslandNames[1], newIslandName) #replaces 1st island name with the new island name
+          tempFile = str_replace_all(file, spIslandNames[1], newIslandName)
+          tempStack <- stack(paste0(tempIslandDir, tempFile))
+          rasterStack = merge(rasterStack, tempStack)
+        }
+        combinedFileName = str_replace_all(file, paste0("_", spIslandNames[1]), "")
+        combinedFileLoc = paste0(combinedDir, "/", combinedFileName)
+      }
       
-      ###################################################
-      ### code chunk number 20: EnsembleForecasting_loading_res
-      ###################################################
-      
-      #plotting the ensemble projections per species per projection
-      #    if (plot_graphs == T){ #set in config file
-      #      for (i in 1:length(eval_stats)){ #for each evaluation statistic
-      #        totalConsDir1 <- paste0(working_dir, "/", sp_nm, "/proj_", proj_nm, 
-      #                                  "/proj_", proj_nm, "_", sp_nm, 
-      #                                  "_TotalConsensus_EMby", eval_stats[i], 
-      #                                  ".grd") #sets location of total consensus ensemble model .grd file
-      #        totalConsStack1 = stack(totalConsDir1) #creates a raster stack from the .grd file
-      #        totalConsSub1 <- subset(totalConsStack1, length(names(totalConsStack1))) #creates a raster layer from the .pmw in the raster stack
-      #        
-      #        #WHAT IS THE DIFFERENCE BETWEEN THIS STACK AND PREVIOUS?
-      #        totalConsDir2 <- paste0(working_dir, "/", sp_nm, "/proj_", proj_nm, 
-      #                                "/proj_", proj_nm, "_", sp_nm, 
-      #                                "_TotalConsensus_EMby", eval_stats[i], "_", 
-      #                                eval_stats[i], "bin.grd") #sets location of total consensus .grd file
-      #        totalConsStack2 = stack(totalConsDir2) #creates raster stack from .grd file
-      #        totalConsSub2 <- subset(totalConsStack2, length(names(totalConsStack2))) #creates raster layer from .pmw file
-      #        
-      #        totalConsComb <- totalConsSub1 * totalConsSub2 #combines the two raster layers from the .pmw files
-      #        totalConsCombReclass <- reclassify(totalConsComb, reclassMatrix2) #reclassifies any values of 0 into NA to get rid of island outline
-      
-      #        names(totalConsCombReclass) <- names(totalConsSub1) #assigns layer name from the original .pmw file to new reclassified layer
-      #        assign(paste0("TotalConsensus_EMScaledandBinnedby_", eval_stats[i]), totalConsComb) #assigns the combined raster layers to a character string
-      #        assign(paste0("TotalConsensus_EMBinnedby_", eval_stats[i]), totalConsSub2) #assigns the raster layer from the 2nd .pmw file to a character string
-      #      }
-      
-      #      emsScaledBinStack <- stack(get(paste0("TotalConsensus_EMScaledandBinnedby_", eval_stats[1])))
-      #      emsBinStack <- stack(get(paste0("TotalConsensus_EMBinnedby_", eval_stats[1])))
-      #      if(length(eval_stats)>1){
-      #        for (i in 2:length(eval_stats)){
-      #          emsScaledBinStack <- addLayer(emsScaledBinStack, get(paste("TotalConsensus_EMScaledandBinnedby_", eval_stats[i], sep="")))
-      #          emsBinStack <- addLayer(emsBinStack, get(paste("TotalConsensus_EMBinnedby_", eval_stats[i], sep="")))
-      #      }}
-      
-      
-      #      setwd(plots)
-      
-      #      jpeg_name=paste(proj_nm,"_", sp_nm,"_TOTALCONSENSUS_Binandscaled_runs_.jpg", sep = "")
-      #      jpeg(jpeg_name, width = 5*length(eval_stats), height = 5, units = "in",
-      #           pointsize = 12, quality = 90, bg = "white", res = 300)  
-      #      par(pin = c(4,4), cex = 1, cex.main = 1, cex.axis = 0.8, mfcol=c(1,length(eval_stats)), mgp = c(1, 0.5, 0),
-      #          mar=c(2, 2, 1.5, 1), oma = c(0, 0, 0, 1), bg = "transparent")
-      
-      #      gc = c('antiquewhite1', 'transparent')
-      #      col5 <- colorRampPalette(c('blue', 'sandybrown', 'darkgreen'))
-      #      jnk <- subset(emsBinStack, 1)
-      #      try(plot(emsScaledBinStack[[1]],  col = col5(255), useRaster=useRasterDef, axes = TRUE, addfun=F, interpolate = interpolateDef, legend = F, add = F, bg = "transparent"),silent=T)
-      #      plot(jnk, col = gc, useRaster=useRasterDef, axes = F, addfun=F, interpolate = interpolateDef, legend = F, add = T)
-      
-      #      if (length(eval_stats)>1){ 
-      #        par(mar=c(2, 0, 1.5, 0))
-      #        jnk <- subset(emsBinStack, 2)
-      #        try(plot(emsScaledBinStack[[2]], col = col5(255), useRaster=useRasterDef, axes = TRUE,interpolate = interpolateDef, legend = F, yaxt = 'n', add = F, bg = "transparent"),silent=T)  # addfun=F, 
-      #        plot(jnk, col = gc, useRaster=useRasterDef, axes = F, addfun=F, interpolate = interpolateDef, yaxt = 'n', legend = F, add = T)
-      #      }
-      
-      #      if (length(eval_stats)>2){ 
-      #        par(mar=c(2, 0, 1.5, 3.5))
-      #        jnk <- subset(emsBinStack, 3)
-      #        try(plot(emsScaledBinStack[[3]], col = col5(255), useRaster=useRasterDef, axes = T, interpolate = interpolateDef, legend = T, yaxt = 'n', add = F, bg = "transparent"),silent=T)
-      #        plot(jnk, col = gc, useRaster=useRasterDef, axes = F, interpolate = interpolateDef, legend = F, add = T)
-      #      }
-      
-      #     legend("bottomright",legend = c("Absent"), fill = gc[1], cex = 0.8)
-      #      dev.off()
-      #    }  
-      
-      #    setwd(working_dir)
-      #    if (plot_graphs==1){
-      #      for (eval_stat in eval_stats){
-      #        try(load(paste0(sp_nm,"/proj_", proj_nm, "/",sp_nm,"_AllData_Full_AllAlgos_EM.",eval_stat)), TRUE)    
-      #        try(load(paste0(sp_nm,"/proj_", proj_nm, "/",sp_nm,"_AllData_AllRun_EM.",eval_stat)), TRUE)
-      #        jpeg_name=paste0(sp_nm,"_", eval_stat,"_ensemble_", proj_nm, "runs.jpg")
-      #        jpeg(jpeg_name,
-      #             width = 10, height = 8, units = "in",
-      #             pointsize = 12, quality = 90, bg = "white", res = 300)
-      #        par(mfrow=c(1,2))
-      #        try(plot(get(paste0(sp_nm,"_AllData_Full_AllAlgos_EM.",eval_stat))), TRUE)
-      #        try(plot(get(paste0(sp_nm,"_AllData_AllRun_EM.",eval_stat))), TRUE)
-      #        sp_bin_file=paste(proj_nm, "_", sp_nm, "_TotalConsensus_EMby", eval_stat,".grd", sep = "")
-      #        sp_bin_file=paste(sp_nm,"/proj_", proj_nm, "/proj_", sp_bin_file , sep = "") #current_BI_Akepa_bin_ROC_RasterStack          
-      #        try(plot(raster(sp_bin_file)), TRUE)
-      #        dev.off()
-      #        eval_stat0=eval_stat
-      #        for (eval_stat in eval_stats){
-      #          try(load(paste(sp_nm,"/proj_", proj_nm, "/",sp_nm,"_AllData_Full_AllAlgos_EM.",eval_stat0,".bin.",eval_stat, sep = "")), TRUE)    
-      #          try(load(paste(sp_nm,"/proj_", proj_nm, "/",sp_nm,"_AllData_AllRun_EM.",eval_stat0,".bin.",eval_stat, sep = "")), TRUE)
-      #          jpeg_name=paste(sp_nm,"_", eval_stat0,"_ensemble_", proj_nm, "_bin_",eval_stat,"runs.jpg", sep = "")
-      #          jpeg(jpeg_name,
-      #               width = 10, height = 8, units = "in",
-      #               pointsize = 12, quality = 90, bg = "white", res = 300)
-      #par(mfrow=c(1,2))
-      #          try(plot(get(paste(sp_nm,"_AllData_Full_AllAlgos_EM.",eval_stat0,".bin.",eval_stat, sep = ""))), TRUE)
-      #          try(plot(get(paste(sp_nm,"_AllData_AllRun_EM.",eval_stat0,".bin.",eval_stat, sep = ""))), TRUE)
-      #          sp_bin_file=paste(proj_nm, "_", sp_nm, "_TotalConsensus_EMby", eval_stat0,"_",eval_stat, "bin.grd", sep = "")
-      #          sp_bin_file=paste(sp_nm,"/proj_", proj_nm, "/proj_", sp_bin_file , sep = "") #current_BI_Akepa_bin_ROC_RasterStack          
-      #          try(plot(raster(sp_bin_file)), TRUE)
-      #          dev.off()
-      #        }
-      #      }
-      #    }
-      #    cat('\n',sp_nm,'ensemble projection figures done...')
-      save("myBiomodProj_baseline", "myBiomodEF", file = workspace_name_out)   #save workspace
-      
-      removeTmpFiles(h=1)
-      cat('\n',sp_nm, "_", spIsland,'done...')
+      for (spIslandName in spIslandNames) {
+        
+      }
+
+      for (eval_stat in eval_stats) {
+        stackFile = paste0()
+        
+        
+        island_mod = raster(list.files)
+      }
     }
     
-    ####STILL NEED TO REVISE FOLLOWING SCRIPT TO BRING EVERYTHING TOGETHER#####
+    test = paste0(working_dir, "Hawaii.Amakihi/proj_", projection_name, "/proj_", projection_name, "_Hawaii.Amakihi.gri")
     
-    for (jj in 1:length(eval_stats)){     
+    for (jj in 1:length(eval_stats)){   #for each of the eval_stats  
       island_mod = raster(list.files(paste0(working_dir, sp_nm,"/proj_", proj_nm, "/"), 
                                      pattern = paste(eval_stats[jj], '_ef.pmw_Tot_Consensus_', spIslandNames[1], ".grd", sep=""),
                                      full.names=T)) 
       
-      for (spIsla in names(spIsland)){
+      for (spIslandName in spIslandNames){
         temp=raster(list.files(paste0(working_dir, sp_nm0,"/proj_", proj_nm, "/"), 
                                pattern = paste(eval_stats[jj], '_ef.pmw_Tot_Consensus_', spIsla, ".grd", sep=""),
                                full.names=T))
