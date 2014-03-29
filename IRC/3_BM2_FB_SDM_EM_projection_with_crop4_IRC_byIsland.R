@@ -41,7 +41,7 @@ if (apply_biomod2_fixes){
 
 spp_info = read.csv(paste(csv_dir,'FB_spp_data.csv', sep = "/")) #creates data frame from species info csv file
 
-sp_nm = spp_nm[2] #resets so the first species to run is the first one listed in config file or csv
+sp_nm = spp_nm[3] #resets so the first species to run is the first one listed in config file or csv
 for (sp_nm in spp_nm){
   sp_nm = as.character(sp_nm) #defines the species name as a character string - not needed if it is already a text name 
   sp_dir = str_replace_all(sp_nm,"_", ".") #replaces "_" with "." in sp_nm
@@ -49,9 +49,10 @@ for (sp_nm in spp_nm){
   workspace_name = paste0(sp_nm,"_FB_EM_fit.RData") #set name of file to load workspace data from model run
   load(workspace_name) #loads workspace from previous ensemble modelling step
   plots = paste0(working_dir, "AllEMplots_pmw") #assigns location for all plots
-  if (file.exists(plots) == F | overwriteData == T){ #run only if plots have not already been collected and the overwrite function is off
+  
+  if (file.exists(plots) == F | overwriteData == T) { #run only if plots have not already been collected and the overwrite function is off
     dir.create(plots, showWarnings = FALSE)
-    } #create directory for plots
+  } #create directory for plots
   
   workspace_name_out = paste0(sp_nm,"_FB_EM_proj_", proj_nm, ".RData") #assigns name to save workspace
   
@@ -122,8 +123,9 @@ for (sp_nm in spp_nm){
       names(Maui)<- var_names
       spIslandNames <- spIslandNames[which(spIslandNames != "Kahoolawe")] #remove Kahoolawe from the list of islands with species
     }
-        
-    spIsland = spIslandNames[1] #for testing
+    
+    ###START OF CODE TO RUN PROJECTIONS ONE ISLAND AT A TIME###
+    spIsland = spIslandNames[1] #for testing - run this whole loop for testing on a species.
     for (spIsland in spIslandNames){
       workspace_name_out0 = paste0(sp_nm, spIsland, "_FB_all_model_proj_", proj_nm, ".RData") #sets location to save R data
       if (file.exists(workspace_name_out0) == F | overwriteData == T){  #does not run if RData file already exists and overwrite is off  
@@ -461,67 +463,33 @@ for (sp_nm in spp_nm){
       }
         
     }
+    ###END OF CODE TO PROJECT ONE ISLAND AT A TIME###
+    
 
-    if (length(spIslandNames) > 0) {
-      combinedDir = paste0(working_dir, sp_dir, "/proj_", proj_nm)
-      dir.create(combinedDir, showWarnings = FALSE)
-      island1Dir = paste0(working_dir, sp_dir, "/proj_", proj_nm, "_", spIslandNames[1], "/")
-      fileList <- list.files(island1Dir, pattern = "*.gri")
-      for (file in fileList) {
-        rasterStack <- stack(paste0(island1Dir, file))
-        for (islandNum in 2:length(spIslandNames)) {
-          newIslandName = spIslandNames[islandNum]
-          tempIslandDir = str_replace_all(island1Dir, spIslandNames[1], newIslandName) #replaces 1st island name with the new island name
-          tempFile = str_replace_all(file, spIslandNames[1], newIslandName)
-          tempStack <- stack(paste0(tempIslandDir, tempFile))
-          rasterStack = merge(rasterStack, tempStack)
+    ####START OF CODE TO MERGE RASTERS FROM EACH ISLAND INTO RASTER ONE FOR ALL ISLANDS###
+    combinedDir = paste0(working_dir, sp_dir, "/proj_", proj_nm) #names the directory where the combined rasters will be placed
+    dir.create(combinedDir, showWarnings = FALSE) #creates the named directory above
+    island1Dir = paste0(working_dir, sp_dir, "/proj_", proj_nm, "_", spIslandNames[1], "/") #points to the name of the 1st island directory
+    fileList <- list.files(island1Dir, pattern = "*.gri") #lists all files within the 1st island directory
+    for (file in fileList) { #for each file in the file list
+      rasterStack <- stack(paste0(island1Dir, file)) #create a rasterstack from the *.gri file in the list
+      rasterStackNames = names(rasterStack) #assigns names of the original rasterStack to a vector to rename later
+      if (length(spIslandNames) > 1) { #if there is more than one island covered by the extent of the species
+        for (islandNum in 2:length(spIslandNames)) { #for each of the islands covered by the data except the 1st island
+          newIslandName = spIslandNames[islandNum] #find the name of the island
+          tempIslandDir = str_replace_all(island1Dir, spIslandNames[1], newIslandName) #finds the directory for the island by replacing 1st island name with the new island name 
+          tempFile = str_replace_all(file, spIslandNames[1], newIslandName) #finds the filename for the island by replacing the 1st island name with the new island name
+          tempStack <- stack(paste0(tempIslandDir, tempFile)) #creates a rasterstack from the *.gri file for the new island
+          rasterStack = stack(merge(rasterStack, tempStack)) #merges the new island data (stack) with the previous island data and creates a RasteStack with the result (need stack() because otherwise a RasterBrick is created)
         }
-        combinedFileName = str_replace_all(file, paste0("_", spIslandNames[1]), "")
-        combinedFileLoc = paste0(combinedDir, "/", combinedFileName)
+        names(rasterStack) <- rasterStackNames #assigns the names of the original rasterStack to the combined one
       }
-      
-      for (spIslandName in spIslandNames) {
+      combinedFileName = str_replace_all(file, paste0("_", spIslandNames[1]), "") #creates a filename for the merged rasterstack by removing the island name
+      combinedFileLoc = paste0(combinedDir, "/", combinedFileName) #creates a file location for the file with data for all islands
+      writeRaster(rasterStack, combinedFileLoc, overwrite = TRUE) #saves the RasterStack to a file and location indicated above  
+    }   
+    ####END OF CODE TO MERGE RASTERS FROM EACH ISLAND INTO ONE FOR ALL ISLANDS###
         
-      }
-
-      for (eval_stat in eval_stats) {
-        stackFile = paste0()
-        
-        
-        island_mod = raster(list.files)
-      }
-    }
-    
-    test = paste0(working_dir, "Hawaii.Amakihi/proj_", projection_name, "/proj_", projection_name, "_Hawaii.Amakihi.gri")
-    
-    for (jj in 1:length(eval_stats)){   #for each of the eval_stats  
-      island_mod = raster(list.files(paste0(working_dir, sp_nm,"/proj_", proj_nm, "/"), 
-                                     pattern = paste(eval_stats[jj], '_ef.pmw_Tot_Consensus_', spIslandNames[1], ".grd", sep=""),
-                                     full.names=T)) 
-      
-      for (spIslandName in spIslandNames){
-        temp=raster(list.files(paste0(working_dir, sp_nm0,"/proj_", proj_nm, "/"), 
-                               pattern = paste(eval_stats[jj], '_ef.pmw_Tot_Consensus_', spIsla, ".grd", sep=""),
-                               full.names=T))
-        island_mod = merge(island_mod, temp)
-      }
-      assign(paste(eval_stats[jj], "binandscale_Consensus_", sp_nm0, sep=""), island_mod)
-    }
-    
-    for (jj in 1:length(eval_stats)){     
-      island_mod = raster(list.files(paste(working_dir, sp_nm0,"/proj_", proj_nm, "/", sep = ""), 
-                                     pattern = paste(eval_stats[jj], '_ef.pmw_', eval_stats[jj], 'bin_Tot_Consensus_', names(spIsland)[1], ".grd", sep=""),
-                                     full.names=T)) 
-      
-      for (spIsla in names(spIsland)){
-        temp=raster(list.files(paste(working_dir, sp_nm0,"/proj_", proj_nm, "/", sep = ""), 
-                               pattern = paste(eval_stats[jj], '_ef.pmw_', eval_stats[jj], 'bin_Tot_Consensus_', spIsla, ".grd", sep=""),
-                               full.names=T))
-        island_mod = merge(island_mod, temp)
-      }
-      assign(paste(eval_stats[jj], "binned_Consensus_", sp_nm0, sep=""), island_mod)
-    }
-    
   } else {
     cat('\n',sp_nm,'previously calculated...')
   }
