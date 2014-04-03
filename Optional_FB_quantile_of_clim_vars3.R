@@ -2,13 +2,13 @@ rm(list = ls()) #remove all past worksheet variables
 
 ###USER CONFIGURATION
 source(paste0("C:/Users/lfortini/","directory_registry.r"))
-spp_nm=c('Akekee', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'Anianiau', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Oahu_Amakihi','Hawaii_Elepaio', 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Omao', 'Oahu_Elepaio', 'Palila', 'Puaiohi', 'Kauai_Amakihi', 'Hawaii_Amakihi', 'Apapane', 'Amakihi', 'Elepaio', 'Iiwi')
+spp_nm=c('Akekee', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'Anianiau', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Oahu_Amakihi','Hawaii_Elepaio', 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Omao', 'Oahu_Elepaio', 'Palila', 'Puaiohi', 'Kauai_Amakihi', 'Hawaii_Amakihi', 'Apapane', 'Iiwi') #'Amakihi', 'Elepaio', 
 server=0
 overwrite=1
 exclude_abs=F
-exclude_pres=T
-island_quantile=T
-proj_name="Isl"
+exclude_pres=F
+island_quantile=F
+proj_name="Pres_Abs"
 Quant = 0.025
 
 Quant_val=(1-Quant*2)*100

@@ -2,7 +2,10 @@
 ###USER CONFIGURATION
 local_config_dir='C:/Users/lfortini/'
 #local_config_dir='Y:/FB analysis/FB SDM/biomod2/run_1_7_12_15/' #'C:/Users/lfortini/'
-spp_nm=c('Akekee', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'Anianiau', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Oahu_Amakihi','Hawaii_Elepaio', 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Omao', 'Oahu_Elepaio', 'Palila', 'Puaiohi', 'Kauai_Amakihi', 'Hawaii_Amakihi', 'Apapane', 'Amakihi', 'Elepaio', 'Iiwi')
+#spp_nm=c('Akekee', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'Anianiau', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Oahu_Amakihi','Hawaii_Elepaio', 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Omao', 'Oahu_Elepaio', 'Palila', 'Puaiohi', 'Kauai_Amakihi', 'Hawaii_Amakihi', 'Apapane', 'Amakihi', 'Elepaio', 'Iiwi')
+spp_nm=c('Akekee', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'Anianiau', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Oahu_Amakihi','Hawaii_Elepaio', 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Omao', 'Oahu_Elepaio', 'Palila', 'Puaiohi', 'Kauai_Amakihi', 'Hawaii_Amakihi', 'Apapane', 'Iiwi')
+#spp here practically do not matter! must be defined in previous script
+sp_order=c(19, 18, 9, 20, 13, 15, 6, 7, 2, 4, 11, 12, 8, 14, 17, 10, 5, 1, 3, 16)
 server=0
 overwrite=1
 proj_names=c("Pres", "Pres_Abs", "Isl")
@@ -40,7 +43,6 @@ jnk=merged_data[merged_data$type=="Pres_Abs",]
 jnk2=merged_data[merged_data$type=="Isl",]
 merged_data2=cbind(merged_data2, jnk[,c("QL", "QU")], jnk2[,c("QL", "QU")])
 names(merged_data2)=c("X", "var", "type", "species", "P_QL", "P_QU", "PA_QL", "PA_QU", "Is_QL", "Is_QU")
-sp_order=c(19, 20, 21, 22, 18, 9, 13, 15, 6, 7, 2, 4, 11, 12, 8, 14, 17, 10, 5, 1, 3, 16)
 
 library(ggplot2)
 var="bio1"
