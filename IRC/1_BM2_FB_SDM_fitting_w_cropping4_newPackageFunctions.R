@@ -202,8 +202,10 @@ for (sp_nm in spp_nm){
       PA.strategy = PA.strategy,
       PA.dist.min = PA.dist.min) #checking formatting of biomod 2 variables
     
+    cat('\n','biomod formatting data complete') #sign-posting
+    
     #This plotting methods takes way too long!!!  (but it is useful since it plots PAs selected)
-    if (plot_graphs == 1 & PA.nb.rep < 9){
+    if (plot_graphs == TRUE & PA.nb.rep < 9){
       jpeg_name3 = paste0(sp_nm, "_loc_data_used2.jpg") #assigning location for jpeg file
       jpeg(jpeg_name3,
            width = 10, height = 10, units = "in", pointsize = 12, quality = 90, bg = "white", res = 300) #creating blank jpeg file

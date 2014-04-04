@@ -29,19 +29,19 @@ if (machine == 1){
 ####GENERAL MODEL CONFIGURATION####
 ###################################
 #setting file locations 
-project_name = "FB_test20140403i" #assign project name to the current run
+project_name = "FB_test20140403n" #assign project name to the current run
 
 #choose species of interest - all (from CSV file) or subset listed
 run_all_spp = F #if running all species enter "T" and if only subset enter "F"
-spp_subset = "Akekee" # c("Apapane", "Hawaii_Amakihi", "Akekee") #if only subset, enter spp names here 
+spp_subset = "Hawaii_Amakihi" # c("Apapane", "Hawaii_Amakihi", "Akekee") #if only subset, enter spp names here 
 
 #Biomod2 modelling options for species of interest
 models_to_run = c("GBM") #"GBM","MAXENT" #choose biomod2 models to run - possibilities are: 'GLM','GBM','GAM','CTA','ANN','SRE','FDA','MARS','RF','MAXENT' 
 eval_stats = c("ROC") #"ROC", "TSS" #choose evaluation methods - possibilties are: 'KAPPA','TSS','ROC'
 env_var_files = c("bio1.grd", "bio7.grd", "bio12.grd", "bio15.grd") #choose bioclimatic variables of interest - if using new clim data use ".tif" instead
 plot_graphs = F #plot graphs of results (T) or not (F)
-EM_fit = F #if you want to run the model fitting = T
-EM_ensemble = F  #if you want to run the ensemble modelling = T
+EM_fit = T #if you want to run the model fitting = T
+EM_ensemble = T  #if you want to run the ensemble modelling = T
 EM_project = F #if you want to project the model results = T
 create_response_curves = F
 apply_biomod2_fixes = F #if running large models use this option - solves memory problems

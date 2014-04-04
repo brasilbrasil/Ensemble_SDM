@@ -460,21 +460,20 @@ for (sp_nm in spp_nm){
         cat('\n',sp_nm, "_", spIsland,'done...')
       } else {
         cat('\n',sp_nm, "_", spIsland,'previously done...')
-      }
-        
+      }   
     }
     ###END OF CODE TO PROJECT ONE ISLAND AT A TIME###
     
 
     ####START OF CODE TO MERGE RASTERS FROM EACH ISLAND INTO RASTER ONE FOR ALL ISLANDS###
-    combinedDir = paste0(working_dir, sp_dir, "/proj_", proj_nm) #names the directory where the combined rasters will be placed
-    dir.create(combinedDir, showWarnings = FALSE) #creates the named directory above
-    island1Dir = paste0(working_dir, sp_dir, "/proj_", proj_nm, "_", spIslandNames[1], "/") #points to the name of the 1st island directory
-    fileList <- list.files(island1Dir, pattern = "*.gri") #lists all files within the 1st island directory
-    for (file in fileList) { #for each file in the file list
-      rasterStack <- stack(paste0(island1Dir, file)) #create a rasterstack from the *.gri file in the list
-      rasterStackNames = names(rasterStack) #assigns names of the original rasterStack to a vector to rename later
-      if (length(spIslandNames) > 1) { #if there is more than one island covered by the extent of the species
+    if (length(spIslandNames) > 1) { #only need to recombine if the species is found on more than one island - otherwise the combined raster is already created above
+      combinedDir = paste0(working_dir, sp_dir, "/proj_", proj_nm) #names the directory where the combined rasters will be placed
+      dir.create(combinedDir, showWarnings = FALSE) #creates the named directory above
+      island1Dir = paste0(working_dir, sp_dir, "/proj_", proj_nm, "_", spIslandNames[1], "/") #points to the name of the 1st island directory
+      fileList <- list.files(island1Dir, pattern = "*.gri") #lists all files within the 1st island directory
+      for (file in fileList) { #for each file in the file list
+        rasterStack <- stack(paste0(island1Dir, file)) #create a rasterstack from the *.gri file in the list
+        rasterStackNames = names(rasterStack) #assigns names of the original rasterStack to a vector to rename later
         for (islandNum in 2:length(spIslandNames)) { #for each of the islands covered by the data except the 1st island
           newIslandName = spIslandNames[islandNum] #find the name of the island
           tempIslandDir = str_replace_all(island1Dir, spIslandNames[1], newIslandName) #finds the directory for the island by replacing 1st island name with the new island name 
@@ -483,11 +482,12 @@ for (sp_nm in spp_nm){
           rasterStack = stack(merge(rasterStack, tempStack)) #merges the new island data (stack) with the previous island data and creates a RasteStack with the result (need stack() because otherwise a RasterBrick is created)
         }
         names(rasterStack) <- rasterStackNames #assigns the names of the original rasterStack to the combined one
+        combinedFileName = str_replace_all(file, paste0("_", spIslandNames[1]), "") #creates a filename for the merged rasterstack by removing the island name
+        combinedFileLoc = paste0(combinedDir, "/", combinedFileName) #creates a file location for the file with data for all islands
+        writeRaster(rasterStack, combinedFileLoc, overwrite = TRUE) #saves the RasterStack to a file and location indicated above 
       }
-      combinedFileName = str_replace_all(file, paste0("_", spIslandNames[1]), "") #creates a filename for the merged rasterstack by removing the island name
-      combinedFileLoc = paste0(combinedDir, "/", combinedFileName) #creates a file location for the file with data for all islands
-      writeRaster(rasterStack, combinedFileLoc, overwrite = TRUE) #saves the RasterStack to a file and location indicated above  
-    }   
+    }
+     
     ####END OF CODE TO MERGE RASTERS FROM EACH ISLAND INTO ONE FOR ALL ISLANDS###
         
   } else {
