@@ -4,7 +4,7 @@ source(paste0("C:/Users/lfortini/","directory_registry.r"))
 #spp_nm = c('Akekee', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'Anianiau', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Oahu_Amakihi','Hawaii_Elepaio', 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Omao', 'Oahu_Elepaio', 'Palila', 'Puaiohi', 'Kauai_Amakihi', 'Hawaii_Amakihi', 'Apapane', 'Amakihi', 'Elepaio', 'Iiwi')
 spp_nm=c("Kauai_Amakihi","Akekee", "Hawaii_Akepa", "Hawaii_Amakihi","Oahu_Amakihi","Maui_Parrotbill", "Palila") #if only subset, enter spp names here 
 #spp_nm = c('Akekee', 'Hawaii_Akepa', 'Palila', 'Maui_Parrotbill', 'Oahu_Amakihi', 'Omao', 'Iiwi', 'Hawaii_Amakihi')
-project_name = "FB_test_seasonal_deltas_bio1_wetDryPpt" #assign project name to the current run
+project_name = "finalmodel_P_PA_oldcode_less_PAs" #assign project name to the current run
 
 comp_projects=c('baseline', 'future') #put future second!
 ensemble_type="wmean"

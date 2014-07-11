@@ -6,7 +6,7 @@ project_name='finalmodel_P_PA_oldcode_less_PAs'
 ensemble_type="ef.pmw"
 eval_stats=c('ROC') 
 habitat_overlay=T
-BPS=F
+BPS=T
 
 working_dir=paste0(resultsDir,project_name,'/')
 clim_data_dir=paste0(bioclimData2013Dir,"all_baseline/500m/")

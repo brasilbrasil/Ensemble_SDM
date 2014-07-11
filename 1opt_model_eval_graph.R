@@ -9,6 +9,7 @@ local_config_dir='Y:/FB_analysis/FB_SDM/biomod2/' #if specifiying sp to run by f
 spp_nm = c('Akekee', 'Hawaii_Amakihi', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'Anianiau', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Oahu_Amakihi','Hawaii_Elepaio', 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Omao', 'Oahu_Elepaio', 'Palila', 'Puaiohi','Kauai_Amakihi', 'Iiwi', 'Apapane')
 #'Iiwi', 'Amakihi', 'Elepaio', 'Apapane', 
 project_name='finalmodel_P_PA_oldcode_less_PAs'
+#resultsDir="Y:/PICCC_analysis/FB_analysis/model_results/biomod2"
 working_dir=paste0(resultsDir,project_name,'/')
 models_to_run=c('GBM','MAXENT')
 eval_stats=c("ROC","KAPPA", "TSS")

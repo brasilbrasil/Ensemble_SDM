@@ -84,6 +84,10 @@ for (sp_nm in spp_nm){
     predictors=crop(predictors,  crop_raster)
     for (jj in 2:jnk0){
       temp=raster(paste(clim_data_dir, env_var_files[jj], sep=""))
+      if (island_quantile){
+        okHab=raster(okrasterDir, "okHabRaster.tif")
+        temp=temp*okHab
+      }
       temp=crop(temp,  crop_raster)
       predictors = addLayer(predictors, temp)
     }

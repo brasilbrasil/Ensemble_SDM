@@ -6,9 +6,9 @@ spp_nm = c('Akekee', 'Hawaii_Amakihi', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'An
 comp_projects=c('baseline', 'future') #put future second!
 ensemble_type="ef.pmw"
 eval_stat="ROC"
-veg_overlay=T #this code is not complete!
-BPS=T
-projected_veg_overlay=T #this code is not complete!
+veg_overlay=T 
+BPS=F
+projected_veg_overlay=F #this code is not complete!
 project_name='finalmodel_P_PA_oldcode_less_PAs'
 working_dir=paste0(resultsDir,project_name,'/')
 overwrite=1 #if 1, will overwrite past results
@@ -69,6 +69,7 @@ for (sp_nm in spp_nm){
       Response_var1=resample(Response_var,resp_zone,  method="ngb")
       #Response_var1=alignExtent(resp_zone,Response_var)
       temp_resp_zone=(Response_var1*4)+resp_zone
+      temp_resp_zone_3Class=(Response_var1*resp_zone)+4
       
       #three lines below are to fix a bug in the plot (it was not considering raster values that had very low freq, hence incorrectly applying the color pallete)
       jnk=freq(temp_resp_zone)
@@ -83,6 +84,25 @@ for (sp_nm in spp_nm){
            width = 10, height = 8, units = "in",
            pointsize = 12, quality = 90, bg = "white", res = 300)
       plot(temp_resp_zone,  breaks=mypalette_breaks, col=mypalette, legend=F)
+      #legend("bottomleft",legend = c("Micro refugia", "Tolerate", "Migrate"), col = mypalette[2:4],pch = 16)
+      legend("bottomleft",legend = resp_zone_names, col = resp_zone_colors,pch = 16)
+      title(paste(sp_nm0," distribution shifts with current biome distribution", sep=""))
+      dev.off()
+      
+      #####Response zones with clipped habitat (no light hues)
+      #three lines below are to fix a bug in the plot (it was not considering raster values that had very low freq, hence incorrectly applying the color pallete)
+      jnk=freq(temp_resp_zone_3Class)
+      todel=jnk[jnk[,'count']<=1,'value']
+      temp_resp_zone_3Class[temp_resp_zone_3Class %in% todel]=0
+      
+      zone_raster_vals=unique(temp_resp_zone_3Class)    
+      
+      jpeg_name=paste('output_rasters/veg_overlays/', BPS_str, sp_nm0,"_response_zones_w_current_veg_distribution_3Class.jpg", sep = "")
+      
+      jpeg(jpeg_name,
+           width = 10, height = 8, units = "in",
+           pointsize = 12, quality = 90, bg = "white", res = 300)
+      plot(temp_resp_zone_3Class,  breaks=mypalette_breaks, col=mypalette, legend=F)
       #legend("bottomleft",legend = c("Micro refugia", "Tolerate", "Migrate"), col = mypalette[2:4],pch = 16)
       legend("bottomleft",legend = resp_zone_names, col = resp_zone_colors,pch = 16)
       title(paste(sp_nm0," distribution shifts with current biome distribution", sep=""))

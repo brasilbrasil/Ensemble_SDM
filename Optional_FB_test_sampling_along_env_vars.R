@@ -2,8 +2,8 @@
 ###USER CONFIGURATION
 local_config_dir='C:/Users/lfortini/'
 #local_config_dir='Y:/FB analysis/FB SDM/biomod2/run_1_7_12_15/' #'C:/Users/lfortini/'
-spp_nm=(read.csv(paste(local_config_dir,'spp_to_run.csv', sep = ""),header=F, stringsAsFactors=F))
-#spp_nm=c("Akikiki","Akekee", "Anianiau", "Kauai_Amakihi", "Kauai_Elepaio", "Puaiohi", "Oahu_Amakihi", "Oahu_Elepaio", "Hawaii_Creeper", "Hawaii_Amakihi","Omao", "Hawaii_Akepa","Palila","Hawaii_Elepaio","Akohekohe","Maui_Alauahio","Maui_Parrotbill","Elepaio", "Amakihi","Apapane", "Iiwi")   #"Akekee", "Akikiki", "Anianiau", "Apapane", "Iiwi", "Kauai_Amakihi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi"
+#spp_nm=(read.csv(paste(local_config_dir,'spp_to_run.csv', sep = ""),header=F, stringsAsFactors=F))
+spp_nm=c('Akekee', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'Anianiau', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Oahu_Amakihi','Hawaii_Elepaio', 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Omao', 'Oahu_Elepaio', 'Palila', 'Puaiohi', 'Kauai_Amakihi', 'Hawaii_Amakihi', 'Apapane', 'Iiwi','Amakihi', 'Elepaio') 
 #spp_nm=c("Akekee", "Akikiki", "Kauai_Amakihi")#, "Apapane", "Iiwi", "Kauai_Amakihi", "Kauai_Elepaio", "Oahu_Amakihi", "Oahu_Elepaio", "Puaiohi"
 server=0
 overwrite=1
@@ -17,12 +17,12 @@ if (server==1){
   clim_data_dir0="Y:/SDM_env_data/bioclim_variables/full extent bioclim data/all_grd/all_baseline/100m/" 
   necessary_run_data='Y:/FB analysis/FB SDM/biomod2/necessary_run_data/' #where all needed files are stored (maxent.jar, species csvs, crop rasters, etc.)
 }else{
-  working_dir='C:/Users/lfortini/Data/biomod2/response_curves/'
-  clim_data_dir0="C:/Users/lfortini/Data/SDM_env_data/all_grd/all_baseline/100m/"
+  working_dir='D:/PICCC_analysis/FB_analysis/model_results/biomod2finalmodel_P_PA_oldcode_220runs/'
+  clim_data_dir0="D:/PICCC_data/climate_data/bioclim_data_Aug2013/complete_rasters/allYrs_avg/bioclims_abs/all_baseline/250m/"
   necessary_run_data='C:/Users/lfortini/Data/biomod2/necessary_run_data/' #where all needed files are stored (maxent.jar, species csvs, crop rasters, etc.    
 }
 
-env_var_files=c("bio1.grd", "bio7.grd", "bio12.grd", "bio15.grd") 
+env_var_files=c("bio1.tif", "bio7.tif", "bio12.tif", "bio15.tif") 
 crop_raster_dir=paste(working_dir, 'map_crop/',sep="")
 csv_dir=paste(working_dir,"single_sp_CSVs/", sep="")
 
@@ -36,27 +36,27 @@ library(mda)
 library(stringr)
 
 all_quantiles=c()
-dirs=list.dirs(necessary_run_data, full.names = FALSE, recursive = TRUE)
-for (dir in dirs){
-  layers<-list.files(dir, pattern=NULL, full.names=FALSE, include.dirs = FALSE)
-  for (layer in layers){
-    layer_full_nm=paste(dir,layer, sep="/")
-    if (file.info(layer_full_nm)$isdir==FALSE){
-      out_dir_nm=str_replace(dir, necessary_run_data, working_dir)
-      dir.create(out_dir_nm, showWarnings = FALSE, recursive = TRUE, mode = "0777")
-      out_lyr_nm=str_replace(layer_full_nm, necessary_run_data, working_dir)
-      #out_lyr_nm=str_replace(out_lyr_nm, bl_lr, output_filenm)
-      if (file.exists(out_lyr_nm)==F){
-        cat('\n','found ', layer, 'in ', dir)
-        file.copy(layer_full_nm, out_lyr_nm, overwrite = TRUE, recursive = TRUE,
-                  copy.mode = TRUE)
-        cat('\n','saved as ', out_lyr_nm)
-      }
-    }
-  }
-}
+# dirs=list.dirs(necessary_run_data, full.names = FALSE, recursive = TRUE)
+# for (dir in dirs){
+#   layers<-list.files(dir, pattern=NULL, full.names=FALSE, include.dirs = FALSE)
+#   for (layer in layers){
+#     layer_full_nm=paste(dir,layer, sep="/")
+#     if (file.info(layer_full_nm)$isdir==FALSE){
+#       out_dir_nm=str_replace(dir, necessary_run_data, working_dir)
+#       dir.create(out_dir_nm, showWarnings = FALSE, recursive = TRUE, mode = "0777")
+#       out_lyr_nm=str_replace(layer_full_nm, necessary_run_data, working_dir)
+#       #out_lyr_nm=str_replace(out_lyr_nm, bl_lr, output_filenm)
+#       if (file.exists(out_lyr_nm)==F){
+#         cat('\n','found ', layer, 'in ', dir)
+#         file.copy(layer_full_nm, out_lyr_nm, overwrite = TRUE, recursive = TRUE,
+#                   copy.mode = TRUE)
+#         cat('\n','saved as ', out_lyr_nm)
+#       }
+#     }
+#   }
+# }
 spp_info=read.csv(paste(csv_dir,'FB_spp_data.csv', sep = ""))
-dir.create("quantiles/", showWarnings=FALSE)
+dir.create("quantilesTest/", showWarnings=FALSE)
 
 var_name=c()
 for (env_var_file  in env_var_files){
@@ -70,7 +70,7 @@ for (sp_nm in spp_nm){
   cat('\n',sp_nm,'modeling...')
   sp_str=sp_nm
   
-  FileName<-paste("quantiles/Q", Quant_val, "_", proj_name, "_", sp_nm,"_taper_off_test.csv", sep="")
+  FileName<-paste("quantilesTest/Q", Quant_val, "_", proj_name, "_", sp_nm,"_taper_off_test.csv", sep="")
   if (file.exists(FileName)==F | overwrite==1){
     #######Loading datasets#######
     sp_data=read.csv(paste(csv_dir,sp_nm,'_pres_abs.csv', sep = "")) #FB_data_points4_PAandA
@@ -135,7 +135,7 @@ for (sp_nm in spp_nm){
       Low_extr_pres=sum(temp_response_var1)
       Low_extr_prop_pres=Low_extr_pres/Low_extr_total
 
-      ##low extreme presence
+      ##high extreme presence
       jnk=which(temp_explanatory>jnk_high)
       temp_response_var1=temp_response_var[jnk]
       High_extr_total=length(temp_response_var1)
@@ -169,5 +169,5 @@ for (sp_nm in spp_nm){
   }
 }
 #names(all_quantiles)[4:5]=c("QL","QU")
-FileName<-paste("quantiles/Q", Quant_val, "_", proj_name, "_all_spp_taper_test.csv", sep="")
+FileName<-paste("quantilesTest/Q", Quant_val, "_", proj_name, "_all_spp_taper_test.csv", sep="")
 write.table((all_quantiles), file = FileName, sep=",", col.names=NA)
