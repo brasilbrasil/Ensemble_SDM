@@ -6,34 +6,32 @@ library(stringr)
 ###################################
 ####SET SOURCE LOCATION############
 ###################################
-machine = 1 #use 1 for LF laptop, 2 for LF hard drive, 3 for IRC local drive
+machine = 1 #use 1 for LF laptop, 2 for LF server
 #Assigns source file (directory_registry file) to appropriate hardware (according to machine number)
 if (machine == 1){
-  source(paste0("C:/Users/lfortini/","directory_registry.r"))
-  server = F
+  source(paste0("C:/Users/lfortini/","directory_registry_local.r"))#sets up general directory locations
+  codeDir = paste0(DR_code_S, "Ensemble_SDM/")  
+  source(paste0(codeDir,"1_assign_data_and_output_directories.r"))#sets up all directory locations for SDM analysis  
 } else {
   if (machine == 2) {
-    source(paste0("C:/Users/lfortini/","directory_registry.r")) #actually same as above
-    server = F
+    source(paste0("C:/Users/lfortini/","directory_registry_local.r"))#sets up general directory locations
+    codeDir = paste0(DR_code_S, "Ensemble_SDM/")  
+    source(paste0(codeDir,"1_assign_data_and_output_directories.r"))#sets up all directory locations for SDM analysis  
   } else {
-    if (machine == 3) {
-      source(paste0("C:/USGS_Honolulu/PICCC_code/Ensemble_SDM/IRC/directory_registryIRC_20131120.r"))
-      server = F
-    } else {
-      cat('\n','Error - invalid machine number')
-    }
+    cat('\n','Error - invalid machine number')
   }
 }
+server = F
 
 ###################################
 ####GENERAL MODEL CONFIGURATION####
 ###################################
 #setting file locations 
-project_name = "FB_test_repo2" #assign project name to the current run
+project_name = "FB_test_repo4" #assign project name to the current run
 
 #choose species of interest - all (from CSV file) or subset listed
 run_all_spp = F #if running all species enter "T" and if only subset enter "F"
-spp_subset = c('Akekee')#, 'Akikiki', 'Akohekohe', 'Anianiau', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Oahu_Amakihi','Hawaii_Elepaio', 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Omao', 'Oahu_Elepaio', 'Palila', 'Puaiohi', 'Kauai_Amakihi', 'Hawaii_Amakihi', 'Apapane', 'Amakihi', 'Elepaio', 'Iiwi')
+spp_subset = c('Akekee', 'Hawaii_Amakihi')#, 'Akikiki', 'Akohekohe', 'Anianiau', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Oahu_Amakihi','Hawaii_Elepaio', 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Omao', 'Oahu_Elepaio', 'Palila', 'Puaiohi', 'Kauai_Amakihi', 'Hawaii_Amakihi', 'Apapane', 'Amakihi', 'Elepaio', 'Iiwi')
 
 #Biomod2 modelling options for species of interest
 models_to_run = c("GBM","MAXENT") #choose biomod2 models to run - possibilities are: 'GLM','GBM','GAM','CTA','ANN','SRE','FDA','MARS','RF','MAXENT' 
@@ -76,7 +74,6 @@ memory = T #keep.in.memory = memory; if T and clamping Mask = T, clamping mask w
 ##########################
 ####RUNNING SCRIPTS!!!####
 ##########################
-
 working_dir = paste0(resultsDir, project_name, "/") #assign working directory
 crop_raster_dir = paste0(working_dir, "map_crop/") #assign directory for cropped raster files
 csv_dir = paste0(working_dir,"single_sp_CSVs/") #assign directory for single species CSV's
@@ -98,51 +95,28 @@ if (server == TRUE){
   interpolateDef = FALSE
 }
 
-dir_for_temp_files <- paste0(rootDir,'/temp/', project_name, "/", baseline_or_future, "/") #dir for temp run data (to avoid memory errors)
+dir_for_temp_files <- paste0(rootDir,'temp/', project_name, "/", baseline_or_future, "/") #dir for temp run data (to avoid memory errors)
 
 if (apply_biomod2_fixes){
   maxentWDtmp = paste0("maxentWDtmp_", baseline_or_future)
   dir.create(dir_for_temp_files, showWarnings = F, recursive = T)
 }
 
-#this code below will subset species into the right number of instances started with the bat file                        
-n_instances = length(list.files(working_dir, pattern = "^00instance"))
-cpucores = as.integer(Sys.getenv('NUMBER_OF_PROCESSORS'))
-if (paralelize){
-  if (cpucores > length(spp_nm)){cpucores = length(spp_nm)}
-  jnkn = length(spp_nm)
-  x = c(1:jnkn)
-  chunk <- function(x,n) split(x, factor(sort(rank(x)%%n)))
-  groups = chunk(x,cpucores)
-  jnk = groups[n_instances+1][[1]]
-  spp_nm = spp_nm[jnk]
-  spp_str = ""
-  for (sp_nm in spp_nm){
-    spp_str = paste(spp_str, sp_nm, sep = "__")
-  }
-  time = Sys.time()
-  time = str_replace_all(time,":", ".")
-  instance_file = paste0("00instance", spp_str, "_", time)
-  file.create(paste0(working_dir, "/", instance_file), showWarnings=F)  
-}
-
-
 ####Runs script for model fitting, creating ensemble models, and projecting models according to settings above.
 ##start the clock
 ptmOverallStart <- proc.time()
 
 if (EM_fit){ #runs fitting code
-  source(paste0(codeDir,"/1_BM2_FB_SDM_fitting_w_cropping4_newPackageFunctions.r")) 
+  source(paste0(codeDir,"1_BM2_FB_SDM_fitting.r")) 
 }
 if (create_response_curves){
-  source(paste0(codeDir,"/2opt_BM2_FB_SDM_response_curves3_newPackageFunctions.r"))
+  source(paste0(codeDir,"2opt_BM2_FB_SDM_response_curves.r"))
 }
 if (EM_ensemble){ #runs ensemble code
-  source(paste0(codeDir,"/2_BM2_FB_SDM_EM_fitting2_IRC_newPackageFunctions.r")) 
+  source(paste0(codeDir,"2_BM2_FB_SDM_EM_creation.r")) 
 }
 if (EM_project){ #runs projection code
-  #source(paste0(codeDir,"/3_BM2_FB_SDM_EM_projection_with_crop4_IRC.r")) 
-  source(paste0(codeDir,"/3_BM2_FB_SDM_EM_projection_with_crop4_IRC_byIsland.R")) 
+  source(paste0(codeDir,"3_BM2_FB_SDM_EM_projection_byIsland.r")) 
 }
 
 ##stop the clock
@@ -152,6 +126,3 @@ jnk = jnk/60 #converts elapsed time into minutes
 cat('\n','It took ', jnk, "minutes (on average) to model each species with",
     length(models_to_run), "model types") #sign-posting
 
-if (paralelize){
-  file.remove(paste0(working_dir, instance_file))
-}
