@@ -3,7 +3,7 @@ rm(list = ls()) #remove all past worksheet variables
 ###USER CONFIGURATION
 source(paste0("C:/Users/lfortini/","directory_registry.r"))
 spp_nm=c('Akekee', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'Anianiau', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Oahu_Amakihi','Hawaii_Elepaio', 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Omao', 'Oahu_Elepaio', 'Palila', 'Puaiohi', 'Kauai_Amakihi', 'Hawaii_Amakihi', 'Apapane', 'Amakihi', 'Elepaio', 'Iiwi')
-server=0
+server=1
 overwrite=1
 exclude_abs=F
 exclude_pres=T
@@ -13,8 +13,10 @@ Quant = 0.025
 Quant_val=(1-Quant*2)*100
 
 if (server==1){
-  working_dir='Y:/FB analysis/FB SDM/biomod2/run_1_7_12_15/'
-  clim_data_dir0="Y:/SDM_env_data/bioclim_variables/full extent bioclim data/all_grd/all_baseline/100m/" 
+#   working_dir='Y:/FB analysis/FB SDM/biomod2/run_1_7_12_15/'
+#   clim_data_dir0="Y:/SDM_env_data/bioclim_variables/full extent bioclim data/all_grd/all_baseline/100m/" 
+  working_dir='Y:/PICCC_analysis/FB_analysis/model_results/biomod2finalmodel_P_PA_oldcode_less_PAs/'
+  clim_data_dir0="Y:/PICCC_data/climate_data/bioclim_data_Aug2013/complete_rasters/allYrs_avg/bioclims_abs/all_baseline/250m/"
 }else{
   working_dir='D:/PICCC_analysis/FB_analysis/model_results/biomod2finalmodel_P_PA_oldcode_220runs/'
   clim_data_dir0="D:/PICCC_data/climate_data/bioclim_data_Aug2013/complete_rasters/allYrs_avg/bioclims_abs/all_baseline/250m/"
