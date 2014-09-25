@@ -2,15 +2,7 @@
 #see 0_sdm_config file.r
 
 setwd(working_dir)
-
-#loading package libraries
-library(biomod2)
-library(stringr)
-library(colorRamps)
-library(rasterVis)
-library(tools)
-library(ncdf)
-library(gbm) #needed for projection of "gbm" data (i.e. "BIOMOD_Projection(...)" function)
+require(snowfall)
 
 ####START UNDERHOOD
 #assigning which projected climate data set to use depending on scenario
@@ -32,19 +24,34 @@ if (baseline_or_future == 5){
 if (baseline_or_future == 6){
   clim_data_dir = clim_data_2100driest
   proj_nm = 'future_driest'}
+if (baseline_or_future == 7){
+  clim_data_dir = clim_data_2100rev
+  proj_nm = 'future_rev'}
 
-#sets options for biomod2 fixes in code (if assigned TRUE in config file)
-if (apply_biomod2_fixes){
-  rasterOptions(tmpdir = dir_for_temp_files, timer = T, progress = "text", todisk  = T) #set options for raster package
-  source(paste(codeDir,"3b_modifications_of_projection_code.r", sep = "/")) #all of fixes to biomod2 code created by AV
-}
 
 spp_info = read.csv(paste(csv_dir,'FB_spp_data.csv', sep = "/")) #creates data frame from species info csv file
 
 sp_nm = spp_nm[1] #resets so the first species to run is the first one listed in config file or csv
-for (sp_nm in spp_nm){
+sp_parallel_run=function(sp_nm){
+  #loading package libraries
+  library(biomod2)
+  library(stringr)
+  library(colorRamps)
+  library(rasterVis)
+  library(tools)
+  library(ncdf)
+  library(gbm) #needed for projection of "gbm" data (i.e. "BIOMOD_Projection(...)" function)
+  
+  #sets options for biomod2 fixes in code (if assigned TRUE in config file)
+  if (apply_biomod2_fixes){
+    rasterOptions(tmpdir = dir_for_temp_files, timer = T, progress = "text", todisk  = T) #set options for raster package
+    source(paste(codeDir,"3b_modifications_of_projection_code.r", sep = "/")) #all of fixes to biomod2 code created by AV
+  }
+
   sp_nm = as.character(sp_nm) #defines the species name as a character string - not needed if it is already a text name 
   sp_dir = str_replace_all(sp_nm,"_", ".") #replaces "_" with "." in sp_nm
+  sink(file(paste0(working_dir,sp_dir,"/",sp_dir,Sys.Date(),"_proj_log.txt"), open="wt"))#######NEW
+  
   cat('\n',sp_nm,'model projection...') #sign-posting
   workspace_name = paste0(sp_nm,"_FB_EM_fit.RData") #set name of file to load workspace data from model run
   load(workspace_name) #loads workspace from previous ensemble modelling step
@@ -243,7 +250,21 @@ for (sp_nm in spp_nm){
   } else {
     cat('\n',sp_nm,'previously calculated...')
   }
+  sink(NULL)
 }  
+
+if (is.null(cpucores)){
+  cpucores=as.integer(Sys.getenv('NUMBER_OF_PROCESSORS'))  
+}else{
+  cpucores=min(cpucores, as.integer(Sys.getenv('NUMBER_OF_PROCESSORS')))
+}
+sfInit( parallel=T, cpus=cpucores) # 
+sfExportAll() 
+system.time((sfLapply(spp_nm,fun=sp_parallel_run)))
+#system.time(sfClusterApplyLB(iter_strings,fun=sp_parallel_run)) #why not alway us LB? Reisensburg2009_TutParallelComputing_Knaus_Porzelius.pdf
+sfRemoveAll()
+sfStop()
+
 
 
     

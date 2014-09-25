@@ -3,9 +3,9 @@ source(paste0("C:/Users/lfortini/","directory_registry.r"))
 ###USER CONFIGURATION
 spp_nm=c("Akekee")#, "Hawaii_Akepa", "Hawaii_Amakihi","Oahu_Amakihi","Maui_Parrotbill", "Palila") #if only subset, enter spp names here 
 #spp_nm = c('Akekee', 'Hawaii_Akepa', 'Palila', 'Maui_Parrotbill', 'Oahu_Amakihi', 'Omao', 'Iiwi', 'Hawaii_Amakihi')
-project_name = "FB_test_repo2" #assign project name to the current run
+project_name = "biomod2finalmodel_P_PA_oldcode_less_PAs" #assign project name to the current run
 
-comp_projects=c('baseline')#, 'future') #put future second!
+comp_projects=c('baseline', 'future') #put future second!
 ensemble_type="wmean"
 eval_stats=c('ROC') 
 plot_CV=T

@@ -27,7 +27,7 @@ server = F
 ####GENERAL MODEL CONFIGURATION####
 ###################################
 #setting file locations 
-project_name = "FB_revProj" #assign project name to the current run
+project_name = "FB_revProj_fewruns2" #assign project name to the current run
 
 #choose species of interest - all (from CSV file) or subset listed
 run_all_spp = F #if running all species enter "T" and if only subset enter "F"
@@ -45,17 +45,17 @@ create_response_curves = F
 apply_biomod2_fixes = T #if running large models use this option - solves memory problems
 overwriteData = F #T if want to overwrite and F if not
 paralelize = F #turn on multi instance auto start
-n_cores=20 #set to a very high number to use total number of threads
+cpucores=20 #set to a very high number to use total number of threads
 
 #################################
 ####CONFIG FOR SPECIFIC STEPS####
 #################################
 ####fit config (script#1)
-NbRunEval = 10 #number of evaluation runs for ensemble modeling
+NbRunEval = 5 #number of evaluation runs for ensemble modeling
 include_Abs = F #in test phase
 PseudoAbs_outside_CE = F #if T, will only consider Pseudo Absences outside climate envelope of all points collected
 dens_PAs_outside_CE = 1 #if 1 will create PA density that is equal to point density within surveyed areas
-PA.nb.rep = 10
+PA.nb.rep = 4
 PA.nb.absences = 1000 #asssign number of Pseudo absence points (if PseudoAbs_outside_CE = T, this will be overridden! (n of PAs will be determined by P/A point density within CE)) 
 candidatePAperPA = 200 #only used if if PAs_outside_CE = F, if value == 0, will use PA.nb.absences   
 PA.strategy = "random" #strategy for selecting pseudo absences ('random', 'sre', 'disk' or 'user.defined')

@@ -5,7 +5,7 @@ setwd(wd)
 library(tiff)
 #library(rasterImage)
 files=list.files(wd)
-strs=c("Fig 3", "Fig 4", "Fig 6")
+strs=c("Fig 2", "Fig 3", "Fig 4", "Fig 6")
 
 str = strs[1]
 for (str in strs){

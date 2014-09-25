@@ -3,15 +3,16 @@
 
 ####START UNDERHOOD
 setwd(working_dir) #sets working directory
-
-##Loading package libraries
-library(biomod2)
-library(stringr)
+require(snowfall)
 
 #memory.limit(size = 4095) #increases memory limit size
 sp_nm = spp_nm[1] #resets so the first species to run is the first one listed in config file or csv
-for (sp_nm in spp_nm){
+sp_parallel_run=function(sp_nm){  ##Loading package libraries
+  library(biomod2)
+  library(stringr)
   sp_nm = as.character(sp_nm) #defines the species name as a character string - not needed if it is already a text name
+  sp_dir = str_replace_all(sp_nm,"_", ".") #replaces "_" with "." in sp_nm
+  sink(file(paste0(working_dir,sp_dir,"/",sp_dir,Sys.Date(),"_EM_creation_log.txt"), open="wt"))#######NEW
   cat('\n',sp_nm,'ensemble creation...')
   workspace_name = paste0(sp_nm,"_FB_modelfitting.RData") #set name of file to load workspace data from model run
   workspace_name_out = paste0(sp_nm,"_FB_EM_fit.RData") #set name of file to load workspace data from model run
@@ -27,7 +28,8 @@ for (sp_nm in spp_nm){
     ### code chunk number 8: modeling_summary
     ###################################################
     myBiomodModelOut #returns summary of biomod2 model fit run for species
-    
+    myBiomodModelOut[models.computed]
+    #showClass("myBiomodModelOut")
     
     ###################################################
     ### code chunk number 9: modeling_model_evaluation
@@ -43,56 +45,11 @@ for (sp_nm in spp_nm){
     
     ###################################################
     ###new code- remove models with bad cutoffs
-  
-    jnk = myBiomodModelEval[,2,,,]
-    NAs = which(is.na(jnk))
-    all_models = list()
-    if (length(dimnames(jnk)) == 4) {
-      for (d in dimnames(jnk)[[4]]) {
-        for (c in dimnames(jnk)[[3]]) {
-          for (b in dimnames(jnk)[[2]]) {
-            for (a in dimnames(jnk)[[1]]) {
-              jnk_str = paste(sp_nm,d,c,b,a, sep = "_")
-              jnk_str2 = paste(sp_nm,d,c,b, sep = "_")
-              all_models[length(all_models)+1] = jnk_str2
-            }
-          }
-        }
-      }
-    } else {
-      #turn the "NbRunEval" variable into the Run names (e.g. a NbRunEval = 2 would run as "RUN1", "RUN2", "Full")
-      RUNnames = c()
-      for (RUNnum in 1: NbRunEval) {
-        RUNstr = paste0("RUN", RUNnum)
-        RUNnames = c(RUNnames, RUNstr)
-      }
-      RUNnames = c(RUNnames, "Full")
-      
-      #generate the PA# variable names by adding "PA" before each repetition
-      PAnames = c()
-      for (PAnum in 1:PA.nb.rep) {
-        PAstr = paste0("PA", PAnum)
-        PAnames = c(PAnames, PAstr)  
-      }
-      
-      for (d in PAnames) {
-        for (c in RUNnames){
-          for (b in models_to_run) {
-            for (a in eval_stats) {
-              jnk_str2 = paste(sp_nm,d,c,b, sep = "_")
-              all_models[length(all_models)+1] = jnk_str2
-            }
-          }
-        }
-      }
-    }
-    
-    bad_models_short = all_models[NAs]
-    bad_models_short = unique(bad_models_short)
-    jnk_good =! (all_models %in% bad_models_short)
-    remaining_models = all_models[jnk_good]
-    remaining_models = unlist(unique(remaining_models))    
-
+    myBiomodModelEval_sum_cutoffs=apply(myBiomodModelEval, c(2,3,4,5), sum)
+    myBiomodModelEval_sum_cutoffs=c(myBiomodModelEval_sum_cutoffs[2, , , ])
+    good_cutoffs = which(!is.na(myBiomodModelEval_sum_cutoffs))
+    models.computed=myBiomodModelOut@models.computed
+    remaining_models=models.computed[good_cutoffs]
     
     ###################################################
     ### code chunk number 11: ensemble_modeling
@@ -133,4 +90,17 @@ for (sp_nm in spp_nm){
     }else{
     cat('\n',sp_nm,'ensemble previously done...') #if file already exists for this run
   }
+  sink(NULL)
 }
+
+if (is.null(cpucores)){
+  cpucores=as.integer(Sys.getenv('NUMBER_OF_PROCESSORS'))  
+}else{
+  cpucores=min(cpucores, as.integer(Sys.getenv('NUMBER_OF_PROCESSORS')))
+}
+sfInit( parallel=T, cpus=cpucores) # 
+sfExportAll() 
+system.time((sfLapply(spp_nm,fun=sp_parallel_run)))
+#system.time(sfClusterApplyLB(iter_strings,fun=sp_parallel_run)) #why not alway us LB? Reisensburg2009_TutParallelComputing_Knaus_Porzelius.pdf
+sfRemoveAll()
+sfStop()

@@ -3,15 +3,7 @@
 
 ###START UNDERHOOD
 setwd(working_dir) #sets the working directory
-
-#Load required libraries
-library(biomod2)
-library(raster)
-library(randomForest)
-library(dismo)
-library(mda)
-library(stringr)
-library(tools)
+require(snowfall)
 
 ###not in FWS code (copy necessary files)
 #this loop copies the necessary data to run the models into the working directory
@@ -44,10 +36,21 @@ var_names <- unlist(file_path_sans_ext(env_var_files))
 
 #sp_nm = spp_nm[1]
 n_abs_removed = c()
-for (sp_nm in spp_nm){
+sp_parallel_run=function(sp_nm){
+  #Load required libraries
+  library(biomod2)
+  library(raster)
+  library(randomForest)
+  library(dismo)
+  library(mda)
+  library(stringr)
+  library(tools)
+  require(snowfall)
+  
   sp_nm = as.character(sp_nm) #converts sp_nm into character variable (in case the species are numbered)
   sp_dir = str_replace_all(sp_nm,"_", ".") #replaces "_" with "." in sp_nm
   dir.create(sp_dir, showWarnings = FALSE) #creates new directory with species name
+  sink(file(paste0(working_dir,sp_dir,"/",sp_dir,Sys.Date(),"_fitting_log.txt"), open="wt"))#######NEW
   
   cat('\n', sp_nm, 'model fitting...') #sign-posting
   FileName00 <- paste0(sp_nm, "_VariImp.csv") ###not in FWS code - allows for overwrite capacity
@@ -281,4 +284,17 @@ for (sp_nm in spp_nm){
   }else{
     cat('\n','fitting for ', sp_nm,'already done...') #sign-posting in case file for variable importance has already been created (indicating this species has already been run)  
   }    
+  sink(NULL)
 }
+
+if (is.null(cpucores)){
+  cpucores=as.integer(Sys.getenv('NUMBER_OF_PROCESSORS'))  
+}else{
+  cpucores=min(cpucores, as.integer(Sys.getenv('NUMBER_OF_PROCESSORS')))
+}
+sfInit( parallel=T, cpus=cpucores) # 
+sfExportAll() 
+system.time((sfLapply(spp_nm,fun=sp_parallel_run)))
+#system.time(sfClusterApplyLB(iter_strings,fun=sp_parallel_run)) #why not alway us LB? Reisensburg2009_TutParallelComputing_Knaus_Porzelius.pdf
+sfRemoveAll()
+sfStop()
