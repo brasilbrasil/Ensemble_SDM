@@ -2,7 +2,6 @@
 #see 0_sdm_config file.r
 
 ####START UNDERHOOD
-setwd(working_dir) #sets working directory
 require(snowfall)
 
 #memory.limit(size = 4095) #increases memory limit size
@@ -28,7 +27,6 @@ sp_parallel_run=function(sp_nm){  ##Loading package libraries
     ### code chunk number 8: modeling_summary
     ###################################################
     myBiomodModelOut #returns summary of biomod2 model fit run for species
-    myBiomodModelOut[models.computed]
     #showClass("myBiomodModelOut")
     
     ###################################################

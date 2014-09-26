@@ -1,8 +1,4 @@
-#rm(list = ls()) #remove all past worksheet variables
 
-###USER CONFIGURATION
-####START UNDERHOOD
-setwd(working_dir)
 last_model = models_to_run[length(models_to_run)]
 
 library(biomod2)
@@ -10,8 +6,6 @@ library(stringr)
 dir.create("output_rasters/", showWarnings = FALSE)
 dir.create("output_rasters/response_curves/", showWarnings = FALSE)
 dir.create("output_rasters/response_curves/combo/", showWarnings = FALSE)
-#sp_nm = spp_nm[1] #for testing
-#spp_nm=rev(spp_nm)
 for (sp_nm in spp_nm){
   sp_nm = as.character(sp_nm) #convert any species names to characters 
   cat('\n',sp_nm,'modeling...')
@@ -82,35 +76,7 @@ for (sp_nm in spp_nm){
         dev.off()
       }
       
-#       OLD CODE - had to be converted to deal with list
-#       bioclim_cnt = 1
-#       for (bioclim_cnt in 1:dim(myRespPlot2D)[3]){
-#         ymax_lim=max(myRespPlot2D[,2,bioclim_cnt,])
-#         ymin_lim=min(myRespPlot2D[,2,bioclim_cnt,])
-#         xmax_lim=max(myRespPlot2D[,1,bioclim_cnt,])
-#         xmin_lim=min(myRespPlot2D[,1,bioclim_cnt,])
-#         var_name=dimnames(myRespPlot2D)[[3]][bioclim_cnt]
-#         
-#         jpeg_name=paste('output_rasters/response_curves/', sp_nm,"_", "response_curve","_",model,"_",var_name,".jpg", sep = "")
-#         jpeg(jpeg_name,
-#              width = 10, height = 8, units = "in",
-#              pointsize = 12, quality = 90, bg = "white", res = 300) 
-#         for (rep in 1:dim(myRespPlot2D)[4]){
-#           var=myRespPlot2D[,1,bioclim_cnt,rep]
-#           pred=myRespPlot2D[,2,bioclim_cnt,rep]
-#           if (rep==1){
-#             plot(var,pred, type="l", xlim=c(xmin_lim, xmax_lim),ylim=c(ymin_lim,ymax_lim), xlab=var_name, ylab="Response", col="grey")
-#           }else{
-#             lines(var,pred, type="l", xlim=c(xmin_lim, xmax_lim),ylim=c(ymin_lim,ymax_lim), col="grey")
-#           }
-#         }
-#         #Add average response line
-#         var=rowMeans(myRespPlot2D[1:dim(myRespPlot2D)[1],1,bioclim_cnt,])
-#         pred=rowMeans(myRespPlot2D[1:dim(myRespPlot2D)[1],2,bioclim_cnt,])
-#         lines(var,pred, type="l", xlim=c(xmin_lim, xmax_lim),ylim=c(ymin_lim,ymax_lim), lwd=3)        
-#         dev.off()
-#       } 
-#       
+
       ###########combo figure########
       ###############################
       jpeg_name_combined = paste0('output_rasters/response_curves/combo/', sp_nm,"_", "response_curves","_",model,"_all_vars.jpg")

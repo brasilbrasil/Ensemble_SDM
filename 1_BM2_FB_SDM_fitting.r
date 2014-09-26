@@ -2,8 +2,8 @@
 #see 0_sdm_config.r file
 
 ###START UNDERHOOD
-setwd(working_dir) #sets the working directory
 require(snowfall)
+library(tools)
 
 ###not in FWS code (copy necessary files)
 #this loop copies the necessary data to run the models into the working directory

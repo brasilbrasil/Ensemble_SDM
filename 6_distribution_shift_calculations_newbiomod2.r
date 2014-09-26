@@ -1,39 +1,36 @@
-rm(list = ls()) #remove all past worksheet variables
-source(paste0("C:/Users/lfortini/","directory_registry.r"))
+#rm(list = ls()) #remove all past worksheet variables
+#source(paste0("C:/Users/lfortini/","directory_registry.r"))
 ###USER CONFIGURATION
-spp_nm = c('Akekee', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Iiwi', 'Maui_Alauahio', 'Maui_Parrotbill', 'Puaiohi', 'Anianiau', 'Apapane', 'Hawaii_Amakihi', 'Hawaii_Elepaio', 'Kauai_Amakihi', 'Kauai_Elepaio', 'Oahu_Amakihi', 'Oahu_Elepaio', 'Omao', 'Palila')
-Reliability=c('High', 'High', 'High', 'High', 'High', 'High', 'High', 'High', 'High', 'High', 'Low', 'Low', 'Low', 'Low', 'Low', 'Low', 'Low', 'Low', 'Low', 'Low')
-project_name='finalmodel_P_PA_oldcode_less_PAs'
+#spp_nm = c('Akekee', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Iiwi', 'Maui_Alauahio', 'Maui_Parrotbill', 'Puaiohi', 'Anianiau', 'Apapane', 'Hawaii_Amakihi', 'Hawaii_Elepaio', 'Kauai_Amakihi', 'Kauai_Elepaio', 'Oahu_Amakihi', 'Oahu_Elepaio', 'Omao', 'Palila')
+#Reliability=c('High', 'High', 'High', 'High', 'High', 'High', 'High', 'High', 'High', 'High', 'Low', 'Low', 'Low', 'Low', 'Low', 'Low', 'Low', 'Low', 'Low', 'Low')
+#project_name='finalmodel_P_PA_oldcode_less_PAs'
 
-model_resolution=0.5 #inkm
-comp_projects=c('baseline', 'future') #put future second!
-ensemble_type="ef.pmw"
-eval_stats=c('ROC') 
-#eval_stats=c('ROC', 'FAR', 'SR', 'ACCURACY', 'BIAS', 'POD', 'CSI', 'ETS') 
-habitat_overlay=T
+#comp_projects=c('baseline', 'future') #put future second!
+#spp_ensemble_type="ef.pmw"
+#spp_ensemble_eval_stats=c('ROC') 
 
-working_dir=paste0(resultsDir,project_name,'/')
+#working_dir=paste0(resultsDir,project_name,'/')
 clim_data_dir=paste0(bioclimData2013Dir,"all_baseline/500m/")
 current_biome_distribution_dir="Y:/PICCC_analysis/FB_analysis/habitat analysis/veg_overlay/current_veg_mask/"
 projected_biome_distribution_dir="Y:/PICCC_analysis/FB_analysis/habitat analysis/veg_overlay/projected_veg_mask/"
 
 ####START UNDERHOOD
-setwd(working_dir)
+#setwd(working_dir)
 library(biomod2)
 library(stringr)
 dir.create("tables/", showWarnings=F)
 px_area=model_resolution^2 
 vars=c("Eval stat", "Species", "baseline_area", "future_area", "% change", "lost", "kept", "gained", "baseline_suitability", "future_suitability", "% suitability change")
 all_stats<- as.data.frame(setNames(replicate(length(vars),numeric(0), simplify = F), vars)) #create empty dataframe to compile results
-if (habitat_overlay){
+if (exclude_areas_beyond_primary_habitat){
   mask_text="habitat_mask_"
 }else{
   mask_text=""
 }
 
 sp_nm=spp_nm[1]
-eval_stat = eval_stats[1]
-for (eval_stat in eval_stats){
+eval_stat = spp_ensemble_eval_stats[1]
+for (eval_stat in spp_ensemble_eval_stats){
   for (sp_nm in spp_nm){
     sp_nm=as.character(sp_nm)  
     cat('\n',sp_nm,'modeling...')
@@ -41,11 +38,11 @@ for (eval_stat in eval_stats){
     sp_nm=str_replace_all(sp_nm,"_", ".")
     a=round(1000*runif(1))
     
-    response_raster_nm=paste('output_rasters/main/', sp_nm0,"_response_zones_",eval_stat, "_", ensemble_type, sep = "")
+    response_raster_nm=paste('output_rasters/main/', sp_nm0,"_response_zones_",eval_stat, "_", spp_ensemble_type, sep = "")
     response_raster_nm=paste(response_raster_nm,".tif", sep = "")
     response_raster=raster(response_raster_nm)
     
-    if (habitat_overlay){
+    if (exclude_areas_beyond_primary_habitat){
       #with current veg overlay
       Response_var=paste(current_biome_distribution_dir, sp_nm0,"_current_veg_mask.tif", sep="")
       Response_var=raster(Response_var)
@@ -71,9 +68,9 @@ for (eval_stat in eval_stats){
     results=c(curr,fut,(fut-curr)*100/curr,zone_area)
     
     #masked suitability
-    baseline_masked_suitability=raster(paste('output_rasters/', sp_nm0,"_", "clipped_suitability_",comp_projects[1],"_",eval_stat,"_",ensemble_type, ".tif", sep = ""))
-    future_masked_suitability=raster(paste('output_rasters/', sp_nm0,"_", "clipped_suitability_",comp_projects[2],"_",eval_stat,"_",ensemble_type, ".tif", sep = ""))
-    if (habitat_overlay){
+    baseline_masked_suitability=raster(paste('output_rasters/', sp_nm0,"_", "clipped_suitability_",comp_projects[1],"_",eval_stat,"_",spp_ensemble_type, ".tif", sep = ""))
+    future_masked_suitability=raster(paste('output_rasters/', sp_nm0,"_", "clipped_suitability_",comp_projects[2],"_",eval_stat,"_",spp_ensemble_type, ".tif", sep = ""))
+    if (exclude_areas_beyond_primary_habitat){
       baseline_masked_suitability=baseline_masked_suitability*Response_var1
       future_masked_suitability=future_masked_suitability*Response_var1
     }
@@ -85,13 +82,13 @@ for (eval_stat in eval_stats){
     results=as.data.frame(results)
     results=cbind(eval_stat, sp_nm0,results)
     names(results)=vars
-    out_csv_name=paste('tables/', sp_nm0,"_metrics_",mask_text,eval_stat, "_", ensemble_type, ".csv",sep = "")
+    out_csv_name=paste('tables/', sp_nm0,"_metrics_",mask_text,eval_stat, "_", spp_ensemble_type, ".csv",sep = "")
     write.table(results, file = out_csv_name, sep=",", row.names=F)
     all_stats=rbind(all_stats,results)
     
   }
 }
-if (habitat_overlay){
+if (exclude_areas_beyond_primary_habitat){
   out_csv_name=paste('tables/', "all_spp_distr_shift_metrics_current_habitat.csv",sep = "")
   write.table(all_stats, file = out_csv_name, sep=",", row.names=F)
   
