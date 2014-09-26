@@ -57,13 +57,13 @@ sp_parallel_run=function(sp_nm){
   load(workspace_name) #loads workspace from previous ensemble modelling step
   plots = paste0(working_dir, "AllEMplots_pmw") #assigns location for all plots
   
-  if (file.exists(plots) == F | overwriteData == T) { #run only if plots have not already been collected and the overwrite function is off
+  if (file.exists(plots) == F | overwrite == T) { #run only if plots have not already been collected and the overwrite function is off
     dir.create(plots, showWarnings = FALSE)
   } #create directory for plots
   
   workspace_name_out = paste0(sp_nm,"_FB_EM_proj_", proj_nm, ".RData") #assigns name to save workspace
   
-  if (file.exists(workspace_name_out) == F | overwriteData == T){ #does not run if file already exists and overwrite is off
+  if (file.exists(workspace_name_out) == F | overwrite == T){ #does not run if file already exists and overwrite is off
     #raster_based_env_grid:
     sp_index = which(spp_info[,"Species"] == sp_nm) #assigns index for the line associated with the target species
     raster_res = spp_info[sp_index, "rasterdir"] #assigns the raster resolution to the directory for the species of interest
@@ -150,7 +150,7 @@ sp_parallel_run=function(sp_nm){
       }
       
       workspace_name_out0 = paste0(sp_is, "_FB_all_model_proj_", proj_nm, ".RData") #sets location to save R data
-      if (file.exists(workspace_name_out0) == F | overwriteData == T){  #does not run if RData file already exists and overwrite is off  
+      if (file.exists(workspace_name_out0) == F | overwrite == T){  #does not run if RData file already exists and overwrite is off  
         
         if (proj_by_island){predictors <- get(spIsland)}
         
@@ -208,7 +208,7 @@ sp_parallel_run=function(sp_nm){
       cat('\n',sp_nm,'projection graphs done...') #sign-posting
       
       workspace_name_out1 = paste0(sp_is, "_FB_all_model_proj_EF", proj_nm, ".RData") #sets location to save R data
-      if (file.exists(workspace_name_out1) == F | overwriteData == T){  #does not run if RData file already exists and overwrite is off  
+      if (file.exists(workspace_name_out1) == F | overwrite == T){  #does not run if RData file already exists and overwrite is off  
         ###################################################
         ### code chunk number 19: EnsembleForecasting
         ###################################################

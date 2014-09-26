@@ -1,21 +1,8 @@
-#rm(list = ls()) #remove all past worksheet variables
-#source(paste0("C:/Users/lfortini/","directory_registry.r"))
-###USER CONFIGURATION
-#spp_nm = c('Akekee', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Iiwi', 'Maui_Alauahio', 'Maui_Parrotbill', 'Puaiohi', 'Anianiau', 'Apapane', 'Hawaii_Amakihi', 'Hawaii_Elepaio', 'Kauai_Amakihi', 'Kauai_Elepaio', 'Oahu_Amakihi', 'Oahu_Elepaio', 'Omao', 'Palila')
-#Reliability=c('High', 'High', 'High', 'High', 'High', 'High', 'High', 'High', 'High', 'High', 'Low', 'Low', 'Low', 'Low', 'Low', 'Low', 'Low', 'Low', 'Low', 'Low')
-#project_name='finalmodel_P_PA_oldcode_less_PAs'
-
-#comp_projects=c('baseline', 'future') #put future second!
-#spp_ensemble_type="ef.pmw"
-#spp_ensemble_eval_stats=c('ROC') 
-
-#working_dir=paste0(resultsDir,project_name,'/')
-clim_data_dir=paste0(bioclimData2013Dir,"all_baseline/500m/")
+clim_data_dir = clim_data_2000 
 current_biome_distribution_dir="Y:/PICCC_analysis/FB_analysis/habitat analysis/veg_overlay/current_veg_mask/"
 projected_biome_distribution_dir="Y:/PICCC_analysis/FB_analysis/habitat analysis/veg_overlay/projected_veg_mask/"
 
 ####START UNDERHOOD
-#setwd(working_dir)
 library(biomod2)
 library(stringr)
 dir.create("tables/", showWarnings=F)

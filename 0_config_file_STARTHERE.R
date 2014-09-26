@@ -6,33 +6,21 @@ library(stringr)
 ###################################
 ####SET SOURCE LOCATION############
 ###################################
-machine = 1 #use 1 for LF laptop, 2 for LF server
 #Assigns source file (directory_registry file) to appropriate hardware (according to machine number)
-if (machine == 1){
-  source(paste0("C:/Users/lfortini/","directory_registry_local.r"))#sets up general directory locations
-  codeDir = paste0(DR_code_S, "Ensemble_SDM/")  
-  source(paste0(codeDir,"1_assign_data_and_output_directories.r"))#sets up all directory locations for SDM analysis  
-} else {
-  if (machine == 2) {
-    source(paste0("C:/Users/lfortini/","directory_registry_local.r"))#sets up general directory locations
-    codeDir = paste0(DR_code_S, "Ensemble_SDM/")  
-    source(paste0(codeDir,"1_assign_data_and_output_directories.r"))#sets up all directory locations for SDM analysis  
-  } else {
-    cat('\n','Error - invalid machine number')
-  }
-}
-server = F
+rootDir = "D:/"
+DR_data_S=dataDir=DR_PICCC_data_S=paste0(rootDir, "PICCC_data/") #directory where all raw data is stored
+DR_analysis_S=analysisDir=paste0(rootDir, "PICCC_analysis/") #directory where all project outputs are stored
+DR_code_S=paste0("D:/", "Dropbox/code/") #directory where all repositories are located
+DR_bioClim_S=bioClimDir=paste0(dataDir,"climate_data/bioclim_data_Aug2013/complete_rasters/") #directory where all most
+codeDir = paste0(DR_code_S, "Ensemble_SDM/")  
+source(paste0(codeDir,"1_assign_data_and_output_directories.r"))#sets up all directory locations for SDM analysis  
 
 ###################################
 ####GENERAL MODEL CONFIGURATION####
 ###################################
-#setting file locations 
 project_name = "FB_revProj_fewruns5" #assign project name to the current run
-
 #choose species of interest - all (from CSV file) or subset listed
-run_all_spp = F #if running all species enter "T" and if only subset enter "F"
-spp_subset = c('Akekee', 'Hawaii_Amakihi', 'Akikiki', 'Akohekohe', 'Anianiau', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Oahu_Amakihi','Hawaii_Elepaio', 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Omao', 'Oahu_Elepaio', 'Palila', 'Puaiohi', 'Kauai_Amakihi', 'Hawaii_Amakihi', 'Apapane', 'Iiwi') #'Amakihi', 'Elepaio', 
-
+spp_nm = c('Akekee', 'Hawaii_Amakihi', 'Akikiki', 'Akohekohe', 'Anianiau', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Oahu_Amakihi','Hawaii_Elepaio', 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Omao', 'Oahu_Elepaio', 'Palila', 'Puaiohi', 'Kauai_Amakihi', 'Hawaii_Amakihi', 'Apapane', 'Iiwi') #'Amakihi', 'Elepaio', 
 #Biomod2 modelling options for species of interest
 models_to_run = c("GBM","MAXENT") #choose biomod2 models to run - possibilities are: 'GLM','GBM','GAM','CTA','ANN','SRE','FDA','MARS','RF','MAXENT' 
 eval_stats = c("ROC", "TSS") #choose evaluation methods - possibilties are: 'KAPPA','TSS','ROC'
@@ -42,7 +30,7 @@ EM_fit = T #if you want to run the model fitting = T
 EM_ensemble = T  #if you want to run the ensemble modelling = T
 EM_project = T #if you want to project the model results = T
 apply_biomod2_fixes = T #if running large models use this option - solves memory problems
-overwriteData = F #T if want to overwrite and F if not
+overwrite = F #T if want to overwrite and F if not
 paralelize = F #turn on multi instance auto start
 cpucores=20 #set to a very high number to use total number of threads
 
@@ -109,21 +97,9 @@ csv_dir = paste0(working_dir,"single_sp_CSVs/") #assign directory for single spe
 dir.create(working_dir, showWarnings = F) #creates working directory if missing
 setwd(working_dir)
 
-#Assigns the species names either according to csv file (all) or list
-if (run_all_spp){
-  spp_nm = read.csv(allSppNames, header = F, stringsAsFactors = F)
-} else {
-  spp_nm = spp_subset
-}
-
 ##Plotting options depending on if server or not
-if (server == TRUE){
-  useRasterDef = FALSE
-  interpolateDef = TRUE
-} else {
-  useRasterDef = TRUE
-  interpolateDef = FALSE
-}
+useRasterDef = TRUE
+interpolateDef = FALSE
 
 dir_for_temp_files <- paste0(rootDir,'temp/', project_name, "/", baseline_or_future, "/") #dir for temp run data (to avoid memory errors)
 

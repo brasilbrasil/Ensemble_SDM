@@ -54,7 +54,7 @@ sp_parallel_run=function(sp_nm){
   
   cat('\n', sp_nm, 'model fitting...') #sign-posting
   FileName00 <- paste0(sp_nm, "_VariImp.csv") ###not in FWS code - allows for overwrite capacity
-  if (file.exists(FileName00) == F | overwriteData == T){ #check if analysis for species already done or overwrite requested in config    
+  if (file.exists(FileName00) == F | overwrite == T){ #check if analysis for species already done or overwrite requested in config    
     # Start the clock!
     ptmModule1Start <- proc.time()
     workspace_name = paste0(sp_nm, "_FB_modelfitting.RData") #set name of file to save all workspace data after model run

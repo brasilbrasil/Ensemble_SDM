@@ -24,7 +24,7 @@ for (sp_nm in spp_nm){
   model = models_to_run[1]
   for (model in models_to_run){
     temp_jpeg_name = paste0('output_rasters/response_curves/combo/', sp_nm,"_", "response_curves","_",model,"_all_vars.jpg")
-    if (file.exists(temp_jpeg_name) == F | overwriteData == T){
+    if (file.exists(temp_jpeg_name) == F | overwrite == T){
       
       loaded_models <- BIOMOD_LoadModels(myBiomodModelOut, models = model)
       loaded_models = loaded_models[1:length(loaded_models)-1]

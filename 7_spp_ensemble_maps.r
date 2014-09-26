@@ -1,12 +1,6 @@
-#rm(list = ls()) #remove all past worksheet variables
-#source(paste0("C:/Users/lfortini/","directory_registry.r"))
-###USER CONFIGURATION
-#spp_nm = c('Akekee', 'Hawaii_Amakihi', 'Akiapolauu', 'Akikiki', 'Akohekohe', 'Anianiau', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Oahu_Amakihi','Hawaii_Elepaio', 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Omao', 'Oahu_Elepaio', 'Palila', 'Puaiohi','Kauai_Amakihi', 'Iiwi', 'Apapane')#'Amakihi', 'Elepaio', 
-#project_name='finalmodel_P_PA_oldcode_less_PAs'
+clim_data_dir = clim_data_2000 
 
-#working_dir=paste0(resultsDir,project_name,'/')
-clim_data_dir=paste0(bioclimData2013Dir,"all_baseline/500m/")
-overwrite=0 #if 1, will overwrite past results
+#overwrite=0 #if 1, will overwrite past results
 if(BPS){
   current_biome_distribution_dir="Y:/PICCC_analysis/FB_analysis/habitat analysis/veg_overlay/BPS/current_veg_mask/" 
 }else{
@@ -290,7 +284,7 @@ for (eval_stat in spp_ensemble_eval_stats){
   Process_raster_data_NeutraltoGood(spp_em_gained_range, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_gained_range_',eval_stat), mask_data=mask_layer)
   
   #MS figures
-  prot_areas=shapefile(paste0("Y:/PICCC_analysis/FB_analysis/habitat analysis/","protected_areas_20100331_simpleWGS1984.shp"))
+  prot_areas=shapefile(paste0("Y:/PICCC_analysis/FB_analysis/habitat_analysis/","protected_areas_20100331_simpleWGS1984.shp"))
   Process_raster_data_NeutraltoGood_W_overlay(spp_em_kept_range, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_kept_ranges_w_prot_areas_',eval_stat), mask_data=mask_layer, overlay_data=prot_areas)
   
   if (BPS){

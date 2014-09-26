@@ -15,7 +15,7 @@ sp_parallel_run=function(sp_nm){  ##Loading package libraries
   cat('\n',sp_nm,'ensemble creation...')
   workspace_name = paste0(sp_nm,"_FB_modelfitting.RData") #set name of file to load workspace data from model run
   workspace_name_out = paste0(sp_nm,"_FB_EM_fit.RData") #set name of file to load workspace data from model run
-  if (file.exists(workspace_name_out) == F | overwriteData == T){ #run only if file does not already exist and overwrite is turned off (in config file)
+  if (file.exists(workspace_name_out) == F | overwrite == T){ #run only if file does not already exist and overwrite is turned off (in config file)
     # Start the clock!
     ptmModule2Start <- proc.time()
     
