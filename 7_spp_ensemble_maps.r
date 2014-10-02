@@ -2,9 +2,9 @@ clim_data_dir = clim_data_2000
 
 #overwrite=0 #if 1, will overwrite past results
 if(BPS){
-  current_biome_distribution_dir="Y:/PICCC_analysis/FB_analysis/habitat analysis/veg_overlay/BPS/current_veg_mask/" 
+  current_biome_distribution_dir="Y:/PICCC_analysis/FB_analysis/habitat_analysis/veg_overlay/BPS/current_veg_mask/" 
 }else{
-  current_biome_distribution_dir="Y:/PICCC_analysis/FB_analysis/habitat analysis/veg_overlay/current_veg_mask/"
+  current_biome_distribution_dir="Y:/PICCC_analysis/FB_analysis/habitat_analysis/veg_overlay/current_veg_mask/"
 }
 
 ####START UNDERHOOD
@@ -134,8 +134,7 @@ Process_raster_data_NeutraltoBad=function(raster_var,out_nm,min_lim=NULL, max_li
   writeRaster(raster_var, out_raster_name, format="GTiff", overwrite=TRUE)
 }
 
-shapedir=paste0(DR_PICCC_data_S,"/climate_data/bioclim_data_Aug2013/original_raw_data/HRMC20130810_20yrs_of_3km_16yrs_of_1km_maui/")
-mask_layer=shapefile(paste0(shapedir,"Main_Hawaiian_Islands_simple3.shp"))
+mask_layer=shapefile(paste0(necessary_run_data,"Main_Hawaiian_Islands_simple3.shp"))
 
 
 sp_nm=spp_nm[1]

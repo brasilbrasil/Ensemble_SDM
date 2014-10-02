@@ -5,33 +5,11 @@
 require(snowfall)
 
 ####START UNDERHOOD
-#assigning which projected climate data set to use depending on scenario
-if (baseline_or_future == 1){
-  clim_data_dir = clim_data_2000 
-  proj_nm = 'baseline'}
-if (baseline_or_future == 2){
-  clim_data_dir = clim_data_2000wettest
-  proj_nm ='baseline_wettest'}
-if (baseline_or_future == 3){
-  clim_data_dir = clim_data_2000driest
-  proj_nm = 'baseline_driest'}
-if (baseline_or_future == 4){
-  clim_data_dir = clim_data_2100 
-  proj_nm = 'future'}
-if (baseline_or_future == 5){
-  clim_data_dir = clim_data_2100wettest
-  proj_nm = 'future_wettest'}
-if (baseline_or_future == 6){
-  clim_data_dir = clim_data_2100driest
-  proj_nm = 'future_driest'}
-if (baseline_or_future == 7){
-  clim_data_dir = clim_data_2100rev
-  proj_nm = 'future_rev'}
 
 
 spp_info = read.csv(paste(csv_dir,'FB_spp_data.csv', sep = "/")) #creates data frame from species info csv file
 
-sp_nm = spp_nm[19] #resets so the first species to run is the first one listed in config file or csv
+sp_nm = spp_nm[2] #resets so the first species to run is the first one listed in config file or csv
 sp_parallel_run=function(sp_nm){
   #loading package libraries
   library(biomod2)
@@ -53,6 +31,7 @@ sp_parallel_run=function(sp_nm){
   sink(file(paste0(working_dir,sp_dir,"/",sp_dir,Sys.Date(),"_proj_log.txt"), open="wt"))#######NEW
   
   cat('\n',sp_nm,'model projection...') #sign-posting
+  cat('\n','loading EM_fit workspace file...') #sign-posting  
   workspace_name = paste0(sp_nm,"_FB_EM_fit.RData") #set name of file to load workspace data from model run
   load(workspace_name) #loads workspace from previous ensemble modelling step
   plots = paste0(working_dir, "AllEMplots_pmw") #assigns location for all plots
@@ -64,6 +43,7 @@ sp_parallel_run=function(sp_nm){
   workspace_name_out = paste0(sp_nm,"_FB_EM_proj_", proj_nm, ".RData") #assigns name to save workspace
   
   if (file.exists(workspace_name_out) == F | overwrite == T){ #does not run if file already exists and overwrite is off
+    cat('\n','loading predictors...') #sign-posting  
     #raster_based_env_grid:
     sp_index = which(spp_info[,"Species"] == sp_nm) #assigns index for the line associated with the target species
     raster_res = spp_info[sp_index, "rasterdir"] #assigns the raster resolution to the directory for the species of interest
@@ -85,10 +65,12 @@ sp_parallel_run=function(sp_nm){
     names(predictors) <- var_names #renames the layers of the raster with the bioclim variable names
     rm("crop_raster" ,"temp", "jnk0") #removes temporary variables
     predictors #returns summary of the predictor rasterStack
-    
+    cat('\n','done loading predictors...') #sign-posting    
     
     if (proj_by_island){
       ###island by island code
+      cat('\n','creating predictors by island...') #sign-posting
+      
       
       # Defining the extent of the different islands
       Kauai = c(-159.82,-159.26, 21.84, 22.25)
@@ -131,6 +113,7 @@ sp_parallel_run=function(sp_nm){
         names(Maui)<- var_names
         spIslandNames <- spIslandNames[which(spIslandNames != "Kahoolawe")] #remove Kahoolawe from the list of islands with species
       }
+      cat('\n','done creating predictors by island...') #sign-posting
       
     }else{
       spIslandNames=c("")
@@ -165,6 +148,7 @@ sp_parallel_run=function(sp_nm){
           names(predictors)<- var_name
         }
         
+        cat('\n','plot predictors...') #sign-posting
         if (baseline_or_future == 1){ #for "baseline" runs
           jpeg_name = paste0(sp_is, "_env_vars_used_for_projection_",projection_name,".jpg") #assigns location for map jpeg file
           jpeg(jpeg_name, #settings for map jpeg file
@@ -179,6 +163,7 @@ sp_parallel_run=function(sp_nm){
         gc() #reclaims memory that is no longer used and returns summary of memory usage
         
         
+        cat('\n','run biomod_projection...') #sign-posting
         myBiomodProj_baseline <- BIOMOD_Projection(
           modeling.output = myBiomodModelOut, #results from previous model step
           new.env = predictors, #new environment to project onto (in case of baseline it is not new)
@@ -192,6 +177,7 @@ sp_parallel_run=function(sp_nm){
         cat('\n',sp_nm,'projection complete...') #sign-posting
         cat('point 1 mem', memory.size(), memory.size(max=TRUE), 'nn') #sign-posting
         save("myBiomodProj_baseline", file = workspace_name_out0)   #save projection workspace  
+        cat('\n','done with running biomod_projection...') #sign-posting
         
         
       } else {
@@ -205,7 +191,9 @@ sp_parallel_run=function(sp_nm){
         myBiomodProjection <- myBiomodProj_baseline
       }
       
-      cat('\n',sp_nm,'projection graphs done...') #sign-posting
+      #cat('\n',sp_nm,'projection graphs done...') #sign-posting
+      
+      cat('\n','run ensemble forecasting') #sign-posting
       
       workspace_name_out1 = paste0(sp_is, "_FB_all_model_proj_EF", proj_nm, ".RData") #sets location to save R data
       if (file.exists(workspace_name_out1) == F | overwrite == T){  #does not run if RData file already exists and overwrite is off  
@@ -234,6 +222,7 @@ sp_parallel_run=function(sp_nm){
     
     ####START OF CODE TO MERGE RASTERS FROM EACH ISLAND INTO RASTER ONE FOR ALL ISLANDS###
     if (proj_by_island){
+      cat('\n','merging island by island forecasts') #sign-posting      
       if (length(spIslandNames) > 1) { #only need to recombine if the species is found on more than one island - otherwise the combined raster is already created above
         cat('\n',"merging individual island projections for ", sp_nm)
         combinedDir = paste0(working_dir, sp_dir, "/proj_", proj_nm) #names the directory where the combined rasters will be placed

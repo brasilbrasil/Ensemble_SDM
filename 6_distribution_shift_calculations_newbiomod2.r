@@ -1,6 +1,6 @@
 clim_data_dir = clim_data_2000 
-current_biome_distribution_dir="Y:/PICCC_analysis/FB_analysis/habitat analysis/veg_overlay/current_veg_mask/"
-projected_biome_distribution_dir="Y:/PICCC_analysis/FB_analysis/habitat analysis/veg_overlay/projected_veg_mask/"
+current_biome_distribution_dir="Y:/PICCC_analysis/FB_analysis/habitat_analysis/veg_overlay/current_veg_mask/"
+projected_biome_distribution_dir="Y:/PICCC_analysis/FB_analysis/habitat_analysis/veg_overlay/projected_veg_mask/"
 
 ####START UNDERHOOD
 library(biomod2)

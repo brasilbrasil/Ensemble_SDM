@@ -5,7 +5,7 @@
 require(snowfall)
 
 #memory.limit(size = 4095) #increases memory limit size
-sp_nm = spp_nm[1] #resets so the first species to run is the first one listed in config file or csv
+sp_nm = spp_nm[2] #resets so the first species to run is the first one listed in config file or csv
 sp_parallel_run=function(sp_nm){  ##Loading package libraries
   library(biomod2)
   library(stringr)
@@ -43,11 +43,12 @@ sp_parallel_run=function(sp_nm){  ##Loading package libraries
     
     ###################################################
     ###new code- remove models with bad cutoffs
-    myBiomodModelEval_sum_cutoffs=apply(myBiomodModelEval, c(2,3,4,5), sum)
-    myBiomodModelEval_sum_cutoffs=c(myBiomodModelEval_sum_cutoffs[2, , , ])
-    good_cutoffs = which(!is.na(myBiomodModelEval_sum_cutoffs))
-    models.computed=myBiomodModelOut@models.computed
-    remaining_models=models.computed[good_cutoffs]
+#     myBiomodModelEval_sum_cutoffs=apply(myBiomodModelEval, c(2,3,4,5), sum)
+#     myBiomodModelEval_sum_cutoffs=c(myBiomodModelEval_sum_cutoffs[2, , , ])
+#     good_cutoffs = which(!is.na(myBiomodModelEval_sum_cutoffs))
+#     models.computed=myBiomodModelOut@models.computed
+#     remaining_models=models.computed[good_cutoffs]
+    remaining_models=myBiomodModelOut@models.computed
     
     ###################################################
     ### code chunk number 11: ensemble_modeling
