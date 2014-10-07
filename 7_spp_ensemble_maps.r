@@ -174,17 +174,17 @@ for (eval_stat in spp_ensemble_eval_stats){
     sp_nm0=sp_nm
     sp_nm=str_replace_all(sp_nm,"_", ".")
     
-    response_raster=raster(paste('output_rasters/main/', sp_nm0,"_response_zones_",eval_stat, "_", spp_ensemble_type, ".tif", sep = ""))  
+    response_raster=raster(paste('output_rasters/main/', sp_nm0,"_response_zones_",eval_stat, "_", spp_ensemble_type, "_", comp_projects[2], ".tif", sep = ""))  
     baseline_masked_suitability=raster(paste('output_rasters/', sp_nm0,"_", "clipped_suitability_","baseline","_",eval_stat,"_",spp_ensemble_type, ".tif", sep = ""))
-    future_masked_suitability=raster(paste('output_rasters/', sp_nm0,"_", "clipped_suitability_","future","_",eval_stat,"_",spp_ensemble_type, ".tif", sep = ""))
+    future_masked_suitability=raster(paste('output_rasters/', sp_nm0,"_", "clipped_suitability_",comp_projects[2],"_",eval_stat,"_",spp_ensemble_type, ".tif", sep = ""))
     baseline_suitability=raster(paste('output_rasters/', sp_nm0,"_", "suitability_","baseline","_",eval_stat,"_",spp_ensemble_type, ".tif", sep = ""))
     baseline_suitability_bin=baseline_suitability>0
-    future_suitability=raster(paste('output_rasters/', sp_nm0,"_", "suitability_","future","_",eval_stat,"_",spp_ensemble_type, ".tif", sep = ""))
+    future_suitability=raster(paste('output_rasters/', sp_nm0,"_", "suitability_",comp_projects[2],"_",eval_stat,"_",spp_ensemble_type, ".tif", sep = ""))
     future_suitability_bin=future_suitability>0
     baseline_suitability_CV=raster(paste0('output_rasters/', sp_nm0,"_", "suitability_CV_","baseline","_",eval_stat,"_",spp_ensemble_type, ".tif"))
-    future_suitability_CV=raster(paste0('output_rasters/', sp_nm0,"_", "suitability_CV_","future","_",eval_stat,"_",spp_ensemble_type, ".tif", sep = ""))
+    future_suitability_CV=raster(paste0('output_rasters/', sp_nm0,"_", "suitability_CV_",comp_projects[2],"_",eval_stat,"_",spp_ensemble_type, ".tif", sep = ""))
     current_bin=raster(paste('output_rasters/', sp_nm0,"_", "BIN_","baseline","_",eval_stat,"_",spp_ensemble_type, ".tif", sep = ""))
-    future_bin=raster(paste('output_rasters/', sp_nm0,"_", "BIN_","future","_",eval_stat,"_",spp_ensemble_type, ".tif", sep = ""))
+    future_bin=raster(paste('output_rasters/', sp_nm0,"_", "BIN_",comp_projects[2],"_",eval_stat,"_",spp_ensemble_type, ".tif", sep = ""))
     suitability_delta=raster(paste('output_rasters/', sp_nm0,"_", "suitability_change_",eval_stat,"_",spp_ensemble_type, ".tif", sep = ""))
     lost_range=response_raster==1
     kept_range=response_raster==2
@@ -265,59 +265,59 @@ for (eval_stat in spp_ensemble_eval_stats){
   dir.create('output_rasters/spp_ensembles/',showWarnings=F)
   
   Process_raster_data_NeutraltoGood(spp_em_current_suitability/spp_em_current_suitability_bin, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_current_suitability_',eval_stat), max_lim=1, min_lim=0, mask_data=mask_layer)
-  Process_raster_data_NeutraltoGood(spp_em_future_suitability/spp_em_future_suitability_bin, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_future_suitability_',eval_stat), max_lim=1, min_lim=0, mask_data=mask_layer)
+  Process_raster_data_NeutraltoGood(spp_em_future_suitability/spp_em_future_suitability_bin, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_', comp_projects[2], '_suitability_',eval_stat), max_lim=1, min_lim=0, mask_data=mask_layer)
   Process_raster_data_NeutraltoGood(spp_em_masked_current_suitability/spp_em_current_bin, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_masked_current_suitability_',eval_stat), max_lim=1, min_lim=0, mask_data=mask_layer)
-  Process_raster_data_NeutraltoGood(spp_em_masked_future_suitability/spp_em_future_bin, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_masked_future_suitability_',eval_stat),max_lim=1, min_lim=0,  mask_data=mask_layer)
+  Process_raster_data_NeutraltoGood(spp_em_masked_future_suitability/spp_em_future_bin, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_masked_', comp_projects[2], '_suitability_',eval_stat),max_lim=1, min_lim=0,  mask_data=mask_layer)
   Process_raster_data_NeutraltoBad(spp_em_masked_current_suitability_CV, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_current_suitability_CV_',eval_stat), mask_data=mask_layer)
-  Process_raster_data_NeutraltoBad(spp_em_masked_future_suitability_CV, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_future_suitability_CV_',eval_stat), mask_data=mask_layer)
+  Process_raster_data_NeutraltoBad(spp_em_masked_future_suitability_CV, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_', comp_projects[2], '_suitability_CV_',eval_stat), mask_data=mask_layer)
   Process_raster_data_NeutraltoGood(spp_em_current_bin, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_current_bin_',eval_stat), mask_data=mask_layer)
-  Process_raster_data_NeutraltoGood(spp_em_future_bin, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_future_bin_',eval_stat), mask_data=mask_layer)
+  Process_raster_data_NeutraltoGood(spp_em_future_bin, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_', comp_projects[2], '_bin_',eval_stat), mask_data=mask_layer)
   avg_spp_em_suitability_delta=(spp_em_future_suitability/spp_em_future_suitability_bin)-(spp_em_current_suitability/spp_em_current_suitability_bin)
   max_val=max(abs(c(cellStats(avg_spp_em_suitability_delta,max),cellStats(avg_spp_em_suitability_delta,min))))
-  Process_raster_data_BadtoGood(avg_spp_em_suitability_delta, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_suitability_avg_delta_',eval_stat), max_lim=max_val, min_lim=-max_val, mask_data=mask_layer)
+  Process_raster_data_BadtoGood(avg_spp_em_suitability_delta, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_suitability_avg_delta_', comp_projects[2],'_', eval_stat), max_lim=max_val, min_lim=-max_val, mask_data=mask_layer)
   
   max_val=max(abs(c(cellStats(spp_em_suitability_delta,max),cellStats(spp_em_suitability_delta,min))))
-  Process_raster_data_BadtoGood(spp_em_suitability_delta, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_suitability_delta_',eval_stat), max_lim=max_val, min_lim=-max_val, mask_data=mask_layer)
-  Process_raster_data_NeutraltoGood(spp_em_lost_range, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_lost_range_',eval_stat), mask_data=mask_layer)
-  Process_raster_data_NeutraltoGood(spp_em_kept_range, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_kept_range_',eval_stat), mask_data=mask_layer)
-  Process_raster_data_NeutraltoGood(spp_em_gained_range, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_gained_range_',eval_stat), mask_data=mask_layer)
+  Process_raster_data_BadtoGood(spp_em_suitability_delta, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_suitability_delta_', comp_projects[2],'_',eval_stat), max_lim=max_val, min_lim=-max_val, mask_data=mask_layer)
+  Process_raster_data_NeutraltoGood(spp_em_lost_range, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_lost_range_', comp_projects[2],'_',eval_stat), mask_data=mask_layer)
+  Process_raster_data_NeutraltoGood(spp_em_kept_range, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_kept_range_', comp_projects[2],'_',eval_stat), mask_data=mask_layer)
+  Process_raster_data_NeutraltoGood(spp_em_gained_range, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_gained_range_', comp_projects[2],'_',eval_stat), mask_data=mask_layer)
   
   #MS figures
   prot_areas=shapefile(paste0("Y:/PICCC_analysis/FB_analysis/habitat_analysis/","protected_areas_20100331_simpleWGS1984.shp"))
-  Process_raster_data_NeutraltoGood_W_overlay(spp_em_kept_range, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_kept_ranges_w_prot_areas_',eval_stat), mask_data=mask_layer, overlay_data=prot_areas)
+  Process_raster_data_NeutraltoGood_W_overlay(spp_em_kept_range, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_kept_ranges_w_prot_areas_', comp_projects[2],'_',eval_stat), mask_data=mask_layer, overlay_data=prot_areas)
   
   if (BPS){
     #future restoration priority
-    FUT_w_BPS_hab=raster(paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_future_bin.tif'))  
-    FUT_w_Curr_hab=raster(paste0('output_rasters/spp_ensembles/',"current_habitat_",'spp_em_future_bin.tif'))
+    FUT_w_BPS_hab=raster(paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_', comp_projects[2], '_bin_',eval_stat,'.tif'))  
+    FUT_w_Curr_hab=raster(paste0('output_rasters/spp_ensembles/',"current_habitat_",'spp_em_', comp_projects[2], '_bin_',eval_stat,'.tif'))
     not_cur_hab=FUT_w_Curr_hab==0
     
     restoration_priority=FUT_w_BPS_hab*not_cur_hab
-    Process_raster_data_NeutraltoGood(restoration_priority, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_restoration_priority_future_',eval_stat), mask_data=mask_layer)  
+    Process_raster_data_NeutraltoGood(restoration_priority, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_restoration_priority_', comp_projects[2], '_',eval_stat), mask_data=mask_layer)  
     
     #current restoration priority
-    CUR_w_BPS_hab=raster(paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_current_bin.tif'))  
-    CUR_w_Curr_hab=raster(paste0('output_rasters/spp_ensembles/',"current_habitat_",'spp_em_current_bin.tif'))
+    CUR_w_BPS_hab=raster(paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_current_bin_',eval_stat,'.tif'))  
+    CUR_w_Curr_hab=raster(paste0('output_rasters/spp_ensembles/',"current_habitat_",'spp_em_current_bin_',eval_stat,'.tif'))
     not_cur_hab=CUR_w_Curr_hab==0
     
     restoration_priority=CUR_w_BPS_hab*not_cur_hab
-    Process_raster_data_NeutraltoGood(restoration_priority, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_restoration_priority_current_',eval_stat), mask_data=mask_layer)  
+    Process_raster_data_NeutraltoGood(restoration_priority, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_restoration_priority_current_', comp_projects[2],'_',eval_stat), mask_data=mask_layer)  
     
     #gained restoration priority
-    CUR_w_BPS_hab=raster(paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_gained_range.tif'))  
-    CUR_w_Curr_hab=raster(paste0('output_rasters/spp_ensembles/',"current_habitat_",'spp_em_gained_range.tif'))
+    CUR_w_BPS_hab=raster(paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_gained_range_', comp_projects[2],'_',eval_stat, '.tif'))  
+    CUR_w_Curr_hab=raster(paste0('output_rasters/spp_ensembles/',"current_habitat_",'spp_em_gained_range_', comp_projects[2],'_',eval_stat, '.tif'))
     not_cur_hab=CUR_w_Curr_hab==0
     
     restoration_priority=CUR_w_BPS_hab*not_cur_hab
-    Process_raster_data_NeutraltoGood(restoration_priority, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_restoration_priority_gained_',eval_stat), mask_data=mask_layer)  
+    Process_raster_data_NeutraltoGood(restoration_priority, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_restoration_priority_gained_', comp_projects[2], '_', eval_stat), mask_data=mask_layer)  
     
     #kept restoration priority
-    CUR_w_BPS_hab=raster(paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_kept_range.tif'))  
-    CUR_w_Curr_hab=raster(paste0('output_rasters/spp_ensembles/',"current_habitat_",'spp_em_kept_range.tif'))
+    CUR_w_BPS_hab=raster(paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_kept_range_', comp_projects[2],'_',eval_stat,'.tif'))  
+    CUR_w_Curr_hab=raster(paste0('output_rasters/spp_ensembles/',"current_habitat_",'spp_em_kept_range_', comp_projects[2],'_',eval_stat,'.tif'))
     not_cur_hab=CUR_w_Curr_hab==0
     
     restoration_priority=CUR_w_BPS_hab*not_cur_hab
-    Process_raster_data_NeutraltoGood(restoration_priority, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_restoration_priority_kept_',eval_stat), mask_data=mask_layer)  
+    Process_raster_data_NeutraltoGood(restoration_priority, paste0('output_rasters/spp_ensembles/',masked_text,'spp_em_restoration_priority_kept_', comp_projects[2], '_',eval_stat), mask_data=mask_layer)  
     
     #MERGE current and future restoration priorities
     #NA/ 0 as no display    

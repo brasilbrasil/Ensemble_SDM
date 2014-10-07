@@ -25,7 +25,7 @@ for (eval_stat in spp_ensemble_eval_stats){
     sp_nm=str_replace_all(sp_nm,"_", ".")
     a=round(1000*runif(1))
     
-    response_raster_nm=paste('output_rasters/main/', sp_nm0,"_response_zones_",eval_stat, "_", spp_ensemble_type, sep = "")
+    response_raster_nm=paste('output_rasters/main/', sp_nm0,"_response_zones_",eval_stat, "_", spp_ensemble_type, "_", comp_projects[2], sep = "")
     response_raster_nm=paste(response_raster_nm,".tif", sep = "")
     response_raster=raster(response_raster_nm)
     
@@ -69,18 +69,18 @@ for (eval_stat in spp_ensemble_eval_stats){
     results=as.data.frame(results)
     results=cbind(eval_stat, sp_nm0,results)
     names(results)=vars
-    out_csv_name=paste('tables/', sp_nm0,"_metrics_",mask_text,eval_stat, "_", spp_ensemble_type, ".csv",sep = "")
+    out_csv_name=paste('tables/', sp_nm0,"_metrics_",mask_text,eval_stat, "_", spp_ensemble_type, "_", comp_projects[2], ".csv",sep = "")
     write.table(results, file = out_csv_name, sep=",", row.names=F)
     all_stats=rbind(all_stats,results)
     
   }
 }
 if (exclude_areas_beyond_primary_habitat){
-  out_csv_name=paste('tables/', "all_spp_distr_shift_metrics_current_habitat.csv",sep = "")
+  out_csv_name=paste('tables/', "all_spp_distr_shift_metrics_current_habitat_", comp_projects[2],".csv",sep = "")
   write.table(all_stats, file = out_csv_name, sep=",", row.names=F)
   
 }else{
-  out_csv_name=paste('tables/', "all_spp_distr_shift_metrics.csv",sep = "")
+  out_csv_name=paste('tables/', "all_spp_distr_shift_metrics_", comp_projects[2],".csv",sep = "")
   write.table(all_stats, file = out_csv_name, sep=",", row.names=F)
   
 }

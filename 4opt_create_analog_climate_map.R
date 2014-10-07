@@ -44,7 +44,7 @@ n_abs_removed=c()
 for (sp_nm in spp_nm){
   sp_nm=as.character(sp_nm)  
   cat('\n',sp_nm,' analog climate mapping...')
-  raster_name=paste0("output_rasters/analog_clim/", sp_nm, "_analog_clim")
+  raster_name=paste0("output_rasters/analog_clim/", sp_nm, "_analog_clim_", comp_projects[2])
   tif_name=paste(raster_name,".tif", sep="")
   jpeg_name=paste(raster_name,".jpg", sep="")
   if (file.exists(tif_name)==F | overwrite==1){ #check to see if the analysis for this species was already done    

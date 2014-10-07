@@ -113,7 +113,7 @@ for (eval_stat in spp_ensemble_eval_stats){
     sp_nm0=sp_nm
     sp_nm=str_replace_all(sp_nm,"_", ".")
     
-    out_nm=paste('output_rasters/main/', sp_nm0,"_response_zones_",eval_stat, "_", spp_ensemble_type, sep = "")
+    out_nm=paste('output_rasters/main/', sp_nm0,"_response_zones_",eval_stat, "_", spp_ensemble_type, "_", comp_projects[2], sep = "")
     out_raster_name00=paste(out_nm,".tif", sep = "")
     if (file.exists(out_raster_name00)==F | overwrite==1){
       
@@ -207,7 +207,7 @@ for (eval_stat in spp_ensemble_eval_stats){
         dev.off()
         
         ##MASKED bin comparison rasters
-        out_nm=paste('output_rasters/main/', sp_nm0,"_response_zones_masked_",eval_stat, "_", spp_ensemble_type, sep = "")
+        out_nm=paste('output_rasters/main/', sp_nm0,"_response_zones_masked_",eval_stat, "_", spp_ensemble_type, "_", comp_projects[2], sep = "")
         jpeg_name=paste(out_nm, ".jpg", sep = "")
         out_raster_name=paste(out_nm,".tif", sep = "")
         
@@ -233,7 +233,7 @@ for (eval_stat in spp_ensemble_eval_stats){
         
         #output suitability rasters for each image
         #suitability
-        out_nm=paste('output_rasters/', sp_nm0,"_suitability_future_masked_",eval_stat,"_",spp_ensemble_type, sep = "")
+        out_nm=paste('output_rasters/', sp_nm0,"_suitability_future_masked_",eval_stat,"_",spp_ensemble_type, "_", comp_projects[2], sep = "")
         jpeg_name=paste(out_nm,".jpg", sep = "")
         jpeg(jpeg_name,
              width = 10, height = 8, units = "in",
@@ -245,7 +245,7 @@ for (eval_stat in spp_ensemble_eval_stats){
         writeRaster(future_suitability_with_mask, out_raster_name, format="GTiff", overwrite=TRUE)
         
         ##binary
-        out_nm=paste('output_rasters/', sp_nm0,"_BIN_future_masked_",eval_stat,"_",spp_ensemble_type, sep = "")
+        out_nm=paste('output_rasters/', sp_nm0,"_BIN_future_masked_",eval_stat,"_",spp_ensemble_type, "_", comp_projects[2], sep = "")
         jpeg_name=paste(out_nm, ".jpg", sep = "")
         jpeg(jpeg_name,
              width = 10, height = 8, units = "in",
@@ -259,7 +259,7 @@ for (eval_stat in spp_ensemble_eval_stats){
       
       
       ##bin comparison rasters
-      out_nm=paste('output_rasters/main/', sp_nm0,"_response_zones_",eval_stat, "_", spp_ensemble_type, sep = "")
+      out_nm=paste('output_rasters/main/', sp_nm0,"_response_zones_",eval_stat, "_", spp_ensemble_type, "_", comp_projects[2], sep = "")
       jpeg_name=paste(out_nm, ".jpg", sep = "")
       out_raster_name00=paste(out_nm,".tif", sep = "")
       

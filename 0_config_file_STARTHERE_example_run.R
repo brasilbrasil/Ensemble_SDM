@@ -26,13 +26,13 @@ clim_data_2100=paste0(bioclimDataDir,"all_future/500m/")
 ###################################
 ####GENERAL MODEL CONFIGURATION####
 ###################################
-project_name = "FB_example_run2" #assign project name to the current run
+project_name = "FB_example_run" #assign project name to the current run
 #choose species of interest. Due to data sensitivity, pseudo data is provided for Akekee and Akikiki as example 
 spp_nm = c('Akekee', 'Akikiki')#, 'Hawaii_Amakihi', 'Akikiki', 'Akohekohe', 'Anianiau', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Oahu_Amakihi','Hawaii_Elepaio', 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Omao', 'Oahu_Elepaio', 'Palila', 'Puaiohi', 'Kauai_Amakihi', 'Hawaii_Amakihi', 'Apapane', 'Iiwi') #'Amakihi', 'Elepaio', 
 
 #Biomod2 modelling options
 models_to_run = c("GBM","MAXENT") #choose biomod2 models to run - possibilities are: 'GLM','GBM','GAM','CTA','ANN','SRE','FDA','MARS','RF','MAXENT' 
-eval_stats = c("ROC", "TSS") #choose evaluation methods - possibilties are: 'KAPPA','TSS','ROC'
+eval_stats = c("ROC") #choose evaluation methods - possibilties are: 'KAPPA','TSS','ROC'
 env_var_files = c("bio1.tif", "bio7.tif", "bio12.tif", "bio15.tif") #choose bioclimatic variables of interest - if using new clim data use ".tif" instead
 plot_graphs = F #plot graphs of results (T) or not (F)
 apply_biomod2_fixes = T #if running large models use this option - solves memory problems
@@ -46,10 +46,10 @@ EM_ensemble = T  #if you want to run the ensemble modelling = T
 EM_project = T #if you want to project the model results = T
 
 #optional scripts (options below)
-merge_all_var_importance_and_model_eval = T
-model_eval_graph = T
-var_importance_graph = T
-create_response_curves = T
+merge_all_var_importance_and_model_eval = F
+model_eval_graph = F
+var_importance_graph = F
+create_response_curves = F
 #scripts below need two projections for comparison (typically baseline and future)
 create_analog_climate_map = F
 raster_output_creation = F #additional/ overridding configurations within files
@@ -152,7 +152,7 @@ if (EM_ensemble){ #runs ensemble code
   source(paste0(codeDir,"2_BM2_FB_SDM_EM_creation.r")) 
 }
 if (EM_project){ #runs projection code
-  source(paste0(codeDir,"3_BM2_FB_SDM_EM_projection_byIsland.r")) 
+  source(paste0(codeDir,"3_BM2_FB_SDM_EM_projection_byIsland.r"))   
 }
 
 #auxiliary scripts
