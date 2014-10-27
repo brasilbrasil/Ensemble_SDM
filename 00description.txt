@@ -1,0 +1,8 @@
+Set of r scripts developed to model species distributions.
+The config file is where all model configurations are held.
+Simple logical switches within this file allows you to select 
+which scripts to run.
+Example data is provided in zipped form.
+The RandPackageVersions.Rdata includes the information on 
+the most recent r and package versions used in the analysis, in case
+errors occur.
