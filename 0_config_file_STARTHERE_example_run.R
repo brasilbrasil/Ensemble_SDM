@@ -13,11 +13,12 @@ codeDir = paste0(rootDir, "Dropbox/code/", "Ensemble_SDM/")
 #were to place project directory where all output will be saved to:
 resultsDir = paste0(rootDir, "PICCC_analysis/","FB_analysis/model_results/biomod2/") 
 #location of example_data/necessary_run_data/
-necessary_run_data = paste0(resultsDir,"example_data/necessary_run_data/") #where all needed files are stored (maxent.jar, species csvs, crop rasters, etc.)
+necessary_run_data = paste0(resultsDir,"necessary_run_data/") #where all needed files are stored (maxent.jar, species csvs, crop rasters, etc.)
 
 ###Location for clim predictors
 #bioclimDataDir is location of example_data/clim_data/
-bioclimDataDir = paste0(resultsDir,"example_data/clim_data/") 
+#bioclimDataDir = paste0(resultsDir,"example_data/clim_data/") 
+bioclimDataDir ="D:/PICCC_data/climate_data/bioclim_data_Aug2013/complete_rasters/allYrs_avg/bioclims_abs/"
 fitting_clim_data_dir = paste0(bioclimDataDir,"all_baseline/125m/") 
 clim_data_2000=paste0(bioclimDataDir,"all_baseline/500m/")
 clim_data_2100=paste0(bioclimDataDir,"all_future/500m/")
@@ -26,9 +27,9 @@ clim_data_2100=paste0(bioclimDataDir,"all_future/500m/")
 ###################################
 ####GENERAL MODEL CONFIGURATION####
 ###################################
-project_name = "FB_example_run" #assign project name to the current run
+project_name = "FB_BI_projection_few_runs" #assign project name to the current run
 #choose species of interest. Due to data sensitivity, pseudo data is provided for Akekee and Akikiki as example 
-spp_nm = c('Akekee', 'Akikiki')#, 'Hawaii_Amakihi', 'Akikiki', 'Akohekohe', 'Anianiau', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Oahu_Amakihi','Hawaii_Elepaio', 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Omao', 'Oahu_Elepaio', 'Palila', 'Puaiohi', 'Kauai_Amakihi', 'Hawaii_Amakihi', 'Apapane', 'Iiwi') #'Amakihi', 'Elepaio', 
+spp_nm = c('Akiapolauu', 'Palila', 'Omao', 'Akekee', 'Akikiki', 'Hawaii_Amakihi', 'Hawaii_Akepa', 'Hawaii_Creeper', 'Apapane', 'Iiwi', 'Hawaii_Elepaio')#, , 'Akikiki', 'Akohekohe', 'Anianiau',  'Oahu_Amakihi', 'Kauai_Elepaio', 'Maui_Alauahio', 'Maui_Parrotbill', 'Oahu_Elepaio', 'Puaiohi', 'Kauai_Amakihi',  ) #'Amakihi', 'Elepaio', 
 
 #Biomod2 modelling options
 models_to_run = c("GBM","MAXENT") #choose biomod2 models to run - possibilities are: 'GLM','GBM','GAM','CTA','ANN','SRE','FDA','MARS','RF','MAXENT' 
@@ -37,7 +38,7 @@ env_var_files = c("bio1.tif", "bio7.tif", "bio12.tif", "bio15.tif") #choose bioc
 plot_graphs = F #plot graphs of results (T) or not (F)
 apply_biomod2_fixes = T #if running large models use this option - solves memory problems
 overwrite = F #T if want to overwrite past results
-paralelize = F #turn on multi instance execution (1 species per thread)
+paralelize = T #turn on multi instance execution (1 species per thread)
 cpucores=20 #set to a very high number to use total number of threads available in computer
 
 # main scripts (options below)
@@ -60,11 +61,11 @@ spp_ensemble_maps = F
 ####CONFIG FOR SPECIFIC STEPS####
 #################################
 ####fit config (script#1)
-NbRunEval = 4 #number of evaluation runs for ensemble modeling
+NbRunEval = 8 #number of evaluation runs for ensemble modeling
 include_Abs = F #in test phase
 PseudoAbs_outside_CE = F #if T, will only consider Pseudo Absences outside climate envelope of all points collected
 dens_PAs_outside_CE = 1 #if 1 will create PA density that is equal to point density within surveyed areas
-PA.nb.rep = 4
+PA.nb.rep = 8
 PA.nb.absences = 1000 #asssign number of Pseudo absence points (if PseudoAbs_outside_CE = T, this will be overridden! (n of PAs will be determined by P/A point density within CE)) 
 candidatePAperPA = 200 #only used if if PAs_outside_CE = F, if value == 0, will use PA.nb.absences   
 PA.strategy = "random" #strategy for selecting pseudo absences ('random', 'sre', 'disk' or 'user.defined')
