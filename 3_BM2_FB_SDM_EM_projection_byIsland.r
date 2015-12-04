@@ -7,7 +7,7 @@ require(snowfall)
 ####START UNDERHOOD
 
 
-spp_info = read.csv(paste(csv_dir,'FB_spp_data_HI.csv', sep = "/")) #creates data frame from species info csv file
+spp_info = read.csv(paste(csv_dir,'FB_spp_data.csv', sep = "/")) #creates data frame from species info csv file
 
 sp_nm = spp_nm[2] #resets so the first species to run is the first one listed in config file or csv
 sp_parallel_run=function(sp_nm){
